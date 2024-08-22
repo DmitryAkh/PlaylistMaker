@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:text="@string/settings"
             android:textColor="@color/button_text_color"
-            android:textSize="22sp"
+            android:textSize="@dimen/header_textSize"
             android:textFontWeight="500"
             android:layout_gravity="center_vertical"/>
 
@@ -47,9 +47,10 @@
             android:layout_gravity="center_vertical"
             android:text="@string/black_theme"
             android:textSize="@dimen/string_screen_textSize"
+            android:textColor="@color/black"
             android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginTop="@dimen/string_text_margin_top"
-            android:layout_marginBottom="@dimen/string_text_margin_bottom"
+            android:layout_marginVertical="@dimen/string_text_margin_vertical"
+
             />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -77,9 +78,9 @@
             android:layout_gravity="center_vertical"
             android:text="@string/share"
             android:textSize="@dimen/string_screen_textSize"
+            android:textColor="@color/black"
             android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginTop="@dimen/string_text_margin_top"
-            android:layout_marginBottom="@dimen/string_text_margin_bottom"
+            android:layout_marginVertical="@dimen/string_text_margin_vertical"
             />
 
         <ImageView
@@ -106,9 +107,10 @@
             android:layout_gravity="center_vertical"
             android:text="@string/support"
             android:textSize="@dimen/string_screen_textSize"
+            android:textColor="@color/black"
             android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginTop="@dimen/string_text_margin_top"
-            android:layout_marginBottom="@dimen/string_text_margin_bottom"
+            android:layout_marginVertical="@dimen/string_text_margin_vertical"
+
             />
 
         <ImageView
@@ -135,9 +137,10 @@
             android:layout_gravity="center_vertical"
             android:text="@string/user_agreement"
             android:textSize="@dimen/string_screen_textSize"
+            android:textColor="@color/black"
             android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginTop="@dimen/string_text_margin_top"
-            android:layout_marginBottom="@dimen/string_text_margin_bottom"
+            android:layout_marginVertical="@dimen/string_text_margin_vertical"
+
             />
 
         <ImageView
