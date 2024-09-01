@@ -75,9 +75,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hideKeyboard() {
-        // Получаем InputMethodManager
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        // Получаем текущее активное окно и скрываем клавиатуру
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
 
@@ -86,9 +84,4 @@ class SearchActivity : AppCompatActivity() {
         outState.putString("ENTERED_TEXT", enteredText)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        enteredText = savedInstanceState.getString("ENTERED_TEXT", "")
-        findViewById<EditText>(R.id.search_area).setText(enteredText)
-    }
 }
