@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/main_background"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:padding="4dp"
-        android:layout_marginBottom="24dp"
+        style="@style/HeaderLinearLayoutSettings"
         >
 
         <ImageView
             android:id="@+id/backButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
             android:src="@drawable/arrow_back"
             android:layout_gravity="start"
-            android:padding="12dp" />
+            app:tint="@color/header_icon"
+            style="@style/HeaderImageView"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
-            android:textColor="@color/button_text_color"
-            android:textSize="@dimen/header_textSize"
-            android:textFontWeight="500"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            style="@style/HeaderTextView"
+            />
 
 
 
@@ -44,13 +42,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
             android:text="@string/black_theme"
-            android:textSize="@dimen/string_screen_textSize"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginVertical="@dimen/string_text_margin_vertical"
-
+            style="@style/StringTextStyle"
             />
 
         <androidx.appcompat.widget.SwitchCompat
@@ -60,6 +53,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="6dp"
             android:layout_marginBottom="11dp"
+            app:thumbTint="@color/switcher_tumb_tint"
+            app:trackTint="@color/switcher_track_tint"
 
 
 
@@ -68,6 +63,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -75,27 +71,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
             android:text="@string/share"
-            android:textSize="@dimen/string_screen_textSize"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginVertical="@dimen/string_text_margin_vertical"
+            style="@style/StringTextStyle"
             />
 
         <ImageView
             android:src="@drawable/share"
-            android:layout_width="@dimen/string_screen_icon_layout_width"
-            android:layout_height="@dimen/string_screen_icon_layout_height"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/string_icon_margin_top"
-            android:layout_marginEnd="@dimen/string_icon_margin_end"
-            android:layout_marginBottom="@dimen/string_icon_margin_bottom"
+            style="@style/StringIconStyle"
             />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/support"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -104,28 +92,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
             android:text="@string/support"
-            android:textSize="@dimen/string_screen_textSize"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginVertical="@dimen/string_text_margin_vertical"
-
+            style="@style/StringTextStyle"
             />
 
         <ImageView
             android:src="@drawable/support"
-            android:layout_width="@dimen/string_screen_icon_layout_width"
-            android:layout_height="@dimen/string_screen_icon_layout_height"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/string_icon_margin_top"
-            android:layout_marginEnd="@dimen/string_icon_margin_end"
-            android:layout_marginBottom="@dimen/string_icon_margin_bottom"
+            style="@style/StringIconStyle"
+
             />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/user_agreement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -134,23 +114,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
             android:text="@string/user_agreement"
-            android:textSize="@dimen/string_screen_textSize"
-            android:textColor="@color/black"
-            android:layout_marginStart="@dimen/string_text_margin_start"
-            android:layout_marginVertical="@dimen/string_text_margin_vertical"
-
+            style="@style/StringTextStyle"
             />
 
         <ImageView
             android:src="@drawable/arrow_forward"
-            android:layout_width="@dimen/string_screen_icon_layout_width"
-            android:layout_height="@dimen/string_screen_icon_layout_height"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/string_icon_margin_top"
-            android:layout_marginEnd="@dimen/string_icon_margin_end"
-            android:layout_marginBottom="@dimen/string_icon_margin_bottom"
+            style="@style/StringIconStyle"
+
             />
 
     </LinearLayout>

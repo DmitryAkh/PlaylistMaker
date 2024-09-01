@@ -6,6 +6,7 @@
     <dimen name="button_icon_padding">8dp</dimen>
     <dimen name="button_icon_size">24dp</dimen>
     <dimen name="string_screen_textSize">16sp</dimen>
+    <dimen name="string_screen_font_weight">400</dimen>
     <dimen name="string_screen_icon_layout_width">24dp</dimen>
     <dimen name="string_screen_icon_layout_height">24dp</dimen>
     <dimen name="string_text_margin_start">16dp</dimen>
@@ -16,6 +17,14 @@
     <dimen name="string_icon_margin_bottom">18dp</dimen>
     <dimen name="string_text_margin_vertical">21dp</dimen>
     <dimen name="header_textSize">22sp</dimen>
+    <dimen name="header_linear_layout_height">56dp</dimen>
+    <dimen name="header_linear_layout_padding">4dp</dimen>
+    <dimen name="header_linear_layout_margin_bottom">24dp</dimen>
+    <dimen name="header_image_view_layout_width">48dp</dimen>
+    <dimen name="header_image_view_layout_height">48dp</dimen>
+    <dimen name="header_image_view_padding">12dp</dimen>
+
+
 
 
 
