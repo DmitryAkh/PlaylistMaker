@@ -17,6 +17,10 @@ class SearchActivity : AppCompatActivity() {
 
     private var enteredText: String = ""
 
+    companion object {
+        private const val ENTERED_TEXT = "ENTERED_TEXT"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,8 +30,8 @@ class SearchActivity : AppCompatActivity() {
         val searchArea = findViewById<EditText>(R.id.search_area)
         val clearButton = findViewById<ImageView>(R.id.clearButton)
 
-        if (savedInstanceState != null){
-          enteredText =  savedInstanceState.getString("ENTERED_TEXT", "")
+        if (savedInstanceState != null) {
+            enteredText = savedInstanceState.getString(ENTERED_TEXT, "")
             searchArea.setText(enteredText)
         }
 
@@ -81,7 +85,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("ENTERED_TEXT", enteredText)
+        outState.putString(ENTERED_TEXT, enteredText)
     }
 
 }

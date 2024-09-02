@@ -7,44 +7,40 @@
     android:background="@color/main_background"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        style="@style/Toolbar"
         android:layout_width="match_parent"
-        style="@style/HeaderLinearLayoutSettings"
+        android:layout_marginBottom="@dimen/header_linear_layout_margin_bottom"
+
         >
 
         <ImageView
             android:id="@+id/backButton"
-            android:src="@drawable/arrow_back"
-            android:layout_gravity="start"
-            app:tint="@color/header_icon"
             style="@style/HeaderImageView"
-            />
+            android:layout_gravity="start"
+            android:src="@drawable/arrow_back"
+            app:tint="@color/header_icon" />
 
         <TextView
+            style="@style/HeaderTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
             android:layout_gravity="center_vertical"
-            style="@style/HeaderTextView"
-            />
+            android:text="@string/settings" />
 
 
-
-
-    </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
+            style="@style/StringTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/black_theme"
-            style="@style/StringTextStyle"
-            />
+            android:text="@string/black_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -57,7 +53,6 @@
             app:trackTint="@color/switcher_track_tint"
 
 
-
             />
 
     </LinearLayout>
@@ -68,37 +63,33 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/StringTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/share"
-            style="@style/StringTextStyle"
-            />
+            android:text="@string/share" />
 
         <ImageView
-            android:src="@drawable/share"
             style="@style/StringIconStyle"
-            />
+            android:src="@drawable/share" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/support"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
+            style="@style/StringTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/support"
-            style="@style/StringTextStyle"
-            />
+            android:text="@string/support" />
 
         <ImageView
-            android:src="@drawable/support"
             style="@style/StringIconStyle"
+            android:src="@drawable/support"
 
             />
 
@@ -107,20 +98,18 @@
     <LinearLayout
         android:id="@+id/user_agreement"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <TextView
+            style="@style/StringTextStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/user_agreement"
-            style="@style/StringTextStyle"
-            />
+            android:text="@string/user_agreement" />
 
         <ImageView
-            android:src="@drawable/arrow_forward"
             style="@style/StringIconStyle"
+            android:src="@drawable/arrow_forward"
 
             />
 
