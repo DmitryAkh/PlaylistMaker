@@ -14,7 +14,6 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
@@ -24,21 +23,21 @@ class SettingsActivity : AppCompatActivity() {
         val support = findViewById<LinearLayout>(R.id.support)
         val userAgreement = findViewById<LinearLayout>(R.id.user_agreement)
 
-        share.setOnClickListener{
+        share.setOnClickListener {
             shareApp()
         }
 
-        support.setOnClickListener{
+        support.setOnClickListener {
             sendToSupport()
         }
 
-        userAgreement.setOnClickListener{
+        userAgreement.setOnClickListener {
             openUserAgreement()
         }
 
 
 
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             finish()
         }
 
@@ -49,10 +48,10 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun shareApp(){
+    private fun shareApp() {
         val shareText = getString(R.string.share_message)
 
-        val sendIntent: Intent = Intent().apply{
+        val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, shareText)
             type = "text/plain"
@@ -64,12 +63,12 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(shareIntent)
     }
 
-    private fun sendToSupport(){
+    private fun sendToSupport() {
         val message = getString(R.string.message_to_support)
         val subject = getString(R.string.subject_message_to_support)
         val email = getString(R.string.email)
 
-        val sendIntent: Intent = Intent().apply{
+        val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
@@ -79,8 +78,8 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(sendIntent)
     }
 
-    private fun openUserAgreement(){
-val url = getString(R.string.user_agreement_url)
+    private fun openUserAgreement() {
+        val url = getString(R.string.user_agreement_url)
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
