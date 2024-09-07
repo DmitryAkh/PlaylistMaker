@@ -31,14 +31,14 @@
     <LinearLayout
         style="@style/LinearEditArea"
         android:layout_width="match_parent"
-        android:layout_height="52dp">
+        android:layout_height="wrap_content">
 
 
         <EditText
             android:id="@+id/search_area"
             style="@style/EditArea"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="36dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:drawableStart="@drawable/search_icon"
@@ -48,12 +48,18 @@
 
         <ImageView
             android:id="@+id/clearButton"
-            style="@style/clearButton"
+            style="@style/ClearButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTracks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
 </LinearLayout>
