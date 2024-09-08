@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/ivImgTrack"
             style="@style/ImgTrack"
-            android:src="@drawable/testimage" />
+            android:src="@drawable/placeholder" />
 
 
         <LinearLayout

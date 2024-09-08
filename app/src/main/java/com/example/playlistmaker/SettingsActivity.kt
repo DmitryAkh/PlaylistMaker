@@ -1,43 +1,39 @@
 package com.example.playlistmaker
-
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_settings)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val backButton = findViewById<ImageView>(R.id.backButton)
-        val share = findViewById<LinearLayout>(R.id.share)
-        val support = findViewById<LinearLayout>(R.id.support)
-        val userAgreement = findViewById<LinearLayout>(R.id.user_agreement)
 
-        share.setOnClickListener {
+        binding.share.setOnClickListener {
             shareApp()
         }
 
-        support.setOnClickListener {
+        binding.support.setOnClickListener {
             sendToSupport()
         }
 
-        userAgreement.setOnClickListener {
+        binding.userAgreement.setOnClickListener {
             openUserAgreement()
         }
 
 
 
-        backButton.setOnClickListener {
+        binding.backButton.setOnClickListener {
             finish()
         }
 

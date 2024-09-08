@@ -19,7 +19,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.artworkUrl100)
             .centerCrop()
             .transform(RoundedCorners(2))
-            .placeholder(R.drawable.baseline_broken_image_24)
+            .placeholder(R.drawable.placeholder)
             .into(imgTrack)
 
 
