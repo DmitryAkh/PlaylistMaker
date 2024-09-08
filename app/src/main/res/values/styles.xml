@@ -64,6 +64,7 @@
     <style name="EditArea">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/edit_area_text_color</item>
         <item name="android:textColorHint">@color/edit_area_hint_color</item>
         <item name="android:backgroundTint">@android:color/transparent</item>
         <item name="android:drawablePadding">8dp</item>
@@ -72,11 +73,32 @@
         <item name="android:paddingVertical">10dp</item>
     </style>
 
-    <style name="clearButton">
+    <style name="ClearButton">
         <item name="android:src">@drawable/clear</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginEnd">14dp</item>
         <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ImgTrack">
+        <item name="android:layout_width">@dimen/img_track_width</item>
+        <item name="android:layout_height">@dimen/img_track_height</item>
+        <item name="android:layout_marginVertical">@dimen/img_track_layout_margin_vertical</item>
+        <item name="android:layout_marginStart">@dimen/img_track_layout_margin_start</item>
+        <item name="android:layout_marginEnd">@dimen/img_track_layout_margin_end</item>
+    </style>
+
+    <style name="TrackName">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="paddingStart">1dp</item>
+        <item name="android:textColor">@color/track_name_text_color</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ArtistName_and_TrackTime">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/artist_name_separator_time_color</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
 
