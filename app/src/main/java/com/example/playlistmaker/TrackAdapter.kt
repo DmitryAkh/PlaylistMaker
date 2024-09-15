@@ -3,13 +3,15 @@ package com.example.playlistmaker
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.databinding.TrackItemBinding
 
-class TrackAdapter(private val trackList: ArrayList<Track>) :
+class TrackAdapter(private var trackList: List<Track>) :
     RecyclerView.Adapter<TrackViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
-        return TrackViewHolder(itemView)
+        val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return TrackViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
