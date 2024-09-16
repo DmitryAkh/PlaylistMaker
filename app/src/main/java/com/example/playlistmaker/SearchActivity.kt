@@ -25,20 +25,15 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""
-    private var tracksWithMilles = ArrayList<TrackWithMilles>()
-    private var tracks = ArrayList<Track>()
+    private var tracksWithMilles: MutableList<TrackWithMilles> = mutableListOf()
+    private var tracks: MutableList<Track> = mutableListOf()
     private val adapter = TrackAdapter(tracks)
 
-    companion object {
-        private const val ENTERED_TEXT = "ENTERED_TEXT"
-    }
-
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://itunes.apple.com/")
+        .baseUrl("https://itunes.apple.com")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
+    private var iTunesService = retrofit.create(iTunesApi::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,24 +48,28 @@ class SearchActivity : AppCompatActivity() {
                     doSearch(binding.searchArea.text.toString())
                 }
             }
-            false
-        }
+            true
 
+        }
         binding.placeholderButtonRenew.setOnClickListener {
             doSearch(binding.searchArea.text.toString())
         }
+
 
         if (savedInstanceState != null) {
             enteredText = savedInstanceState.getString(ENTERED_TEXT, "")
             binding.searchArea.setText(enteredText)
         }
 
-        binding.clearButton.setOnClickListener {
+        binding.clearButton.setOnClickListener() {
             binding.searchArea.setText("")
+            tracksWithMilles.clear()
+            tracks.clear()
+            adapter.notifyDataSetChanged()
             hideKeyboard()
         }
 
-        binding.backButton.setOnClickListener {
+        binding.backButton.setOnClickListener() {
             finish()
         }
 
@@ -88,9 +87,12 @@ class SearchActivity : AppCompatActivity() {
                 enteredText = s.toString()
             }
 
-            override fun afterTextChanged(s: Editable?) {}
-        }
+            override fun afterTextChanged(s: Editable?) {
 
+            }
+
+
+        }
         binding.searchArea.addTextChangedListener(simpleTextWatcher)
 
         binding.rvTracks.adapter = adapter
@@ -132,20 +134,7 @@ class SearchActivity : AppCompatActivity() {
 
                 when (response.code()) {
                     200 -> {
-                        tracksWithMilles.clear()
-                        tracks.clear()
-                        hidePlaceholder()
-                        if (response.body()?.results?.isNotEmpty() == true) {
-                            tracksWithMilles.addAll(response.body()?.results!!)
-                            tracks.addAll(
-                                convertTracksWithMillesToTracks(
-                                    tracksWithMilles
-                                )
-                            )
-                            adapter.notifyDataSetChanged()
-                        } else {
-                            showNotFoundPlaceholder()
-                        }
+                        updateTracksList(response)
                     }
 
                     else -> showNoInternetPlaceholder()
@@ -161,10 +150,27 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+    fun updateTracksList(response: Response<TracksResponse>) {
+        tracksWithMilles.clear()
+        tracks.clear()
+        hidePlaceholder()
+        if (response.body()?.results?.isNotEmpty() == true) {
+            tracksWithMilles.addAll(response.body()?.results!!)
+            tracks.addAll(
+                convertTracksWithMillesToTracks(
+                    tracksWithMilles
+                )
+            )
+            adapter.notifyDataSetChanged()
+        } else {
+            showNotFoundPlaceholder()
+        }
+    }
+
     fun showNotFoundPlaceholder() {
         tracks.clear()
         adapter.notifyDataSetChanged()
-        binding.placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderMessage.show()
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
                 this@SearchActivity,
@@ -175,12 +181,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun hidePlaceholder() {
-        binding.placeholderMessage.visibility = View.GONE
-        binding.placeholderButtonRenew.visibility = View.GONE
+        binding.placeholderMessage.gone()
+        binding.placeholderButtonRenew.gone()
     }
 
     fun showNoInternetPlaceholder() {
-        binding.placeholderMessage.visibility = View.VISIBLE
+        binding.placeholderMessage.show()
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
                 this@SearchActivity,
@@ -188,10 +194,17 @@ class SearchActivity : AppCompatActivity() {
             )
         )
         binding.placeholderText.text = getString(R.string.no_internet)
-        binding.placeholderButtonRenew.visibility = View.VISIBLE
+        binding.placeholderButtonRenew.show()
     }
 
+    companion object {
+        private const val ENTERED_TEXT = "ENTERED_TEXT"
+    }
 
 }
+
+
+
+
 
 
