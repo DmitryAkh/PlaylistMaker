@@ -93,12 +93,34 @@
         <item name="paddingStart">1dp</item>
         <item name="android:textColor">@color/track_name_text_color</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="ArtistName_and_TrackTime">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/artist_name_separator_time_color</item>
         <item name="android:textSize">11sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+
+    <style name="PlaceholderText">
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/placeholderText</item>
+        <item name="android:textSize">19sp</item>
+    </style>
+
+    <style name="PlaceholderButtonRenew">
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:backgroundTint">@color/placeholderButtonRenew</item>
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="cornerRadius">54dp</item>
+        <item name="android:visibility">gone</item>
     </style>
 
 
