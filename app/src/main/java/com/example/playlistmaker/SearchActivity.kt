@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,7 +28,11 @@ class SearchActivity : AppCompatActivity() {
     private var enteredText: String = ""
     private var tracksWithMilles: MutableList<TrackWithMilles> = mutableListOf()
     private var tracks: MutableList<Track> = mutableListOf()
-    private val adapter = TrackAdapter(tracks)
+    private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyList: List<Track>
+    private lateinit var adapter: TrackAdapter
+    private lateinit var historyAdapter: HistoryAdapter
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://itunes.apple.com")
@@ -41,6 +46,15 @@ class SearchActivity : AppCompatActivity() {
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        sharedPrefs = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs)
+        adapter = TrackAdapter(tracks, searchHistory)
+        historyList = searchHistory.loadHistoryList()
+        historyAdapter = HistoryAdapter(historyList, searchHistory)
+
+        showHistoryList()
+
 
         binding.searchArea.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -73,6 +87,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(
                 s: CharSequence?,
@@ -95,9 +110,22 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.searchArea.addTextChangedListener(simpleTextWatcher)
 
+        binding.searchArea.setOnFocusChangeListener { v, hasFocus ->
+            binding.llSearchHistory.visibility = View.GONE
+        }
+
         binding.rvTracks.adapter = adapter
         binding.rvTracks.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        binding.rvTracksHistory.adapter = historyAdapter
+        binding.rvTracks.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        binding.clearHistoryButton.setOnClickListener() {
+            searchHistory.clearHistoryList()
+            binding.llSearchHistory.visibility = View.GONE
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -125,6 +153,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun doSearch(query: String) {
+        hideKeyboard()
         iTunesService.search(query).enqueue(object :
             Callback<TracksResponse> {
             override fun onResponse(
@@ -196,6 +225,16 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderText.text = getString(R.string.no_internet)
         binding.placeholderButtonRenew.show()
     }
+
+    private fun showHistoryList() {
+        if (historyList.isNotEmpty()) {
+            binding.llSearchHistory.visibility = View.VISIBLE
+        } else {
+            binding.llSearchHistory.visibility = View.GONE
+
+        }
+    }
+
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"

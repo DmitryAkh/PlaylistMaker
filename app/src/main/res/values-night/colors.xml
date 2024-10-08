@@ -19,5 +19,6 @@
     <color name="track_name_text_color">#FFFFFF</color>
     <color name="artist_name_separator_time_color">#FFFFFF</color>
     <color name="placeholderText">#FFFFFFFF</color>
-    <color name="placeholderButtonRenew">#FFFFFFFF</color>
+    <color name="action_button">#FFFFFFFF</color>
+    <color name="search_history_header">#FFFFFFFF</color>
 </resources>
