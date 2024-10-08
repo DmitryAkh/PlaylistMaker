@@ -37,7 +37,7 @@
 
                 <TextView
                     android:id="@+id/tvArtistName"
-                    style="@style/ArtistName_and_TrackTime"
+                    style="@style/ArtistNameAndTrackTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="The Beatles" />
@@ -51,7 +51,7 @@
 
                 <TextView
                     android:id="@+id/tvTrackTime"
-                    style="@style/ArtistName_and_TrackTime"
+                    style="@style/ArtistNameAndTrackTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2:55" />
