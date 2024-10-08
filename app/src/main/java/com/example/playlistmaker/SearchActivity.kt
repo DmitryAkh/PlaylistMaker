@@ -81,6 +81,7 @@ class SearchActivity : AppCompatActivity() {
             tracks.clear()
             adapter.notifyDataSetChanged()
             hideKeyboard()
+            showHistoryList()
         }
 
         binding.backButton.setOnClickListener() {
