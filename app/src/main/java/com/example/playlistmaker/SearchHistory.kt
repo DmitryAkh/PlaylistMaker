@@ -8,7 +8,6 @@ const val HISTORY_LIST_KEY = "key_for_history_list"
 class SearchHistory(private val sharedPrefs: SharedPreferences) {
 
 
-    private val historyList: MutableList<Track> = mutableListOf()
 
 
     fun addTrackToHistory(track: Track) {
@@ -31,7 +30,6 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
     }
 
     fun clearHistoryList() {
-        historyList.clear()
         sharedPrefs.edit()
             .remove(HISTORY_LIST_KEY)
             .apply()

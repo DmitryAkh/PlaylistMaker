@@ -8,7 +8,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.databinding.TrackItemBinding
 
 class TrackViewHolder(
-    private val binding: TrackItemBinding, private val searchHistory: SearchHistory,
+    private val binding: TrackItemBinding, private val onTrackClicked: (Track) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -28,7 +28,7 @@ class TrackViewHolder(
         binding.tvTrackTime.text = item.trackTime
 
         binding.root.setOnClickListener() {
-            searchHistory.addTrackToHistory(item)
+            onTrackClicked(item)
         }
 
 

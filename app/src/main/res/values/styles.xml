@@ -71,6 +71,7 @@
         <item name="android:drawableTint">@color/edit_area_icon_color</item>
         <item name="android:paddingHorizontal">12dp</item>
         <item name="android:paddingVertical">10dp</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
     </style>
 
     <style name="ClearButton">

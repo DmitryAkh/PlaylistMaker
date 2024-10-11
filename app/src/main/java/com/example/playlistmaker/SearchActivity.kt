@@ -49,9 +49,12 @@ class SearchActivity : AppCompatActivity() {
 
         sharedPrefs = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPrefs)
-        adapter = TrackAdapter(tracks, searchHistory)
+        adapter = TrackAdapter(tracks) { track ->
+            searchHistory.addTrackToHistory(track)
+        }
         historyList = searchHistory.loadHistoryList()
-        historyAdapter = HistoryAdapter(historyList, searchHistory)
+        historyAdapter = HistoryAdapter(historyList) {
+        }
 
         showHistoryList()
 
@@ -60,6 +63,7 @@ class SearchActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (binding.searchArea.text.isNotEmpty()) {
                     doSearch(binding.searchArea.text.toString())
+                    binding.rvTracks.show()
                 }
             }
             true
@@ -100,6 +104,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 binding.clearButton.visibility = clearButtonVisibility(s)
+                placeholdersAndTracksListVisibility(s)
                 enteredText = s.toString()
             }
 
@@ -112,7 +117,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchArea.addTextChangedListener(simpleTextWatcher)
 
         binding.searchArea.setOnFocusChangeListener { v, hasFocus ->
-            binding.llSearchHistory.visibility = View.GONE
+            binding.llSearchHistory.gone()
         }
 
         binding.rvTracks.adapter = adapter
@@ -120,12 +125,13 @@ class SearchActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.rvTracksHistory.adapter = historyAdapter
-        binding.rvTracks.layoutManager =
+        binding.rvTracksHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearHistoryButton.setOnClickListener() {
             searchHistory.clearHistoryList()
-            binding.llSearchHistory.visibility = View.GONE
+            binding.llSearchHistory.gone()
+            searchHistory.clearHistoryList()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -142,6 +148,15 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
+    private fun placeholdersAndTracksListVisibility(s: CharSequence?) {
+        if (s.isNullOrEmpty()) {
+            hidePlaceholder()
+            binding.rvTracks.gone()
+            showHistoryList()
+        }
+    }
+
 
     private fun hideKeyboard() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -215,6 +230,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderButtonRenew.gone()
     }
 
+
     fun showNoInternetPlaceholder() {
         binding.placeholderMessage.show()
         binding.placeholderImage.setImageDrawable(
@@ -228,10 +244,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showHistoryList() {
+        historyList = searchHistory.loadHistoryList()
+        historyAdapter.updateData(historyList)
         if (historyList.isNotEmpty()) {
-            binding.llSearchHistory.visibility = View.VISIBLE
+            binding.llSearchHistory.show()
         } else {
-            binding.llSearchHistory.visibility = View.GONE
+            binding.llSearchHistory.gone()
 
         }
     }
