@@ -31,14 +31,19 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var searchHistory: SearchHistory
     private lateinit var historyList: List<Track>
-    private lateinit var adapter: TrackAdapter
-    private lateinit var historyAdapter: HistoryAdapter
+    private val adapter: TrackAdapter by lazy {
+        TrackAdapter(tracks) { track ->
+            searchHistory.addTrackToHistory(
+                track
+            )
+        }
+    }
+    private val historyAdapter: HistoryAdapter by lazy {
+        HistoryAdapter(historyList) {
+        }
+    }
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://itunes.apple.com")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private var iTunesService = retrofit.create(iTunesApi::class.java)
+    private val iTunesService = RetrofitClient.retrofit.create(iTunesApi::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
         sharedPrefs = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
         searchHistory = SearchHistory(sharedPrefs)
-        adapter = TrackAdapter(tracks) { track ->
-            searchHistory.addTrackToHistory(track)
-        }
         historyList = searchHistory.loadHistoryList()
-        historyAdapter = HistoryAdapter(historyList) {
-        }
-
-        showHistoryList()
 
 
         binding.searchArea.setOnEditorActionListener { _, actionId, _ ->
@@ -116,8 +114,8 @@ class SearchActivity : AppCompatActivity() {
         }
         binding.searchArea.addTextChangedListener(simpleTextWatcher)
 
-        binding.searchArea.setOnFocusChangeListener { v, hasFocus ->
-            binding.llSearchHistory.gone()
+        binding.searchArea.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) showHistoryList()
         }
 
         binding.rvTracks.adapter = adapter
