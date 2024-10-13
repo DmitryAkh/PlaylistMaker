@@ -62,7 +62,51 @@
         android:id="@+id/rvTracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/llSearchHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <TextView
+            android:id="@+id/SearchHistoryHeader"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/you_searched"
+            style="@style/SearchHistoryHeader" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTracksHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/clearHistoryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_history"
+            style="@style/ActionButton"
+            android:visibility="visible"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+    </ScrollView>
+
 
     <LinearLayout
         android:id="@+id/placeholderMessage"
@@ -71,7 +115,7 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
             android:id="@+id/placeholderImage"
@@ -91,7 +135,7 @@
 
         <Button
             android:id="@+id/placeholderButtonRenew"
-            style="@style/PlaceholderButtonRenew"
+            style="@style/ActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/renew"

@@ -1,4 +1,5 @@
 package com.example.playlistmaker
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -18,6 +19,14 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val sharedPrefs = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
+        val isNightMode = sharedPrefs.getBoolean(IS_NIGHT_MODE_KEY, false)
+        binding.themeSwitcher.isChecked = isNightMode
+
+        binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+
+        }
 
         binding.share.setOnClickListener {
             shareApp()

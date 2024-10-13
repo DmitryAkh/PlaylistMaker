@@ -42,7 +42,8 @@
             android:layout_weight="1"
             android:text="@string/black_theme" />
 
-        <androidx.appcompat.widget.SwitchCompat
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -50,10 +51,7 @@
             android:layout_marginEnd="6dp"
             android:layout_marginBottom="11dp"
             app:thumbTint="@color/switcher_tumb_tint"
-            app:trackTint="@color/switcher_track_tint"
-
-
-            />
+            app:trackTint="@color/switcher_track_tint" />
 
     </LinearLayout>
 

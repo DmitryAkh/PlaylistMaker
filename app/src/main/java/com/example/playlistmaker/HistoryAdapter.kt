@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
 
-class TrackAdapter(
-    private var trackList: List<Track>,
+class HistoryAdapter(
+    private var historyList: List<Track>,
     private var onTrackClicked: (Track) -> Unit,
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
@@ -18,11 +18,16 @@ class TrackAdapter(
     }
 
     override fun getItemCount(): Int {
-        return trackList.size
+        return historyList.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = trackList[position]
+        val track = historyList[position]
         holder.bind(track)
+    }
+
+    fun updateData(newHistoryList: List<Track>) {
+        this.historyList = newHistoryList
+        notifyDataSetChanged()
     }
 }

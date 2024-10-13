@@ -8,6 +8,7 @@ data class Track(
     val artistName: String,
     val trackTime: String,
     val artworkUrl100: String,
+    val trackId: String,
 ) {
 
     companion object {
@@ -21,7 +22,8 @@ data class Track(
                     trackName = tracksWithMilles.trackName,
                     artistName = tracksWithMilles.artistName,
                     trackTime = formatTrackTime(tracksWithMilles.trackTimeMillis),
-                    artworkUrl100 = tracksWithMilles.artworkUrl100
+                    artworkUrl100 = tracksWithMilles.artworkUrl100,
+                    trackId = tracksWithMilles.trackId
                 )
             })
         }
@@ -35,4 +37,5 @@ data class TrackWithMilles(
     val artistName: String,
     val trackTimeMillis: Long,
     val artworkUrl100: String,
+    val trackId: String,
 )
