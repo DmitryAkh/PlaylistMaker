@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -16,11 +17,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Track.Companion.convertTracksWithMillesToTracks
 import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
@@ -36,10 +36,16 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.addTrackToHistory(
                 track
             )
+            val displayIntent = Intent(this, Player::class.java)
+            displayIntent.putExtra("TRACK", jsonFromTrack(track))
+            startActivity(displayIntent)
         }
     }
     private val historyAdapter: HistoryAdapter by lazy {
-        HistoryAdapter(historyList) {
+        HistoryAdapter(historyList) { track ->
+            val displayIntent = Intent(this, Player::class.java)
+            displayIntent.putExtra("TRACK", jsonFromTrack(track))
+            startActivity(displayIntent)
         }
     }
 
@@ -129,7 +135,6 @@ class SearchActivity : AppCompatActivity() {
         binding.clearHistoryButton.setOnClickListener() {
             searchHistory.clearHistoryList()
             binding.llSearchHistory.gone()
-            searchHistory.clearHistoryList()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -178,6 +183,7 @@ class SearchActivity : AppCompatActivity() {
                 when (response.code()) {
                     200 -> {
                         updateTracksList(response)
+                        binding.rvTracks.show()
                     }
 
                     else -> showNoInternetPlaceholder()
@@ -210,7 +216,8 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    fun showNotFoundPlaceholder() {
+    private fun showNotFoundPlaceholder() {
+        hideTrackLists()
         tracks.clear()
         adapter.notifyDataSetChanged()
         binding.placeholderMessage.show()
@@ -223,13 +230,19 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderText.text = getString(R.string.nothing_found)
     }
 
-    fun hidePlaceholder() {
+    private fun hidePlaceholder() {
         binding.placeholderMessage.gone()
         binding.placeholderButtonRenew.gone()
     }
 
+    private fun hideTrackLists() {
+        binding.llSearchHistory.gone()
+        binding.rvTracks.gone()
+    }
+
 
     fun showNoInternetPlaceholder() {
+        hideTrackLists()
         binding.placeholderMessage.show()
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
@@ -250,6 +263,12 @@ class SearchActivity : AppCompatActivity() {
             binding.llSearchHistory.gone()
 
         }
+
+
+    }
+
+    private fun jsonFromTrack(track: Track): String {
+        return Gson().toJson(track)
     }
 
 
