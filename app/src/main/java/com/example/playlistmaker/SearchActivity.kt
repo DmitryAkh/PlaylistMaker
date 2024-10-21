@@ -17,7 +17,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.Track.Companion.convertTracksWithMillesToTracks
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -37,14 +36,14 @@ class SearchActivity : AppCompatActivity() {
                 track
             )
             val displayIntent = Intent(this, Player::class.java)
-            displayIntent.putExtra("TRACK", jsonFromTrack(track))
+            displayIntent.putExtra(TRACK, track)
             startActivity(displayIntent)
         }
     }
     private val historyAdapter: HistoryAdapter by lazy {
         HistoryAdapter(historyList) { track ->
             val displayIntent = Intent(this, Player::class.java)
-            displayIntent.putExtra("TRACK", jsonFromTrack(track))
+            displayIntent.putExtra(TRACK, track)
             startActivity(displayIntent)
         }
     }
@@ -267,13 +266,12 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    private fun jsonFromTrack(track: Track): String {
-        return Gson().toJson(track)
-    }
+
 
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"
+        private const val TRACK = "TRACK"
     }
 
 }
