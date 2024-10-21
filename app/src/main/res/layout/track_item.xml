@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -27,7 +28,8 @@
                 style="@style/TrackName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yesterday (Remastered 2009)" />
+                android:text=""
+                tools:text="Yesterday (Remastered 2009)" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -40,7 +42,8 @@
                     style="@style/ArtistNameAndTrackTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="The Beatles" />
+                    android:text=""
+                    tools:text="The Beatles" />
 
                 <ImageView
                     android:id="@+id/ivPointTrack"
@@ -54,7 +57,8 @@
                     style="@style/ArtistNameAndTrackTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2:55" />
+                    android:text=""
+                    tools:text="2:55" />
             </LinearLayout>
 
         </LinearLayout>
