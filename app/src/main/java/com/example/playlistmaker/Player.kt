@@ -8,7 +8,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.google.gson.Gson
 
 class Player : AppCompatActivity() {
 
@@ -23,7 +22,7 @@ class Player : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.backButton.setOnClickListener() {
+        binding.backButton.setOnClickListener {
             finish()
         }
 
