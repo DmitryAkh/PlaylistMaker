@@ -28,6 +28,6 @@
     <color name="like_button_fill">#FFFFFF</color>
     <color name="placeholder_fill">#FFFFFF</color>
     <color name="play_button_fill">#FFFFFF</color>
-
+    <color name="clear_button_fill">#1A1B22</color>
 
 </resources>

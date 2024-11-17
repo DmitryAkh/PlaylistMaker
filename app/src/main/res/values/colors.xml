@@ -29,5 +29,6 @@
     <color name="like_button_fill">#1A1B22</color>
     <color name="placeholder_fill">#1A1B22</color>
     <color name="play_button_fill">#1A1B22</color>
+    <color name="clear_button_fill">#AEAFB4</color>
 
 </resources>

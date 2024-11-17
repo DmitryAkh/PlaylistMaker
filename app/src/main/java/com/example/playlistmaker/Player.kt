@@ -122,7 +122,7 @@ class Player : AppCompatActivity() {
         }
     }
 
-    fun startPlayer() {
+    private fun startPlayer() {
         mediaPlayer.start()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
@@ -135,7 +135,7 @@ class Player : AppCompatActivity() {
 
     }
 
-    fun pausePlayer() {
+    private fun pausePlayer() {
         mediaPlayer.pause()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
@@ -146,7 +146,7 @@ class Player : AppCompatActivity() {
         playerState = STATE_PAUSED
     }
 
-    fun playbackControl() {
+    private fun playbackControl() {
         when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
