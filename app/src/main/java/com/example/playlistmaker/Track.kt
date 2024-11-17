@@ -2,10 +2,8 @@ package com.example.playlistmaker
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import java.text.SimpleDateFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 @Parcelize
 data class Track(
@@ -18,17 +16,13 @@ data class Track(
     val releaseDate: String?,
     val primaryGenreName: String?,
     val country: String?,
+    val previewUrl: String?,
 ) : Parcelable {
 
     fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
 
 
     companion object {
-        private fun formatTrackTime(milliseconds: Long): String {
-            return SimpleDateFormat("mm:ss", Locale.getDefault()).format(milliseconds)
-
-
-        }
 
         fun formatDate(date: String?): String {
             return if (date != null) {
@@ -45,13 +39,14 @@ data class Track(
                 Track(
                     trackName = tracksWithMilles.trackName,
                     artistName = tracksWithMilles.artistName,
-                    trackTime = formatTrackTime(tracksWithMilles.trackTimeMillis),
+                    trackTime = Utils.formatTrackTime(tracksWithMilles.trackTimeMillis),
                     artworkUrl100 = tracksWithMilles.artworkUrl100,
                     trackId = tracksWithMilles.trackId,
                     collectionName = tracksWithMilles.collectionName,
                     releaseDate = formatDate(tracksWithMilles.releaseDate),
                     primaryGenreName = tracksWithMilles.primaryGenreName,
-                    country = tracksWithMilles.country
+                    country = tracksWithMilles.country,
+                    previewUrl = tracksWithMilles.previewUrl
                 )
             })
         }
@@ -72,4 +67,5 @@ data class TrackWithMilles(
     val releaseDate: String?,
     val primaryGenreName: String?,
     val country: String?,
+    val previewUrl: String?,
 )

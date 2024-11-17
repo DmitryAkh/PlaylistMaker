@@ -21,7 +21,7 @@
     <color name="placeholderText">#FFFFFFFF</color>
     <color name="action_button">#FFFFFFFF</color>
     <color name="search_history_header">#FFFFFFFF</color>
-    <color name="cursor">#3772E7</color>
+    <color name="cursor_and_progressBar">#3772E7</color>
     <color name="player_track_artist_name_and_time">#FFFFFF</color>
     <color name="player_info_data">#FFFFFF</color>
     <color name="add_to_library_button_fill">#FFFFFF</color>

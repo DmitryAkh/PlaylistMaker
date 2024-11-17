@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -23,6 +25,7 @@ import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
+
     private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""
     private var tracksWithMilles: MutableList<TrackWithMilles> = mutableListOf()
@@ -30,29 +33,44 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var searchHistory: SearchHistory
     private lateinit var historyList: List<Track>
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(tracks) { track ->
-            searchHistory.addTrackToHistory(
-                track
-            )
-            val displayIntent = Intent(this, Player::class.java)
-            displayIntent.putExtra(TRACK, track)
-            startActivity(displayIntent)
+
+            if (clickDebounce()) {
+                searchHistory.addTrackToHistory(
+                    track
+                )
+                val displayIntent = Intent(this, Player::class.java)
+                displayIntent.putExtra(TRACK, track)
+                startActivity(displayIntent)
+            }
         }
     }
     private val historyAdapter: HistoryAdapter by lazy {
         HistoryAdapter(historyList) { track ->
-            val displayIntent = Intent(this, Player::class.java)
-            displayIntent.putExtra(TRACK, track)
-            startActivity(displayIntent)
+            if (clickDebounce()) {
+                val displayIntent = Intent(this, Player::class.java)
+                displayIntent.putExtra(TRACK, track)
+                startActivity(displayIntent)
+            }
+        }
+    }
+
+    private val searchRunnable = Runnable {
+        if (binding.searchArea.text.isNotEmpty()) {
+            doSearch(binding.searchArea.text.toString())
         }
     }
 
     private val iTunesService = RetrofitClient.retrofit.create(iTunesApi::class.java)
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -109,6 +127,7 @@ class SearchActivity : AppCompatActivity() {
                 binding.clearButton.visibility = clearButtonVisibility(s)
                 placeholdersAndTracksListVisibility(s)
                 enteredText = s.toString()
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -171,7 +190,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun doSearch(query: String) {
+        hideTrackLists()
         hideKeyboard()
+        hidePlaceholder()
+        binding.progressBar.show()
         iTunesService.search(query).enqueue(object :
             Callback<TracksResponse> {
             override fun onResponse(
@@ -182,6 +204,7 @@ class SearchActivity : AppCompatActivity() {
                 when (response.code()) {
                     200 -> {
                         updateTracksList(response)
+                        binding.progressBar.gone()
                         binding.rvTracks.show()
                     }
 
@@ -266,12 +289,30 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    private fun searchDebounce() {
 
+        handler.removeCallbacks(searchRunnable)
+
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+
+    }
+
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
 
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"
         private const val TRACK = "TRACK"
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
 }
