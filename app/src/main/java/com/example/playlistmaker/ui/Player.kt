@@ -24,8 +24,6 @@ class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var useCase: MediaPlayerUseCase
-    private lateinit var playerState: Any
-    private var trackUrl: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
@@ -50,7 +48,6 @@ class Player : AppCompatActivity() {
         }
 
         useCase = Creator.provideMediaPlayerUseCase()
-        playerState = useCase.getState()
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -75,7 +72,6 @@ class Player : AppCompatActivity() {
         binding.trackGenreData.text = track?.primaryGenreName
         binding.trackCountryData.text = track?.country
 
-        trackUrl = track?.previewUrl
 
         preparePlayer(track)
 

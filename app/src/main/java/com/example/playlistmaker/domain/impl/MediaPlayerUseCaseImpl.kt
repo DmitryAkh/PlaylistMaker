@@ -12,6 +12,7 @@ class MediaPlayerUseCaseImpl(private val mediaPlayer: MediaPlayer) : MediaPlayer
 
 
     override fun preparePlayer(track: Track?) {
+        mediaPlayer.reset()
         mediaPlayer.setDataSource(track?.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
