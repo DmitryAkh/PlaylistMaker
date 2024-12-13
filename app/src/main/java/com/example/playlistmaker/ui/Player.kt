@@ -1,6 +1,5 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,19 +11,26 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.Utils
+import com.example.playlistmaker.Utils.getCoverArtwork
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.api.MediaPlayerUseCase
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.impl.MediaPlayerUseCaseImpl
 
 class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
+    private lateinit var useCase: MediaPlayerUseCase
+    private lateinit var playerState: Any
     private var trackUrl: String? = null
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
-            binding.playerTime.text = Utils.formatTrackTime(mediaPlayer.currentPosition.toLong())
+            binding.playerTime.text = Utils.formatTrackTime(useCase.getCurrentPosition().toLong())
             handler.postDelayed(this, 1000)
         }
     }
@@ -43,6 +49,9 @@ class Player : AppCompatActivity() {
             track = intent.getParcelableExtra("TRACK")
         }
 
+        useCase = Creator.provideMediaPlayerUseCase()
+        playerState = useCase.getState()
+
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -51,7 +60,7 @@ class Player : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(track?.getCoverArtwork())
+            .load(getCoverArtwork(track?.artworkUrl100))
             .centerCrop()
             .transform(RoundedCorners(Utils.dpToPx(8f, this)))
             .placeholder(R.drawable.placeholder312)
@@ -68,7 +77,7 @@ class Player : AppCompatActivity() {
 
         trackUrl = track?.previewUrl
 
-        preparePlayer()
+        preparePlayer(track)
 
         binding.playButton.setOnClickListener {
             playbackControl()
@@ -93,66 +102,59 @@ class Player : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(updateTimerRunnable)
-        mediaPlayer.release()
+        useCase.release()
     }
 
     override fun onResume() {
         super.onResume()
-        if (playerState == STATE_PLAYING) {
+        if (useCase.getState() == MediaPlayerUseCaseImpl.STATE_PLAYING) {
             handler.post(updateTimerRunnable)
         }
     }
 
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
+    private fun preparePlayer(track: Track?) {
+        useCase.preparePlayer(track)
+
             binding.playButton.setImageDrawable(
                 ContextCompat.getDrawable(
                     this@Player,
                     R.drawable.play_button
                 )
             )
-            playerState = STATE_PREPARED
             binding.playerTime.text = getString(R.string.default_timer)
             handler.removeCallbacks(updateTimerRunnable)
-        }
+
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        useCase.startPlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
                 R.drawable.pause_button
             )
         )
-        playerState = STATE_PLAYING
         handler.post(updateTimerRunnable)
 
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        useCase.pausePlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
                 R.drawable.play_button
             )
         )
-        playerState = STATE_PAUSED
     }
 
     private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
+        when (useCase.getState()) {
+            MediaPlayerUseCaseImpl.STATE_PLAYING -> {
                 pausePlayer()
             }
 
-            STATE_PREPARED, STATE_PAUSED -> {
+            MediaPlayerUseCaseImpl.STATE_PREPARED, MediaPlayerUseCaseImpl.STATE_PAUSED -> {
                 startPlayer()
             }
         }
@@ -160,11 +162,5 @@ class Player : AppCompatActivity() {
     }
 
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
 
 }

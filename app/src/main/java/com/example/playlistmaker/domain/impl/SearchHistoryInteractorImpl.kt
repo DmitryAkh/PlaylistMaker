@@ -1,17 +1,18 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.impl
 
 import android.content.SharedPreferences
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
 const val HISTORY_LIST_KEY = "key_for_history_list"
 
-class SearchHistory(private val sharedPrefs: SharedPreferences) {
+
+class SearchHistoryInteractorImpl(private val sharedPrefs: SharedPreferences) :
+    SearchHistoryInteractor {
 
 
-
-
-    fun addTrackToHistory(track: Track) {
-
+    override fun addTrackToHistory(track: Track) {
         val historyList = loadHistoryList()
 
         if (historyList.contains(track)) {
@@ -29,13 +30,13 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
             .apply()
     }
 
-    fun clearHistoryList() {
+    override fun clearHistoryList() {
         sharedPrefs.edit()
             .remove(HISTORY_LIST_KEY)
             .apply()
     }
 
-    fun loadHistoryList(): MutableList<Track> {
+    override fun loadHistoryList(): MutableList<Track> {
         val json = sharedPrefs.getString(HISTORY_LIST_KEY, null)
         return if (json != null) {
             historyListFromJson(json)
@@ -44,14 +45,12 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         }
     }
 
-
-    fun historyListFromJson(json: String?): MutableList<Track> {
+    override fun historyListFromJson(json: String?): MutableList<Track> {
         val type = object : com.google.gson.reflect.TypeToken<MutableList<Track>>() {}.type
         return Gson().fromJson(json, type)
     }
 
-    fun jsonFromHistoryList(historyList: MutableList<Track>): String {
+    override fun jsonFromHistoryList(historyList: MutableList<Track>): String {
         return Gson().toJson(historyList)
     }
-
 }

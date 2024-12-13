@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -7,10 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.domain.api.SettingsInteractor
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var useCase: SettingsInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -19,12 +23,13 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val sharedPrefs = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        val isNightMode = sharedPrefs.getBoolean(IS_NIGHT_MODE_KEY, false)
+        useCase = Creator.provideSettingsInteractor()
+        val sharedPrefs = Creator.provideSharedPreferences()
+        val isNightMode = Creator.provideIsNightMode()
         binding.themeSwitcher.isChecked = isNightMode
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+            useCase.switchTheme(checked, sharedPrefs)
 
         }
 
@@ -54,11 +59,10 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun shareApp() {
-        val shareText = getString(R.string.share_message)
 
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, shareText)
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message))
             type = "text/plain"
         }
         val intentMessage = getString(R.string.share_intent_message)
@@ -69,23 +73,20 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun sendToSupport() {
-        val message = getString(R.string.message_to_support)
-        val subject = getString(R.string.subject_message_to_support)
-        val email = getString(R.string.email)
 
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SENDTO
             data = Uri.parse("mailto:")
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, message)
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.email)))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.subject_message_to_support))
+            putExtra(Intent.EXTRA_TEXT, getString(R.string.message_to_support))
         }
         startActivity(sendIntent)
     }
 
     private fun openUserAgreement() {
-        val url = getString(R.string.user_agreement_url)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.user_agreement_url)))
         startActivity(intent)
     }
 }
