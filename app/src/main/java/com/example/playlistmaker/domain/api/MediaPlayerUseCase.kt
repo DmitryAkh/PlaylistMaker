@@ -10,4 +10,5 @@ interface MediaPlayerUseCase {
     fun release()
     fun getState(): Int
     fun getCurrentPosition(): Int
+    fun setOnCompletionListener(listener: () -> Unit)
 }

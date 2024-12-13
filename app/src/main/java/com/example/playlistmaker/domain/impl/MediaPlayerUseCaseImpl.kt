@@ -46,6 +46,14 @@ class MediaPlayerUseCaseImpl(private val mediaPlayer: MediaPlayer) : MediaPlayer
         return mediaPlayer.currentPosition
     }
 
+    override fun setOnCompletionListener(listener: () -> Unit) {
+        mediaPlayer.setOnCompletionListener {
+            playerState = STATE_PREPARED
+            listener()
+        }
+    }
+
+
     companion object {
         const val STATE_DEFAULT = 0
         const val STATE_PREPARED = 1

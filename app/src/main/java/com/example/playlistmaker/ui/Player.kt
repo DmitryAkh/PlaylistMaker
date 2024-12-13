@@ -110,15 +110,16 @@ class Player : AppCompatActivity() {
 
     private fun preparePlayer(track: Track?) {
         useCase.preparePlayer(track)
-
+        useCase.setOnCompletionListener {
             binding.playButton.setImageDrawable(
                 ContextCompat.getDrawable(
                     this@Player,
                     R.drawable.play_button
                 )
             )
-            binding.playerTime.text = getString(R.string.default_timer)
-            handler.removeCallbacks(updateTimerRunnable)
+        }
+        binding.playerTime.text = getString(R.string.default_timer)
+        handler.removeCallbacks(updateTimerRunnable)
 
     }
 
@@ -156,7 +157,6 @@ class Player : AppCompatActivity() {
         }
 
     }
-
 
 
 }
