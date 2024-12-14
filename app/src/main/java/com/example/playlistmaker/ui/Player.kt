@@ -16,14 +16,16 @@ import com.example.playlistmaker.Utils
 import com.example.playlistmaker.Utils.getCoverArtwork
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.domain.api.MediaPlayerUseCase
+import com.example.playlistmaker.domain.api.PlayerUseCase
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.impl.MediaPlayerUseCaseImpl
+import com.example.playlistmaker.domain.impl.PlayerUseCaseImpl
+
+private const val TRACK = "TRACK"
 
 class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var useCase: MediaPlayerUseCase
+    private lateinit var useCase: PlayerUseCase
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
@@ -41,10 +43,10 @@ class Player : AppCompatActivity() {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            track = intent.getParcelableExtra("TRACK", Track::class.java)
+            track = intent.getParcelableExtra(TRACK, Track::class.java)
         } else {
             @Suppress("DEPRECATION")
-            track = intent.getParcelableExtra("TRACK")
+            track = intent.getParcelableExtra(TRACK)
         }
 
         useCase = Creator.provideMediaPlayerUseCase()
@@ -103,7 +105,7 @@ class Player : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (useCase.getState() == MediaPlayerUseCaseImpl.STATE_PLAYING) {
+        if (useCase.getState() == PlayerUseCaseImpl.STATE_PLAYING) {
             handler.post(updateTimerRunnable)
         }
     }
@@ -147,11 +149,11 @@ class Player : AppCompatActivity() {
 
     private fun playbackControl() {
         when (useCase.getState()) {
-            MediaPlayerUseCaseImpl.STATE_PLAYING -> {
+            PlayerUseCaseImpl.STATE_PLAYING -> {
                 pausePlayer()
             }
 
-            MediaPlayerUseCaseImpl.STATE_PREPARED, MediaPlayerUseCaseImpl.STATE_PAUSED -> {
+            PlayerUseCaseImpl.STATE_PREPARED, PlayerUseCaseImpl.STATE_PAUSED -> {
                 startPlayer()
             }
         }

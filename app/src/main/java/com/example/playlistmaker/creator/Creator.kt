@@ -1,23 +1,22 @@
 package com.example.playlistmaker.creator
 
+import SettingsRepository
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.data.network.RetrofitClient
-import com.example.playlistmaker.data.repository.TrackRepositoryImpl
-import com.example.playlistmaker.domain.api.MediaPlayerUseCase
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.data.repository.SearchRepositoryImpl
+import com.example.playlistmaker.data.repository.SettingRepositoryImpl
+import com.example.playlistmaker.domain.api.PlayerUseCase
+import com.example.playlistmaker.domain.api.SearchInteractor
+import com.example.playlistmaker.domain.api.SearchRepository
 import com.example.playlistmaker.domain.api.SettingsInteractor
-import com.example.playlistmaker.domain.api.TracksRepository
-import com.example.playlistmaker.domain.api.TracksUseCase
-import com.example.playlistmaker.domain.impl.MediaPlayerUseCaseImpl
-import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
+import com.example.playlistmaker.domain.impl.PlayerUseCaseImpl
+import com.example.playlistmaker.domain.impl.SearchInteractorImpl
 import com.example.playlistmaker.domain.impl.SettingsInteractorImpl
-import com.example.playlistmaker.domain.impl.TracksUseCaseImpl
 
 const val SHARED_PREFERENCES = "shared_preferences"
-const val IS_NIGHT_MODE_KEY = "key_for_night_mode"
 
 object Creator {
 
@@ -32,34 +31,24 @@ object Creator {
         return application.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    fun provideIsNightMode(): Boolean {
-        return provideSharedPreferences().getBoolean(IS_NIGHT_MODE_KEY, false)
+    private fun provideSettingsRepository(): SettingsRepository {
+        return SettingRepositoryImpl(provideSharedPreferences())
     }
 
-    private fun provideTracksRepository(): TracksRepository {
-        return TrackRepositoryImpl(RetrofitClient())
+    fun provideMediaPlayerUseCase(): PlayerUseCase {
+        return PlayerUseCaseImpl(MediaPlayer())
     }
 
-    fun provideMediaPlayerUseCase(): MediaPlayerUseCase {
-        return MediaPlayerUseCaseImpl(MediaPlayer())
-    }
-
-
-    fun provideTracksUseCase(): TracksUseCase {
-
-        return TracksUseCaseImpl(provideTracksRepository())
-    }
 
     fun provideSettingsInteractor(): SettingsInteractor {
-        return SettingsInteractorImpl()
+        return SettingsInteractorImpl(provideSettingsRepository())
     }
 
-    fun provideSearchHistoryInteractor(): SearchHistoryInteractor {
-        return SearchHistoryInteractorImpl(
-            application.getSharedPreferences(
-                SHARED_PREFERENCES,
-                Context.MODE_PRIVATE
-            )
-        )
+    fun provideSearchRepository(): SearchRepository {
+        return SearchRepositoryImpl(RetrofitClient(), provideSharedPreferences())
+    }
+
+    fun provideSearchInteractor(): SearchInteractor {
+        return SearchInteractorImpl(provideSearchRepository())
     }
 }

@@ -14,7 +14,7 @@ import com.example.playlistmaker.domain.api.SettingsInteractor
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var useCase: SettingsInteractor
+    private lateinit var interactor: SettingsInteractor
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -23,13 +23,12 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        useCase = Creator.provideSettingsInteractor()
-        val sharedPrefs = Creator.provideSharedPreferences()
-        val isNightMode = Creator.provideIsNightMode()
+        interactor = Creator.provideSettingsInteractor()
+        val isNightMode = interactor.provideIsNightMode()
         binding.themeSwitcher.isChecked = isNightMode
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            useCase.switchTheme(checked, sharedPrefs)
+            interactor.switchTheme(checked)
 
         }
 

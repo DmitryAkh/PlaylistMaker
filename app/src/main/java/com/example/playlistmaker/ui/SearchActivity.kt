@@ -15,15 +15,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.api.TracksUseCase
+import com.example.playlistmaker.domain.api.SearchInteractor
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.gone
-import com.example.playlistmaker.presentation.show
 
 
 class SearchActivity : AppCompatActivity() {
@@ -31,18 +29,15 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""
     private var tracks: MutableList<Track> = mutableListOf()
-    private lateinit var searchHistoryInteractor: SearchHistoryInteractor
+    private lateinit var interactor: SearchInteractor
     private lateinit var historyList: List<Track>
-
-    private lateinit var useCase: TracksUseCase
-
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(tracks) { track ->
 
             if (clickDebounce()) {
-                searchHistoryInteractor.addTrackToHistory(
+                interactor.addTrackToHistory(
                     track
                 )
                 val displayIntent = Intent(this, Player::class.java)
@@ -79,9 +74,8 @@ class SearchActivity : AppCompatActivity() {
 
 
 
-        searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
-        historyList = searchHistoryInteractor.loadHistoryList()
-        useCase = Creator.provideTracksUseCase()
+        interactor = Creator.provideSearchInteractor()
+        historyList = interactor.loadHistoryList()
 
         binding.searchArea.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -151,8 +145,8 @@ class SearchActivity : AppCompatActivity() {
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         binding.clearHistoryButton.setOnClickListener() {
-            searchHistoryInteractor.clearHistoryList()
-            binding.llSearchHistory.gone()
+            interactor.clearHistoryList()
+            binding.llSearchHistory.isVisible = false
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -173,7 +167,7 @@ class SearchActivity : AppCompatActivity() {
     private fun placeholdersAndTracksListVisibility(s: CharSequence?) {
         if (s.isNullOrEmpty()) {
             hidePlaceholder()
-            binding.rvTracks.gone()
+            binding.rvTracks.isVisible = false
             showHistoryList()
         }
     }
@@ -194,12 +188,12 @@ class SearchActivity : AppCompatActivity() {
         hideKeyboard()
         hidePlaceholder()
         tracks.clear()
-        binding.progressBar.show()
+        binding.progressBar.isVisible = true
 
-        useCase.doSearch(query, object : TracksUseCase.TracksConsumer {
+        interactor.doSearch(query, object : SearchInteractor.TracksConsumer {
             override fun consume(foundTracks: List<Track>) {
                 runOnUiThread {
-                    updateTracksList(foundTracks, useCase.getResultCode())
+                    updateTracksList(foundTracks, interactor.getResponseState())
                 }
             }
         })
@@ -207,16 +201,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    fun updateTracksList(trackList: List<Track>, resultCode: Int) {
+    fun updateTracksList(trackList: List<Track>, responseState: Int) {
 
 
         if (trackList.isNotEmpty()) {
             hidePlaceholder()
-            binding.progressBar.gone()
-            binding.rvTracks.show()
+            binding.progressBar.isVisible = false
+            binding.rvTracks.isVisible = true
             tracks.addAll(trackList)
             adapter.notifyDataSetChanged()
-        } else if (resultCode == 404) {
+        } else if (responseState == 404) {
             showNotFoundPlaceholder()
         } else {
             showNoInternetPlaceholder()
@@ -224,10 +218,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showNotFoundPlaceholder() {
-        binding.progressBar.gone()
+        binding.progressBar.isVisible = false
         hideTrackLists()
         adapter.notifyDataSetChanged()
-        binding.placeholderMessage.show()
+        binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
                 this@SearchActivity,
@@ -238,20 +232,20 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun hidePlaceholder() {
-        binding.placeholderMessage.gone()
-        binding.placeholderButtonRenew.gone()
+        binding.placeholderMessage.isVisible = false
+        binding.placeholderButtonRenew.isVisible = false
     }
 
     private fun hideTrackLists() {
-        binding.llSearchHistory.gone()
-        binding.rvTracks.gone()
+        binding.llSearchHistory.isVisible = false
+        binding.rvTracks.isVisible = false
     }
 
 
     fun showNoInternetPlaceholder() {
-        binding.progressBar.gone()
+        binding.progressBar.isVisible = false
         hideTrackLists()
-        binding.placeholderMessage.show()
+        binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
                 this@SearchActivity,
@@ -259,16 +253,16 @@ class SearchActivity : AppCompatActivity() {
             )
         )
         binding.placeholderText.text = getString(R.string.no_internet)
-        binding.placeholderButtonRenew.show()
+        binding.placeholderButtonRenew.isVisible = true
     }
 
     private fun showHistoryList() {
-        historyList = searchHistoryInteractor.loadHistoryList()
+        historyList = interactor.loadHistoryList()
         historyAdapter.updateData(historyList)
         if (historyList.isNotEmpty()) {
-            binding.llSearchHistory.show()
+            binding.llSearchHistory.isVisible = true
         } else {
-            binding.llSearchHistory.gone()
+            binding.llSearchHistory.isVisible = false
 
         }
 

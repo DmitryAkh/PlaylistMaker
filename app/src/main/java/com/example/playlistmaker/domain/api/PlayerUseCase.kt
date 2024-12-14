@@ -3,7 +3,7 @@ package com.example.playlistmaker.domain.api
 import com.example.playlistmaker.domain.models.Track
 
 
-interface MediaPlayerUseCase {
+interface PlayerUseCase {
     fun preparePlayer(track: Track?)
     fun startPlayer()
     fun pausePlayer()
