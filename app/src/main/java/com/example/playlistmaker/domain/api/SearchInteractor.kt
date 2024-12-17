@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.api
 
+import com.example.playlistmaker.data.dto.ResponseState
 import com.example.playlistmaker.domain.models.Track
 
 interface SearchInteractor {
@@ -9,7 +10,7 @@ interface SearchInteractor {
     fun historyListFromJson(json: String?): MutableList<Track>
     fun jsonFromHistoryList(historyList: MutableList<Track>): String
     fun doSearch(expression: String, consumer: TracksConsumer)
-    fun getResponseState(): Int
+    fun getResponseState(): ResponseState
     interface TracksConsumer {
         fun consume(foundTracks: List<Track>)
     }

@@ -21,6 +21,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.SearchInteractor
+import com.example.playlistmaker.data.dto.ResponseState
 import com.example.playlistmaker.domain.models.Track
 
 
@@ -201,7 +202,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    fun updateTracksList(trackList: List<Track>, responseState: Int) {
+    fun updateTracksList(trackList: List<Track>, responseState: ResponseState) {
 
 
         if (trackList.isNotEmpty()) {
@@ -210,7 +211,7 @@ class SearchActivity : AppCompatActivity() {
             binding.rvTracks.isVisible = true
             tracks.addAll(trackList)
             adapter.notifyDataSetChanged()
-        } else if (responseState == 404) {
+        } else if (responseState == ResponseState.SUCCESS) {
             showNotFoundPlaceholder()
         } else {
             showNoInternetPlaceholder()

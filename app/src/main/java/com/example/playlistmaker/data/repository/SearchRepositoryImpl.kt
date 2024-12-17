@@ -7,6 +7,7 @@ import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.network.RetrofitClient
 import com.example.playlistmaker.domain.api.SearchRepository
 import com.example.playlistmaker.domain.impl.HISTORY_LIST_KEY
+import com.example.playlistmaker.data.dto.ResponseState
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
@@ -16,7 +17,7 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
     override fun doSearch(expression: String): List<Track> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        if (response.resultCode == 200) {
+        if (networkClient.getResponseState() == ResponseState.SUCCESS) {
             return (response as TracksResponse).results.map {
                 Track(
                     trackId = it.trackId,
@@ -35,12 +36,8 @@ class SearchRepositoryImpl(
         return emptyList()
     }
 
-    override fun getResponseState(): Int {
-        return when (networkClient.getResultCode()) {
-            200 -> 200
-            404 -> 404
-            else -> 0
-        }
+    override fun getResponseState(): ResponseState {
+        return networkClient.getResponseState()
     }
 
     override fun addTrackToHistory(track: Track) {

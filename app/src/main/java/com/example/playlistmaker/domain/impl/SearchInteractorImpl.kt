@@ -2,6 +2,7 @@ package com.example.playlistmaker.domain.impl
 
 import com.example.playlistmaker.domain.api.SearchRepository
 import com.example.playlistmaker.domain.api.SearchInteractor
+import com.example.playlistmaker.data.dto.ResponseState
 import com.example.playlistmaker.domain.models.Track
 
 const val HISTORY_LIST_KEY = "key_for_history_list"
@@ -40,7 +41,9 @@ class SearchInteractorImpl(private val repository: SearchRepository) :
 
     }
 
-    override fun getResponseState(): Int {
+    override fun getResponseState(): ResponseState {
         return repository.getResponseState()
     }
+
+
 }
