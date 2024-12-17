@@ -16,16 +16,16 @@ import com.example.playlistmaker.Utils
 import com.example.playlistmaker.Utils.getCoverArtwork
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.domain.api.PlayerUseCase
+import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.impl.PlayerUseCaseImpl
+import com.example.playlistmaker.domain.impl.PlayeInteractorImpl
 
 private const val TRACK = "TRACK"
 
 class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var useCase: PlayerUseCase
+    private lateinit var useCase: PlayerInteractor
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
@@ -105,7 +105,7 @@ class Player : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (useCase.getState() == PlayerUseCaseImpl.STATE_PLAYING) {
+        if (useCase.getState() == PlayeInteractorImpl.STATE_PLAYING) {
             handler.post(updateTimerRunnable)
         }
     }
@@ -149,11 +149,11 @@ class Player : AppCompatActivity() {
 
     private fun playbackControl() {
         when (useCase.getState()) {
-            PlayerUseCaseImpl.STATE_PLAYING -> {
+            PlayeInteractorImpl.STATE_PLAYING -> {
                 pausePlayer()
             }
 
-            PlayerUseCaseImpl.STATE_PREPARED, PlayerUseCaseImpl.STATE_PAUSED -> {
+            PlayeInteractorImpl.STATE_PREPARED, PlayeInteractorImpl.STATE_PAUSED -> {
                 startPlayer()
             }
         }

@@ -1,11 +1,11 @@
 package com.example.playlistmaker.domain.impl
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.domain.api.PlayerUseCase
+import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.models.Track
 
 
-class PlayerUseCaseImpl(private val mediaPlayer: MediaPlayer) : PlayerUseCase {
+class PlayeInteractorImpl(private val mediaPlayer: MediaPlayer) : PlayerInteractor {
 
 
     private var playerState = STATE_DEFAULT

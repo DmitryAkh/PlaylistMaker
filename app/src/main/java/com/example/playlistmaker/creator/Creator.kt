@@ -8,11 +8,11 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.data.network.RetrofitClient
 import com.example.playlistmaker.data.repository.SearchRepositoryImpl
 import com.example.playlistmaker.data.repository.SettingRepositoryImpl
-import com.example.playlistmaker.domain.api.PlayerUseCase
+import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.api.SearchInteractor
 import com.example.playlistmaker.domain.api.SearchRepository
 import com.example.playlistmaker.domain.api.SettingsInteractor
-import com.example.playlistmaker.domain.impl.PlayerUseCaseImpl
+import com.example.playlistmaker.domain.impl.PlayeInteractorImpl
 import com.example.playlistmaker.domain.impl.SearchInteractorImpl
 import com.example.playlistmaker.domain.impl.SettingsInteractorImpl
 
@@ -35,8 +35,8 @@ object Creator {
         return SettingRepositoryImpl(provideSharedPreferences())
     }
 
-    fun provideMediaPlayerUseCase(): PlayerUseCase {
-        return PlayerUseCaseImpl(MediaPlayer())
+    fun provideMediaPlayerUseCase(): PlayerInteractor {
+        return PlayeInteractorImpl(MediaPlayer())
     }
 
 
