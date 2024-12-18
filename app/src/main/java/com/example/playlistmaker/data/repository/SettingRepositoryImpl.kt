@@ -1,8 +1,8 @@
 package com.example.playlistmaker.data.repository
 
-import SettingsRepository
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.domain.api.SettingsRepository
 
 const val IS_NIGHT_MODE_KEY = "key_for_night_mode"
 

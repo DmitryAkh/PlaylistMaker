@@ -1,14 +1,16 @@
-package com.example.playlistmaker.domain.impl
+package com.example.playlistmaker.data.repository
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.api.PlayerRepository
+import com.example.playlistmaker.domain.models.PlayerState
+import com.example.playlistmaker.domain.models.PlayerState.PLAYING
+import com.example.playlistmaker.domain.models.PlayerState.PREPARED
+import com.example.playlistmaker.domain.models.PlayerState.PAUSED
+import com.example.playlistmaker.domain.models.PlayerState.DEFAULT
 import com.example.playlistmaker.domain.models.Track
 
-
-class PlayeInteractorImpl(private val mediaPlayer: MediaPlayer) : PlayerInteractor {
-
-
-    private var playerState = STATE_DEFAULT
+class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
+    private var playerState = DEFAULT
 
 
     override fun preparePlayer(track: Track?) {
@@ -16,21 +18,21 @@ class PlayeInteractorImpl(private val mediaPlayer: MediaPlayer) : PlayerInteract
         mediaPlayer.setDataSource(track?.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
+            playerState = PREPARED
         }
         mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
+            playerState = PREPARED
         }
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = STATE_PLAYING
+        playerState = PLAYING
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = STATE_PAUSED
+        playerState = PAUSED
     }
 
 
@@ -38,7 +40,7 @@ class PlayeInteractorImpl(private val mediaPlayer: MediaPlayer) : PlayerInteract
         mediaPlayer.release()
     }
 
-    override fun getState(): Int {
+    override fun getState(): PlayerState {
         return playerState
     }
 
@@ -48,16 +50,8 @@ class PlayeInteractorImpl(private val mediaPlayer: MediaPlayer) : PlayerInteract
 
     override fun setOnCompletionListener(listener: () -> Unit) {
         mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
+            playerState = PREPARED
             listener()
         }
-    }
-
-
-    companion object {
-        const val STATE_DEFAULT = 0
-        const val STATE_PREPARED = 1
-        const val STATE_PLAYING = 2
-        const val STATE_PAUSED = 3
     }
 }

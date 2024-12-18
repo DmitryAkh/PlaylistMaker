@@ -18,19 +18,22 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.impl.PlayeInteractorImpl
+import com.example.playlistmaker.domain.models.PlayerState.PLAYING
+import com.example.playlistmaker.domain.models.PlayerState.PREPARED
+import com.example.playlistmaker.domain.models.PlayerState.PAUSED
 
 private const val TRACK = "TRACK"
 
 class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var useCase: PlayerInteractor
+    private lateinit var interactor: PlayerInteractor
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
-            binding.playerTime.text = Utils.formatTrackTime(useCase.getCurrentPosition().toLong())
+            binding.playerTime.text =
+                Utils.formatTrackTime(interactor.getCurrentPosition().toLong())
             handler.postDelayed(this, 1000)
         }
     }
@@ -49,7 +52,7 @@ class Player : AppCompatActivity() {
             track = intent.getParcelableExtra(TRACK)
         }
 
-        useCase = Creator.provideMediaPlayerUseCase()
+        interactor = Creator.providePlayerInteractor()
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -100,19 +103,19 @@ class Player : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(updateTimerRunnable)
-        useCase.release()
+        interactor.release()
     }
 
     override fun onResume() {
         super.onResume()
-        if (useCase.getState() == PlayeInteractorImpl.STATE_PLAYING) {
+        if (interactor.getState() == PLAYING) {
             handler.post(updateTimerRunnable)
         }
     }
 
     private fun preparePlayer(track: Track?) {
-        useCase.preparePlayer(track)
-        useCase.setOnCompletionListener {
+        interactor.preparePlayer(track)
+        interactor.setOnCompletionListener {
             binding.playButton.setImageDrawable(
                 ContextCompat.getDrawable(
                     this@Player,
@@ -126,7 +129,7 @@ class Player : AppCompatActivity() {
     }
 
     private fun startPlayer() {
-        useCase.startPlayer()
+        interactor.startPlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
@@ -138,7 +141,7 @@ class Player : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        useCase.pausePlayer()
+        interactor.pausePlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
@@ -148,17 +151,16 @@ class Player : AppCompatActivity() {
     }
 
     private fun playbackControl() {
-        when (useCase.getState()) {
-            PlayeInteractorImpl.STATE_PLAYING -> {
-                pausePlayer()
-            }
+        if (interactor.getState() == PLAYING) {
 
-            PlayeInteractorImpl.STATE_PREPARED, PlayeInteractorImpl.STATE_PAUSED -> {
+                pausePlayer()
+        } else if (interactor.getState() == PREPARED || interactor.getState() == PAUSED)
+
                 startPlayer()
             }
-        }
-
-    }
 
 
 }
+
+
+

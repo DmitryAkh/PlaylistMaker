@@ -21,7 +21,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.SearchInteractor
-import com.example.playlistmaker.data.dto.ResponseState
+import com.example.playlistmaker.domain.models.ResponseState
 import com.example.playlistmaker.domain.models.Track
 
 

@@ -3,7 +3,7 @@ package com.example.playlistmaker.data.network
 import android.util.Log
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.Response
-import com.example.playlistmaker.data.dto.ResponseState
+import com.example.playlistmaker.domain.models.ResponseState
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

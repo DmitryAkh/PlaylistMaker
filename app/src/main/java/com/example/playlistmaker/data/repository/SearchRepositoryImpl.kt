@@ -7,7 +7,7 @@ import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.network.RetrofitClient
 import com.example.playlistmaker.domain.api.SearchRepository
 import com.example.playlistmaker.domain.impl.HISTORY_LIST_KEY
-import com.example.playlistmaker.data.dto.ResponseState
+import com.example.playlistmaker.domain.models.ResponseState
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 
