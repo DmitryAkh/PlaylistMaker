@@ -1,12 +1,13 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
+import com.example.playlistmaker.domain.models.Track
 
-class HistoryAdapter(
-    private var historyList: List<Track>,
+class TrackAdapter(
+    private var trackList: List<Track>,
     private var onTrackClicked: (Track) -> Unit,
 ) :
     RecyclerView.Adapter<TrackViewHolder>() {
@@ -18,16 +19,11 @@ class HistoryAdapter(
     }
 
     override fun getItemCount(): Int {
-        return historyList.size
+        return trackList.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val track = historyList[position]
+        val track = trackList[position]
         holder.bind(track)
-    }
-
-    fun updateData(newHistoryList: List<Track>) {
-        this.historyList = newHistoryList
-        notifyDataSetChanged()
     }
 }

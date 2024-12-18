@@ -1,6 +1,5 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui
 
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,19 +11,29 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.Utils
+import com.example.playlistmaker.Utils.getCoverArtwork
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.api.PlayerInteractor
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.models.PlayerState.PLAYING
+import com.example.playlistmaker.domain.models.PlayerState.PREPARED
+import com.example.playlistmaker.domain.models.PlayerState.PAUSED
+
+private const val TRACK = "TRACK"
 
 class Player : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
-    private var trackUrl: String? = null
+    private lateinit var interactor: PlayerInteractor
     private val handler = Handler(Looper.getMainLooper())
 
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
-            binding.playerTime.text = Utils.formatTrackTime(mediaPlayer.currentPosition.toLong())
+            binding.playerTime.text =
+                Utils.formatTrackTime(interactor.getCurrentPosition().toLong())
             handler.postDelayed(this, 1000)
         }
     }
@@ -37,11 +46,13 @@ class Player : AppCompatActivity() {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            track = intent.getParcelableExtra("TRACK", Track::class.java)
+            track = intent.getParcelableExtra(TRACK, Track::class.java)
         } else {
             @Suppress("DEPRECATION")
-            track = intent.getParcelableExtra("TRACK")
+            track = intent.getParcelableExtra(TRACK)
         }
+
+        interactor = Creator.providePlayerInteractor()
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,7 +62,7 @@ class Player : AppCompatActivity() {
         }
 
         Glide.with(this)
-            .load(track?.getCoverArtwork())
+            .load(getCoverArtwork(track?.artworkUrl100))
             .centerCrop()
             .transform(RoundedCorners(Utils.dpToPx(8f, this)))
             .placeholder(R.drawable.placeholder312)
@@ -66,9 +77,8 @@ class Player : AppCompatActivity() {
         binding.trackGenreData.text = track?.primaryGenreName
         binding.trackCountryData.text = track?.country
 
-        trackUrl = track?.previewUrl
 
-        preparePlayer()
+        preparePlayer(track)
 
         binding.playButton.setOnClickListener {
             playbackControl()
@@ -93,78 +103,64 @@ class Player : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(updateTimerRunnable)
-        mediaPlayer.release()
+        interactor.release()
     }
 
     override fun onResume() {
         super.onResume()
-        if (playerState == STATE_PLAYING) {
+        if (interactor.getState() == PLAYING) {
             handler.post(updateTimerRunnable)
         }
     }
 
-    private fun preparePlayer() {
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
+    private fun preparePlayer(track: Track?) {
+        interactor.preparePlayer(track)
+        interactor.setOnCompletionListener {
             binding.playButton.setImageDrawable(
                 ContextCompat.getDrawable(
                     this@Player,
                     R.drawable.play_button
                 )
             )
-            playerState = STATE_PREPARED
-            binding.playerTime.text = getString(R.string.default_timer)
-            handler.removeCallbacks(updateTimerRunnable)
         }
+        binding.playerTime.text = getString(R.string.default_timer)
+        handler.removeCallbacks(updateTimerRunnable)
+
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        interactor.startPlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
                 R.drawable.pause_button
             )
         )
-        playerState = STATE_PLAYING
         handler.post(updateTimerRunnable)
 
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        interactor.pausePlayer()
         binding.playButton.setImageDrawable(
             ContextCompat.getDrawable(
                 this@Player,
                 R.drawable.play_button
             )
         )
-        playerState = STATE_PAUSED
     }
 
     private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
+        if (interactor.getState() == PLAYING) {
 
-            STATE_PREPARED, STATE_PAUSED -> {
+                pausePlayer()
+        } else if (interactor.getState() == PREPARED || interactor.getState() == PAUSED)
+
                 startPlayer()
             }
-        }
 
-    }
-
-
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
-    }
 
 }
+
+
+

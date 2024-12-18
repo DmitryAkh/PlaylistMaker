@@ -3,6 +3,8 @@ package com.example.playlistmaker
 import android.content.Context
 import android.util.TypedValue
 import java.text.SimpleDateFormat
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 object Utils {
@@ -19,4 +21,18 @@ object Utils {
     fun formatTrackTime(milliseconds: Long): String {
         return SimpleDateFormat("mm:ss", Locale.getDefault()).format(milliseconds)
     }
+
+    fun formatDate(date: String?): String {
+        return if (date != null) {
+            val zonedDateTime = ZonedDateTime.parse(date)
+            val formatter = DateTimeFormatter.ofPattern("yyyy")
+            zonedDateTime.format(formatter)
+        } else {
+            ""
+        }
+    }
+
+    fun getCoverArtwork(url: String?) = url?.replaceAfterLast('/', "512x512bb.jpg")
+
+
 }
