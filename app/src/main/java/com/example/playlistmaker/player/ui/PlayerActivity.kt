@@ -22,7 +22,6 @@ class PlayerActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var interactor: PlayerInteractor
     private lateinit var viewModel: PlayerViewModel
     var track: Track? = null
 
@@ -39,10 +38,9 @@ class PlayerActivity : AppCompatActivity() {
             track = intent.getParcelableExtra(TRACK)
         }
 
-        interactor = Creator.providePlayerInteractor()
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getViewModelFactory(interactor)
+            PlayerViewModel.getViewModelFactory()
         )[PlayerViewModel::class.java]
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
