@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.data.Track
 
 class TrackAdapter(
     private var trackList: List<Track>,

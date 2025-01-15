@@ -7,7 +7,7 @@ import com.example.playlistmaker.player.domain.PlayerState.PLAYING
 import com.example.playlistmaker.player.domain.PlayerState.PREPARED
 import com.example.playlistmaker.player.domain.PlayerState.PAUSED
 import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.data.Track
 
 class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
     private var playerState = DEFAULT

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.search.domain
 
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.Resource
+import com.example.playlistmaker.search.data.Track
 
 
 class SearchInteractorImpl(private val repository: SearchRepository) :
@@ -16,7 +15,7 @@ class SearchInteractorImpl(private val repository: SearchRepository) :
         repository.clearHistoryList()
     }
 
-    override fun loadHistoryList(): MutableList<Track> {
+    override fun loadHistoryList(): List<Track> {
         return repository.loadHistoryList()
     }
 

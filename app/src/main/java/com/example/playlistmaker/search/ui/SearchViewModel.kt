@@ -13,7 +13,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.ResponseState
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.data.Track
 
 import com.example.playlistmaker.creator.Creator
 
@@ -22,15 +22,15 @@ class SearchViewModel(
     application: Application,
 ) : AndroidViewModel(application) {
     private var latestSearchText: String? = null
-    private var tracks: MutableList<Track> = mutableListOf()
-    private var historyList: MutableList<Track> = mutableListOf()
+    private val tracks: MutableList<Track> = mutableListOf()
+    private var historyList: List<Track> = mutableListOf()
     val handler = Handler(Looper.getMainLooper())
     private val interactor = Creator.provideSearchInteractor(getApplication())
     private val stateLiveData = MutableLiveData<SearchScreenState>()
 
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
 
-    fun renderState(state: SearchScreenState) {
+    private fun renderState(state: SearchScreenState) {
         stateLiveData.postValue(state)
     }
 

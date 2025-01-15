@@ -7,8 +7,7 @@ import com.example.playlistmaker.search.data.dto.TracksSearchRequest
 import com.example.playlistmaker.search.data.network.RetrofitClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.ResponseState
-import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.search.domain.models.Resource
+import com.example.playlistmaker.search.domain.Resource
 import com.google.gson.Gson
 
 const val HISTORY_LIST_KEY = "key_for_history_list"

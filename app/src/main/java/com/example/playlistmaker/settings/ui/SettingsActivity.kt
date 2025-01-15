@@ -7,14 +7,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
-import com.example.playlistmaker.settings.domain.SettingsInteractor
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var interactor: SettingsInteractor
+    private lateinit var viewModel: SettingsViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -23,12 +23,15 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        interactor = Creator.provideSettingsInteractor()
-        val isNightMode = interactor.provideIsNightMode()
-        binding.themeSwitcher.isChecked = isNightMode
+        viewModel = ViewModelProvider(
+            this,
+            SettingsViewModel.getViewModelFactory(Creator.provideSettingsInteractor())
+        )[SettingsViewModel::class.java]
+
+        binding.themeSwitcher.isChecked = viewModel.isNightMode
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            interactor.switchTheme(checked)
+            viewModel.switchTheme(checked)
 
         }
 

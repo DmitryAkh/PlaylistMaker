@@ -2,18 +2,22 @@ package com.example.playlistmaker.player.ui
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.search.domain.models.Track
+import com.example.playlistmaker.search.data.Track
 import com.example.playlistmaker.util.Utils
 
 class PlayerActivity : AppCompatActivity() {
@@ -38,7 +42,12 @@ class PlayerActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            PlayerViewModel.getViewModelFactory()
+            PlayerViewModel.getViewModelFactory(
+                MutableLiveData(),
+                MutableLiveData(),
+                Handler(Looper.getMainLooper()),
+                Creator.providePlayerInteractor()
+            )
         )[PlayerViewModel::class.java]
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
