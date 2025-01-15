@@ -1,7 +1,7 @@
 package com.example.playlistmaker.search.domain
 
 import com.example.playlistmaker.search.domain.models.Track
-import com.example.playlistmaker.util.Resource
+import com.example.playlistmaker.search.domain.models.Resource
 
 interface SearchRepository {
     fun doSearch(expression: String): Resource<List<Track>>
