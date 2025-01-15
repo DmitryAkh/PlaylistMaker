@@ -4,19 +4,19 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.media.MediaPlayer
-import com.example.playlistmaker.data.network.RetrofitClient
-import com.example.playlistmaker.data.repository.PlayerRepositoryImpl
-import com.example.playlistmaker.data.repository.SearchRepositoryImpl
-import com.example.playlistmaker.data.repository.SettingRepositoryImpl
-import com.example.playlistmaker.domain.api.PlayerInteractor
-import com.example.playlistmaker.domain.api.PlayerRepository
-import com.example.playlistmaker.domain.api.SearchInteractor
-import com.example.playlistmaker.domain.api.SearchRepository
-import com.example.playlistmaker.domain.api.SettingsInteractor
-import com.example.playlistmaker.domain.api.SettingsRepository
-import com.example.playlistmaker.domain.impl.PlayerInteractorImpl
-import com.example.playlistmaker.domain.impl.SearchInteractorImpl
-import com.example.playlistmaker.domain.impl.SettingsInteractorImpl
+import com.example.playlistmaker.search.data.network.RetrofitClient
+import com.example.playlistmaker.player.data.PlayerRepositoryImpl
+import com.example.playlistmaker.search.data.SearchRepositoryImpl
+import com.example.playlistmaker.settings.data.SettingRepositoryImpl
+import com.example.playlistmaker.player.domain.PlayerInteractor
+import com.example.playlistmaker.player.domain.PlayerRepository
+import com.example.playlistmaker.search.domain.SearchInteractor
+import com.example.playlistmaker.search.domain.SearchRepository
+import com.example.playlistmaker.settings.domain.SettingsInteractor
+import com.example.playlistmaker.settings.domain.SettingsRepository
+import com.example.playlistmaker.player.domain.PlayerInteractorImpl
+import com.example.playlistmaker.search.domain.SearchInteractorImpl
+import com.example.playlistmaker.settings.domain.SettingsInteractorImpl
 
 const val SHARED_PREFERENCES = "shared_preferences"
 
@@ -26,7 +26,7 @@ object Creator {
 
 
     fun initApplication(application: Application) {
-        this.application = application
+        Creator.application = application
     }
 
     fun provideSharedPreferences(): SharedPreferences {
@@ -50,11 +50,11 @@ object Creator {
         return SettingsInteractorImpl(provideSettingsRepository())
     }
 
-    fun provideSearchRepository(): SearchRepository {
-        return SearchRepositoryImpl(RetrofitClient(), provideSharedPreferences())
+    private fun provideSearchRepository(context: Context): SearchRepository {
+        return SearchRepositoryImpl(RetrofitClient(context), provideSharedPreferences())
     }
 
-    fun provideSearchInteractor(): SearchInteractor {
-        return SearchInteractorImpl(provideSearchRepository())
+    fun provideSearchInteractor(context: Context): SearchInteractor {
+        return SearchInteractorImpl(provideSearchRepository(context))
     }
 }
