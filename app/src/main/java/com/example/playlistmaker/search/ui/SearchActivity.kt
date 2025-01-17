@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
 
 class SearchActivity : AppCompatActivity() {
@@ -37,8 +37,8 @@ class SearchActivity : AppCompatActivity() {
                 viewModel.addTrackToHistory(
                     track
                 )
+                viewModel.putTrackForPlayer(track)
                 val displayIntent = Intent(this, PlayerActivity::class.java)
-                displayIntent.putExtra(TRACK, track)
                 startActivity(displayIntent)
             }
         }
@@ -46,8 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private val historyAdapter: HistoryAdapter by lazy {
         HistoryAdapter(historyList) { track ->
             if (clickDebounce()) {
+                viewModel.putTrackForPlayer(track)
                 val displayIntent = Intent(this, PlayerActivity::class.java)
-                displayIntent.putExtra(TRACK, track)
                 startActivity(displayIntent)
             }
         }
@@ -260,7 +260,6 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"
-        private const val TRACK = "TRACK"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 

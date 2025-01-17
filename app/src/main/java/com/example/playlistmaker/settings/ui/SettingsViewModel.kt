@@ -10,9 +10,7 @@ class SettingsViewModel(private val interactor: SettingsInteractor) : ViewModel(
 
     val isNightMode = interactor.provideIsNightMode()
 
-    fun switchTheme(checked: Boolean) {
-        interactor.switchTheme(checked)
-    }
+    fun switchTheme(checked: Boolean) = interactor.switchTheme(checked)
 
     companion object {
         fun getViewModelFactory(

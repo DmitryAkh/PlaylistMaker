@@ -1,21 +1,31 @@
 package com.example.playlistmaker.player.data
 
 import android.media.MediaPlayer
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.PlayerRepository
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.domain.PlayerState.PLAYING
 import com.example.playlistmaker.player.domain.PlayerState.PREPARED
 import com.example.playlistmaker.player.domain.PlayerState.PAUSED
 import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.data.TRACK_FOR_PLAYER_KEY
+import com.example.playlistmaker.search.domain.Track
+import com.google.gson.Gson
 
 class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
     private var playerState = DEFAULT
+    private val sharedPrefs = Creator.provideSharedPreferences()
+    private var track = getTrackFromSharedPrefs()
 
 
-    override fun preparePlayer(track: Track?) {
+    override fun getTrackFromSharedPrefs(): Track {
+        val json = sharedPrefs.getString(TRACK_FOR_PLAYER_KEY, null)
+        return trackFromJson(json)
+    }
+
+    override fun preparePlayer() {
         mediaPlayer.reset()
-        mediaPlayer.setDataSource(track?.previewUrl)
+        mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playerState = PREPARED
@@ -36,17 +46,12 @@ class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerReposit
     }
 
 
-    override fun release() {
-        mediaPlayer.release()
-    }
+    override fun release() = mediaPlayer.release()
 
-    override fun getState(): PlayerState {
-        return playerState
-    }
+    override fun getState(): PlayerState = playerState
 
-    override fun getCurrentPosition(): Int {
-        return mediaPlayer.currentPosition
-    }
+    override fun getCurrentPosition(): Int = mediaPlayer.currentPosition
+
 
     override fun setOnCompletionListener(listener: () -> Unit) {
         mediaPlayer.setOnCompletionListener {
@@ -54,4 +59,11 @@ class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerReposit
             listener()
         }
     }
+
+    override fun trackFromJson(json: String?): Track {
+        val type = object : com.google.gson.reflect.TypeToken<Track>() {}.type
+        return Gson().fromJson(json, type)
+    }
+
+    override fun getTrack(): Track = track
 }

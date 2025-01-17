@@ -8,9 +8,11 @@ import com.example.playlistmaker.search.data.network.RetrofitClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.domain.Resource
+import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 
 const val HISTORY_LIST_KEY = "key_for_history_list"
+const val TRACK_FOR_PLAYER_KEY = "key_for_track"
 
 
 class SearchRepositoryImpl(
@@ -31,7 +33,7 @@ class SearchRepositoryImpl(
                     country = it.country,
                     previewUrl = it.previewUrl,
                     releaseDate = Utils.formatDate(it.releaseDate),
-                    trackTime = Utils.formatTrackTime(it.trackTimeMillis)
+                    trackTime = Utils.millisToSeconds(it.trackTimeMillis)
                 )
             }
             )
@@ -40,9 +42,7 @@ class SearchRepositoryImpl(
         return Resource.Error("Ошибка сервера")
     }
 
-    override fun getResponseState(): ResponseState {
-        return networkClient.getResponseState()
-    }
+    override fun getResponseState(): ResponseState = networkClient.getResponseState()
 
     override fun addTrackToHistory(track: Track) {
         val historyList = loadHistoryList()
@@ -85,5 +85,16 @@ class SearchRepositoryImpl(
     override fun jsonFromHistoryList(historyList: MutableList<Track>): String {
         return Gson().toJson(historyList)
     }
+
+    override fun putTrackForPlayer(track: Track) {
+        sharedPrefs.edit()
+            .putString(
+                TRACK_FOR_PLAYER_KEY, jsonFromTrack(track)
+            )
+            .apply()
+    }
+
+
+    override fun jsonFromTrack(track: Track): String = Gson().toJson(track)
 
 }

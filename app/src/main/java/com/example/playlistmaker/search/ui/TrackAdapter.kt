@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 
 class TrackAdapter(
     private var trackList: List<Track>,
@@ -18,9 +18,7 @@ class TrackAdapter(
         return TrackViewHolder(binding, onTrackClicked)
     }
 
-    override fun getItemCount(): Int {
-        return trackList.size
-    }
+    override fun getItemCount(): Int = trackList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = trackList[position]

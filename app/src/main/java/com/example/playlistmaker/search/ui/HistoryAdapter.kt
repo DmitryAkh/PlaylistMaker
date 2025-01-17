@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackItemBinding
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 
 class HistoryAdapter(
     private var historyList: List<Track>,
@@ -18,9 +18,7 @@ class HistoryAdapter(
         return TrackViewHolder(binding, onTrackClicked)
     }
 
-    override fun getItemCount(): Int {
-        return historyList.size
-    }
+    override fun getItemCount(): Int = historyList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = historyList[position]

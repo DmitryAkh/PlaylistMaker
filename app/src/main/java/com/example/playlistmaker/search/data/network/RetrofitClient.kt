@@ -19,7 +19,7 @@ class RetrofitClient(private val context: Context) : NetworkClient {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val iTunesService = retrofit.create(iTunesApi::class.java)
+    private val iTunesService = retrofit.create(ITunesApi::class.java)
     private var responseState: ResponseState = ResponseState.DEFAULT
 
     override fun doRequest(dto: Any): Response {
@@ -54,9 +54,7 @@ class RetrofitClient(private val context: Context) : NetworkClient {
         }
     }
 
-    override fun getResponseState(): ResponseState {
-        return responseState
-    }
+    override fun getResponseState(): ResponseState = responseState
 
     override fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(

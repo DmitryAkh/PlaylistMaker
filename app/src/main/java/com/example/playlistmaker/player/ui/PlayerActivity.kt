@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,7 +16,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.util.Utils
 
 class PlayerActivity : AppCompatActivity() {
@@ -25,20 +24,13 @@ class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var viewModel: PlayerViewModel
-    var track: Track? = null
+    private lateinit var track: Track
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            track = intent.getParcelableExtra(TRACK, Track::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            track = intent.getParcelableExtra(TRACK)
-        }
 
         viewModel = ViewModelProvider(
             this,
@@ -51,7 +43,7 @@ class PlayerActivity : AppCompatActivity() {
         )[PlayerViewModel::class.java]
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        track = viewModel.getTrack()
         prepareUI()
         setupObservers()
 
@@ -73,22 +65,22 @@ class PlayerActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             finish()
         }
-        viewModel.preparePlayer(track)
+        viewModel.preparePlayer()
 
         Glide.with(this)
-            .load(Utils.getCoverArtwork(track?.artworkUrl100))
+            .load(Utils.getCoverArtwork(track.artworkUrl100))
             .centerCrop()
             .transform(RoundedCorners(Utils.dpToPx(8f, this)))
             .placeholder(R.drawable.placeholder312)
             .into(binding.cover)
 
-        binding.artistName.text = track?.artistName
-        binding.trackName.text = track?.trackName
-        binding.trackTimeData.text = track?.trackTime
-        binding.trackAlbumData.text = track?.collectionName
-        binding.trackYearData.text = track?.releaseDate
-        binding.trackGenreData.text = track?.primaryGenreName
-        binding.trackCountryData.text = track?.country
+        binding.artistName.text = track.artistName
+        binding.trackName.text = track.trackName
+        binding.trackTimeData.text = track.trackTime
+        binding.trackAlbumData.text = track.collectionName
+        binding.trackYearData.text = track.releaseDate
+        binding.trackGenreData.text = track.primaryGenreName
+        binding.trackCountryData.text = track.country
         binding.playButton.setOnClickListener {
             viewModel.togglePlayer()
         }
@@ -117,10 +109,6 @@ class PlayerActivity : AppCompatActivity() {
                 )
             }
         }
-    }
-
-    companion object {
-        private const val TRACK = "TRACK"
     }
 
 

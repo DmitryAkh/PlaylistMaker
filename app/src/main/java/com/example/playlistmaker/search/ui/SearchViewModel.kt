@@ -13,7 +13,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.ResponseState
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 
 import com.example.playlistmaker.creator.Creator
 
@@ -30,9 +30,7 @@ class SearchViewModel(
 
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
 
-    private fun renderState(state: SearchScreenState) {
-        stateLiveData.postValue(state)
-    }
+    private fun renderState(state: SearchScreenState) = stateLiveData.postValue(state)
 
     fun doSearch(query: String) {
         renderState(SearchScreenState.Loading)
@@ -86,9 +84,7 @@ class SearchViewModel(
 
     }
 
-    fun addTrackToHistory(track: Track) {
-        interactor.addTrackToHistory(track)
-    }
+    fun addTrackToHistory(track: Track) = interactor.addTrackToHistory(track)
 
     fun getTracks(): List<Track> = tracks
     private fun loadHistoryList() {
@@ -101,14 +97,11 @@ class SearchViewModel(
         return historyList
     }
 
-    fun clearTracks() {
-        tracks.clear()
-    }
+    fun clearTracks() = tracks.clear()
 
-    fun clearHistoryList() {
-        interactor.clearHistoryList()
-    }
+    fun clearHistoryList() = interactor.clearHistoryList()
 
+    fun putTrackForPlayer(track: Track) = interactor.putTrackForPlayer(track)
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L

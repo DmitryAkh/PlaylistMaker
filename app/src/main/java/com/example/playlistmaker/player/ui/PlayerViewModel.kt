@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.player.domain.PlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.search.data.Track
+import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.util.Utils
 
 class PlayerViewModel(
@@ -23,7 +23,7 @@ class PlayerViewModel(
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
             timeLiveData.postValue(
-                Utils.formatTrackTime(interactor.getCurrentPosition().toLong())
+                Utils.millisToSeconds(interactor.getCurrentPosition().toLong())
             )
             handler.postDelayed(this, 100)
         }
@@ -33,9 +33,9 @@ class PlayerViewModel(
     fun observeState(): LiveData<PlayerState> = stateLiveData
     fun observeTime(): LiveData<String> = timeLiveData
 
-    fun preparePlayer(track: Track?) {
+    fun preparePlayer() {
         handler.removeCallbacks(updateTimerRunnable)
-        interactor.preparePlayer(track)
+        interactor.preparePlayer()
         interactor.setOnCompletionListener {
             stateLiveData.postValue(PlayerState.PAUSED)
         }
@@ -61,6 +61,8 @@ class PlayerViewModel(
 
             startPlayer()
     }
+
+    fun getTrack(): Track = interactor.getTrack()
 
     override fun onCleared() {
         handler.removeCallbacks(updateTimerRunnable)

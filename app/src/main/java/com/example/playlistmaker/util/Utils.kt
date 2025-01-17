@@ -18,9 +18,8 @@ object Utils {
 
     }
 
-    fun formatTrackTime(milliseconds: Long): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(milliseconds)
-    }
+    fun millisToSeconds(milliseconds: Long?): String =
+        SimpleDateFormat("mm:ss", Locale.getDefault()).format(milliseconds)
 
     fun formatDate(date: String?): String {
         return if (date != null) {
@@ -36,3 +35,5 @@ object Utils {
 
 
 }
+
+

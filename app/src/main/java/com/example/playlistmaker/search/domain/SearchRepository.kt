@@ -1,7 +1,5 @@
 package com.example.playlistmaker.search.domain
 
-import com.example.playlistmaker.search.data.Track
-
 interface SearchRepository {
     fun doSearch(expression: String): Resource<List<Track>>
     fun addTrackToHistory(track: Track)
@@ -10,4 +8,6 @@ interface SearchRepository {
     fun historyListFromJson(json: String?): MutableList<Track>
     fun jsonFromHistoryList(historyList: MutableList<Track>): String
     fun getResponseState(): ResponseState
+    fun putTrackForPlayer(track: Track)
+    fun jsonFromTrack(track: Track): String
 }

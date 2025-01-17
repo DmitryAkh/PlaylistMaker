@@ -11,9 +11,7 @@ class SettingRepositoryImpl(private val sharedPrefs: SharedPreferences) : Settin
 
     private var darkTheme = false
 
-    override fun provideIsNightMode(): Boolean {
-        return sharedPrefs.getBoolean(IS_NIGHT_MODE_KEY, false)
-    }
+    override fun provideIsNightMode(): Boolean = sharedPrefs.getBoolean(IS_NIGHT_MODE_KEY, false)
 
     override fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled

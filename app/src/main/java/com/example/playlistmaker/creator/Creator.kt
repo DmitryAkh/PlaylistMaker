@@ -29,32 +29,27 @@ object Creator {
         Creator.application = application
     }
 
-    fun provideSharedPreferences(): SharedPreferences {
-        return application.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
-    }
-
-    private fun provideSettingsRepository(): SettingsRepository {
-        return SettingRepositoryImpl(provideSharedPreferences())
-    }
-
-    private fun providePlayerRepository(): PlayerRepository {
-        return PlayerRepositoryImpl(mediaPlayer = MediaPlayer())
-    }
-
-    fun providePlayerInteractor(): PlayerInteractor {
-        return PlayerInteractorImpl(providePlayerRepository())
-    }
+    fun provideSharedPreferences(): SharedPreferences =
+        application.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE)
 
 
-    fun provideSettingsInteractor(): SettingsInteractor {
-        return SettingsInteractorImpl(provideSettingsRepository())
-    }
+    private fun provideSettingsRepository(): SettingsRepository =
+        SettingRepositoryImpl(provideSharedPreferences())
 
-    private fun provideSearchRepository(context: Context): SearchRepository {
-        return SearchRepositoryImpl(RetrofitClient(context), provideSharedPreferences())
-    }
 
-    fun provideSearchInteractor(context: Context): SearchInteractor {
-        return SearchInteractorImpl(provideSearchRepository(context))
-    }
+    private fun providePlayerRepository(): PlayerRepository =
+        PlayerRepositoryImpl(mediaPlayer = MediaPlayer())
+
+    fun providePlayerInteractor(): PlayerInteractor =
+        PlayerInteractorImpl(providePlayerRepository())
+
+
+    fun provideSettingsInteractor(): SettingsInteractor =
+        SettingsInteractorImpl(provideSettingsRepository())
+
+    private fun provideSearchRepository(context: Context): SearchRepository =
+        SearchRepositoryImpl(RetrofitClient(context), provideSharedPreferences())
+
+    fun provideSearchInteractor(context: Context): SearchInteractor =
+        SearchInteractorImpl(provideSearchRepository(context))
 }
