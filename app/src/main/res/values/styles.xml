@@ -119,6 +119,7 @@
     <style name="ActionButton">
         <item name="android:backgroundTint">@color/action_button</item>
         <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/action_button_text</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
         <item name="cornerRadius">54dp</item>
