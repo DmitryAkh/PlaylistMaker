@@ -7,7 +7,7 @@ import com.example.playlistmaker.settings.domain.SettingsRepository
 const val IS_NIGHT_MODE_KEY = "key_for_night_mode"
 
 
-class SettingRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {
+class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {
 
     private var darkTheme = false
 

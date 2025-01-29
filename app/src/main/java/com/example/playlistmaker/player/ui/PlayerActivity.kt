@@ -1,29 +1,24 @@
 package com.example.playlistmaker.player.ui
-
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.util.Utils
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var track: Track
 
 
@@ -32,15 +27,7 @@ class PlayerActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
 
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory(
-                MutableLiveData(),
-                MutableLiveData(),
-                Handler(Looper.getMainLooper()),
-                Creator.providePlayerInteractor()
-            )
-        )[PlayerViewModel::class.java]
+
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         track = viewModel.getTrack()
