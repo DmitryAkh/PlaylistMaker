@@ -50,26 +50,26 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // Unit Testing
     testImplementation(libs.junit)
 
-    // Android Testing
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Glide
     implementation(libs.glide)
     kapt(libs.glide.compiler)
 
-    // Gson
     implementation(libs.gson)
 
-    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-    // Moxy
     implementation(libs.moxy)
     implementation(libs.moxy.android)
     kapt(libs.moxy.compiler)
+
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+
+    implementation(libs.koin.android)
+
 }

@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.example.playlistmaker.util.Utils
 import com.example.playlistmaker.search.data.dto.TracksResponse
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
-import com.example.playlistmaker.search.data.network.RetrofitClient
+import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.domain.Resource
@@ -16,7 +16,7 @@ const val TRACK_FOR_PLAYER_KEY = "key_for_track"
 
 
 class SearchRepositoryImpl(
-    private val networkClient: RetrofitClient,
+    private val networkClient: NetworkClient,
     private val sharedPrefs: SharedPreferences,
 ) : SearchRepository {
     override fun doSearch(expression: String): Resource<List<Track>> {
