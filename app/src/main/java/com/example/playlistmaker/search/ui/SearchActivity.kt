@@ -23,8 +23,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var tracks: List<Track>
-    private lateinit var historyList: List<Track>
+    private var tracks: List<Track> = emptyList()
+    private var historyList: List<Track> = emptyList()
     private var isClickAllowed = true
     private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""

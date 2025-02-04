@@ -36,6 +36,8 @@ class PlayerViewModel(
         interactor.preparePlayer()
         interactor.setOnCompletionListener {
             stateLiveData.postValue(PlayerState.PAUSED)
+            handler.removeCallbacks(updateTimerRunnable)
+            timeLiveData.postValue("00:00")
         }
         timeLiveData.postValue("00:00")
     }
