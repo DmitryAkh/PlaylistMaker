@@ -4,8 +4,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.settings.domain.SettingsRepository
 
-const val IS_NIGHT_MODE_KEY = "key_for_night_mode"
-
 
 class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : SettingsRepository {
 
@@ -38,4 +36,10 @@ class SettingsRepositoryImpl(private val sharedPrefs: SharedPreferences) : Setti
             }
         )
     }
+
+    companion object {
+        const val IS_NIGHT_MODE_KEY = "key_for_night_mode"
+
+    }
+
 }

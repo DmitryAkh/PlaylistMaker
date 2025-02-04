@@ -8,7 +8,7 @@ import com.example.playlistmaker.player.domain.PlayerState.PLAYING
 import com.example.playlistmaker.player.domain.PlayerState.PREPARED
 import com.example.playlistmaker.player.domain.PlayerState.PAUSED
 import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
-import com.example.playlistmaker.search.data.TRACK_FOR_PLAYER_KEY
+import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 

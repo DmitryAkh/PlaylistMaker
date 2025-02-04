@@ -11,9 +11,6 @@ import com.example.playlistmaker.search.domain.Resource
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 
-const val HISTORY_LIST_KEY = "key_for_history_list"
-const val TRACK_FOR_PLAYER_KEY = "key_for_track"
-
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -96,5 +93,10 @@ class SearchRepositoryImpl(
 
 
     override fun jsonFromTrack(track: Track): String = Gson().toJson(track)
+
+    companion object {
+        const val HISTORY_LIST_KEY = "key_for_history_list"
+        const val TRACK_FOR_PLAYER_KEY = "key_for_track"
+    }
 
 }
