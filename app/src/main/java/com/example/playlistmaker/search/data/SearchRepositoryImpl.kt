@@ -4,19 +4,16 @@ import android.content.SharedPreferences
 import com.example.playlistmaker.util.Utils
 import com.example.playlistmaker.search.data.dto.TracksResponse
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
-import com.example.playlistmaker.search.data.network.RetrofitClient
+import com.example.playlistmaker.search.data.network.NetworkClient
 import com.example.playlistmaker.search.domain.SearchRepository
 import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.domain.Resource
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 
-const val HISTORY_LIST_KEY = "key_for_history_list"
-const val TRACK_FOR_PLAYER_KEY = "key_for_track"
-
 
 class SearchRepositoryImpl(
-    private val networkClient: RetrofitClient,
+    private val networkClient: NetworkClient,
     private val sharedPrefs: SharedPreferences,
 ) : SearchRepository {
     override fun doSearch(expression: String): Resource<List<Track>> {
@@ -96,5 +93,10 @@ class SearchRepositoryImpl(
 
 
     override fun jsonFromTrack(track: Track): String = Gson().toJson(track)
+
+    companion object {
+        const val HISTORY_LIST_KEY = "key_for_history_list"
+        const val TRACK_FOR_PLAYER_KEY = "key_for_track"
+    }
 
 }

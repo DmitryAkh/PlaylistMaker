@@ -1,23 +1,21 @@
 package com.example.playlistmaker.player.ui
 
 import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.player.domain.PlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.util.Utils
 
 class PlayerViewModel(
-    private val stateLiveData: MutableLiveData<PlayerState>,
-    private val timeLiveData: MutableLiveData<String>,
-    private val handler: Handler,
     private val interactor: PlayerInteractor,
 ) : ViewModel() {
+    private val timeLiveData: MutableLiveData<String> = MutableLiveData()
+    private val stateLiveData: MutableLiveData<PlayerState> = MutableLiveData()
+    private val handler: Handler = Handler(Looper.getMainLooper())
 
 
     private val updateTimerRunnable = object : Runnable {
@@ -38,6 +36,8 @@ class PlayerViewModel(
         interactor.preparePlayer()
         interactor.setOnCompletionListener {
             stateLiveData.postValue(PlayerState.PAUSED)
+            handler.removeCallbacks(updateTimerRunnable)
+            timeLiveData.postValue("00:00")
         }
         timeLiveData.postValue("00:00")
     }
@@ -69,18 +69,5 @@ class PlayerViewModel(
         interactor.release()
     }
 
-    companion object {
-        fun getViewModelFactory(
-            stateLiveData: MutableLiveData<PlayerState>,
-            timeLiveData: MutableLiveData<String>,
-            handler: Handler,
-            interactor: PlayerInteractor,
-        ): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    PlayerViewModel(stateLiveData, timeLiveData, handler, interactor)
-                }
-            }
-    }
 }
 

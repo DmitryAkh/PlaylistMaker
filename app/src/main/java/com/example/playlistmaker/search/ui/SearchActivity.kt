@@ -14,22 +14,22 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var tracks: List<Track>
-    private lateinit var historyList: List<Track>
+    private var tracks: List<Track> = emptyList()
+    private var historyList: List<Track> = emptyList()
     private var isClickAllowed = true
     private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel by viewModel<SearchViewModel>()
     private val adapter: TrackAdapter by lazy {
         TrackAdapter(tracks) { track ->
 
@@ -57,10 +57,6 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
 
         viewModel.observeState().observe(this) {
             render(it)
@@ -141,7 +137,7 @@ class SearchActivity : AppCompatActivity() {
         binding.rvTracksHistory.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        binding.clearHistoryButton.setOnClickListener() {
+        binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistoryList()
             binding.llSearchHistory.isVisible = false
         }

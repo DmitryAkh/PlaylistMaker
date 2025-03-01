@@ -1,13 +1,13 @@
 [versions]
-agp = "8.7.3"
-kotlin = "1.9.23"
+agp = "8.8.0"
+kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.3"
+activity = "1.10.0"
 moxy = "2.2.2"
 
 [libraries]
@@ -27,6 +27,9 @@ converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", ve
 moxy = { group = "com.github.moxy-community", name = "moxy", version.ref = "moxy" }
 moxy-android = { group = "com.github.moxy-community", name = "moxy-android", version.ref = "moxy" }
 moxy-compiler = { group = "com.github.moxy-community", name = "moxy-compiler", version.ref = "moxy" }
+dagger = { group = "com.google.dagger", name = "dagger", version = "2.45" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version = "2.45" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version = "3.3.0" }
 
 
 

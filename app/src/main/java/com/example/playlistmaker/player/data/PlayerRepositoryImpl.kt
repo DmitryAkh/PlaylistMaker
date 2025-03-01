@@ -1,20 +1,22 @@
 package com.example.playlistmaker.player.data
 
+import android.content.SharedPreferences
 import android.media.MediaPlayer
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.domain.PlayerRepository
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.player.domain.PlayerState.PLAYING
 import com.example.playlistmaker.player.domain.PlayerState.PREPARED
 import com.example.playlistmaker.player.domain.PlayerState.PAUSED
 import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
-import com.example.playlistmaker.search.data.TRACK_FOR_PLAYER_KEY
+import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
 
-class PlayerRepositoryImpl(private val mediaPlayer: MediaPlayer) : PlayerRepository {
+class PlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer,
+    private val sharedPrefs: SharedPreferences,
+) : PlayerRepository {
     private var playerState = DEFAULT
-    private val sharedPrefs = Creator.provideSharedPreferences()
     private var track = getTrackFromSharedPrefs()
 
 
