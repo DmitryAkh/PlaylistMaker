@@ -32,9 +32,6 @@ class PlayerRepositoryImpl(
         mediaPlayer.setOnPreparedListener {
             playerState = PREPARED
         }
-        mediaPlayer.setOnCompletionListener {
-            playerState = PREPARED
-        }
     }
 
     override fun startPlayer() {
