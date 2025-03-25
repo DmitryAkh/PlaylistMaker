@@ -14,7 +14,6 @@ class LibraryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLibraryBinding
     private lateinit var tabMediator: TabLayoutMediator
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
