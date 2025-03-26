@@ -9,6 +9,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityLibraryBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
+
 class LibraryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLibraryBinding
@@ -24,8 +25,8 @@ class LibraryActivity : AppCompatActivity() {
 
         tabMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             when (position) {
-                0 -> tab.text = "Избранные треки"
-                1 -> tab.text = "Плейлисты"
+                0 -> tab.text = getString(R.string.favorite_tracks)
+                1 -> tab.text = getString(R.string.playlists)
             }
         }
         tabMediator.attach()
@@ -46,4 +47,6 @@ class LibraryActivity : AppCompatActivity() {
         super.onDestroy()
         tabMediator.detach()
     }
+
+
 }

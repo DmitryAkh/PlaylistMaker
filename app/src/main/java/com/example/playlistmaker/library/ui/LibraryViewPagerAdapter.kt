@@ -9,7 +9,7 @@ class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifec
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int {
-        return 2
+        return ITEM_COUNT
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -18,4 +18,9 @@ class LibraryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifec
             else -> PlaylistsFragment.newInstance()
         }
     }
+
+    companion object {
+        private const val ITEM_COUNT = 2
+    }
+
 }
