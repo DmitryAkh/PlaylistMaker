@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.library.LibraryActivity
+import com.example.playlistmaker.library.ui.LibraryActivity
 import com.example.playlistmaker.search.ui.SearchActivity
 import com.example.playlistmaker.settings.ui.SettingsActivity
 
@@ -35,6 +35,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.settingsButton.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
+            startActivity(displayIntent)
+        }
+
+        binding.libraryButton.setOnClickListener {
+            val displayIntent = Intent(this, LibraryActivity::class.java)
             startActivity(displayIntent)
         }
 

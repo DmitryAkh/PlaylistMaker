@@ -10,14 +10,14 @@
 
     <androidx.appcompat.widget.Toolbar
         style="@style/Toolbar"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/backButton"
-            style="@style/HeaderImageView"
-            android:layout_gravity="start"
-            android:src="@drawable/arrow_back"
-            app:tint="@color/header_icon" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back" />
 
         <TextView
             style="@style/HeaderTextView"
@@ -81,41 +81,41 @@
         android:layout_height="wrap_content"
         android:fillViewport="true">
 
-    <LinearLayout
-        android:id="@+id/llSearchHistory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="gone">
-
-        <TextView
-            android:id="@+id/SearchHistoryHeader"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:gravity="center"
-            android:text="@string/you_searched"
-            style="@style/SearchHistoryHeader" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTracksHistory"
+        <LinearLayout
+            android:id="@+id/llSearchHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:visibility="visible" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="gone">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/clearHistoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/clear_history"
-            style="@style/ActionButton"
-            android:visibility="visible"
-            tools:visibility="visible" />
+            <TextView
+                android:id="@+id/SearchHistoryHeader"
+                style="@style/SearchHistoryHeader"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:gravity="center"
+                android:text="@string/you_searched" />
 
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTracksHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clearHistoryButton"
+                style="@style/ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear_history"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+        </LinearLayout>
     </ScrollView>
 
 

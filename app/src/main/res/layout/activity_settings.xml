@@ -10,16 +10,15 @@
     <androidx.appcompat.widget.Toolbar
         style="@style/Toolbar"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/header_linear_layout_margin_bottom"
+        android:layout_height="wrap_content"
 
-        >
+        android:layout_marginBottom="@dimen/header_linear_layout_margin_bottom">
 
         <ImageView
             android:id="@+id/backButton"
-            style="@style/HeaderImageView"
-            android:layout_gravity="start"
-            android:src="@drawable/arrow_back"
-            app:tint="@color/header_icon" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/arrow_back" />
 
         <TextView
             style="@style/HeaderTextView"

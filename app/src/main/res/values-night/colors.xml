@@ -31,5 +31,7 @@
     <color name="play_button_fill">#FFFFFF</color>
     <color name="clear_button_fill">#1A1B22</color>
     <color name="action_button_text">#1A1B22</color>
+    <color name="tab_text">#FFFFFF</color>
+    <color name="tab_indicator">#FFFFFF</color>
 
 </resources>
