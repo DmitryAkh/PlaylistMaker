@@ -29,7 +29,8 @@ class FavoritesTracksFragment : Fragment() {
         return binding.root
     }
 
-    companion object {
-        fun newInstance() = FavoritesTracksFragment()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
