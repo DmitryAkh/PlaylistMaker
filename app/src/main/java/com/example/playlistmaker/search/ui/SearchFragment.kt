@@ -1,32 +1,30 @@
 package com.example.playlistmaker.search.ui
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.search.domain.Track
-import com.example.playlistmaker.player.ui.PlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-
+class SearchFragment : Fragment() {
     private var tracks: List<Track> = emptyList()
     private var historyList: List<Track> = emptyList()
     private var isClickAllowed = true
-    private lateinit var binding: ActivitySearchBinding
     private var enteredText: String = ""
     private val handler = Handler(Looper.getMainLooper())
     private val viewModel by viewModel<SearchViewModel>()
@@ -38,8 +36,7 @@ class SearchActivity : AppCompatActivity() {
                     track
                 )
                 viewModel.putTrackForPlayer(track)
-                val displayIntent = Intent(this, PlayerActivity::class.java)
-                startActivity(displayIntent)
+                findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
             }
         }
     }
@@ -47,25 +44,28 @@ class SearchActivity : AppCompatActivity() {
         HistoryAdapter(historyList) { track ->
             if (clickDebounce()) {
                 viewModel.putTrackForPlayer(track)
-                val displayIntent = Intent(this, PlayerActivity::class.java)
-                startActivity(displayIntent)
+                findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
+
             }
         }
     }
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-
-
-        setContentView(binding.root)
 
         tracks = viewModel.getTracks()
         historyList = viewModel.getHistoryList()
@@ -94,10 +94,6 @@ class SearchActivity : AppCompatActivity() {
             viewModel.clearTracks()
             adapter.notifyDataSetChanged()
             showHistory()
-        }
-
-        binding.backButton.setOnClickListener {
-            finish()
         }
 
 
@@ -131,22 +127,21 @@ class SearchActivity : AppCompatActivity() {
 
         binding.rvTracks.adapter = adapter
         binding.rvTracks.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.rvTracksHistory.adapter = historyAdapter
         binding.rvTracksHistory.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.clearHistoryButton.setOnClickListener {
             viewModel.clearHistoryList()
             binding.llSearchHistory.isVisible = false
         }
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 
@@ -166,9 +161,9 @@ class SearchActivity : AppCompatActivity() {
     }
 
 
-    private fun hideKeyboard() {
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+    private fun hideKeyboard(view: View) {
+        val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -187,7 +182,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        hideKeyboard()
+        hideKeyboard(binding.root)
         binding.llSearchHistory.isVisible = false
         binding.rvTracks.isVisible = false
         binding.placeholderMessage.isVisible = false
@@ -203,7 +198,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
-                this@SearchActivity,
+                requireContext(),
                 R.drawable.not_found
             )
         )
@@ -217,7 +212,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
-                this@SearchActivity,
+                requireContext(),
                 R.drawable.no_internet
             )
         )
@@ -235,7 +230,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showHistory() {
-        hideKeyboard()
+        hideKeyboard(binding.root)
         binding.progressBar.isVisible = false
         binding.placeholderMessage.isVisible = false
         binding.placeholderButtonRenew.isVisible = false
