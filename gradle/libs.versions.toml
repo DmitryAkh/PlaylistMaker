@@ -1,7 +1,7 @@
 [versions]
-agp = "8.9.1"
+agp = "8.9.2"
 kotlin = "2.0.21"
-coreKtx = "1.15.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -12,10 +12,11 @@ moxy = "2.2.2"
 fragmentKtx = "1.8.6"
 viewpager2 = "1.1.0"
 legacySupportV4 = "1.0.0"
-lifecycleLivedataKtx = "2.8.7"
-lifecycleViewmodelKtx = "2.8.7"
-navigation-fragment-ktx = "2.8.9"
-navigation-ui-ktx = "2.8.9"
+lifecycleLivedataKtx = "2.9.0"
+lifecycleViewmodelKtx = "2.9.0"
+navigation-fragment-ktx = "2.9.0"
+navigation-ui-ktx = "2.9.0"
+kotlinx-coroutines-android = "1.7.3"
 
 
 [libraries]
@@ -45,7 +46,7 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
-
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

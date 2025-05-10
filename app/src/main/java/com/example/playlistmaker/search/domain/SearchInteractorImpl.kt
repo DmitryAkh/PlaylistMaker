@@ -1,5 +1,8 @@
 package com.example.playlistmaker.search.domain
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
 
 class SearchInteractorImpl(private val repository: SearchRepository) :
     SearchInteractor {
@@ -9,7 +12,7 @@ class SearchInteractorImpl(private val repository: SearchRepository) :
 
     override fun clearHistoryList() = repository.clearHistoryList()
 
-    override fun loadHistoryList(): List<Track> = repository.loadHistoryList()
+    override fun loadHistoryList(): MutableList<Track> = repository.loadHistoryList()
 
     override fun historyListFromJson(json: String?): MutableList<Track> =
         repository.historyListFromJson(json)
@@ -17,12 +20,18 @@ class SearchInteractorImpl(private val repository: SearchRepository) :
     override fun jsonFromHistoryList(historyList: MutableList<Track>): String =
         repository.jsonFromHistoryList(historyList)
 
-    override fun doSearch(expression: String, consumer: SearchInteractor.TracksConsumer) {
-        when (val resource = repository.doSearch(expression)) {
-            is Resource.Success -> consumer.consume(resource.data, null)
-            is Resource.Error -> consumer.consume(null, resource.message)
-        }
+    override fun searchProcessing(expression: String): Flow<List<Track>?> {
+        return repository.doSearch(expression).map { resource ->
+            when (resource) {
+                is Resource.Success<List<Track>> -> {
+                    resource.data
+                }
 
+                is Resource.Error -> {
+                    null
+                }
+            }
+        }
     }
 
     override fun getResponseState(): ResponseState = repository.getResponseState()

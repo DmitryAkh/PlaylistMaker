@@ -1,16 +1,14 @@
 package com.example.playlistmaker.search.domain
 
+import kotlinx.coroutines.flow.Flow
+
 interface SearchInteractor {
     fun addTrackToHistory(track: Track)
     fun clearHistoryList()
-    fun loadHistoryList(): List<Track>
+    fun loadHistoryList(): MutableList<Track>
     fun historyListFromJson(json: String?): MutableList<Track>
     fun jsonFromHistoryList(historyList: MutableList<Track>): String
-    fun doSearch(expression: String, consumer: TracksConsumer)
+    fun searchProcessing(expression: String): Flow<List<Track>?>
     fun getResponseState(): ResponseState
     fun putTrackForPlayer(track: Track)
-    interface TracksConsumer {
-        fun consume(foundTracks: List<Track>?, errorMessage: String?)
-    }
-
 }

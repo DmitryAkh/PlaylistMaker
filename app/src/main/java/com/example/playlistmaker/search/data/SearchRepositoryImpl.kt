@@ -10,16 +10,18 @@ import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.domain.Resource
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val sharedPrefs: SharedPreferences,
 ) : SearchRepository {
-    override fun doSearch(expression: String): Resource<List<Track>> {
+    override fun doSearch(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         if (response.resultCode == 200) {
-            return Resource.Success((response as TracksResponse).results.map {
+            emit(Resource.Success((response as TracksResponse).results.map {
                 Track(
                     trackId = it.trackId,
                     trackName = it.trackName,
@@ -34,9 +36,10 @@ class SearchRepositoryImpl(
                 )
             }
             )
-
+            )
+        } else {
+            emit(Resource.Error("Ошибка сервера"))
         }
-        return Resource.Error("Ошибка сервера")
     }
 
     override fun getResponseState(): ResponseState = networkClient.getResponseState()
