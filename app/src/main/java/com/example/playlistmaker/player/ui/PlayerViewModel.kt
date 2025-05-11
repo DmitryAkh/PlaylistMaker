@@ -30,6 +30,8 @@ class PlayerViewModel(
         interactor.preparePlayer()
         interactor.setOnCompletionListener {
             stateLiveData.postValue(PlayerState.PAUSED)
+            timeLiveData.postValue("00:00")
+            timerJob?.cancel()
         }
     }
 
