@@ -28,7 +28,6 @@ class PlayerActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
 
-
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         track = viewModel.getTrack()

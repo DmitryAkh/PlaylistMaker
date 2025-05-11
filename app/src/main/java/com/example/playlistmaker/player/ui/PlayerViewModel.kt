@@ -62,7 +62,6 @@ class PlayerViewModel(
         interactor.release()
     }
 
-
     private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (player.isPlaying) {
