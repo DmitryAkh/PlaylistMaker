@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:orientation="vertical"
-    tools:context=".presentation.library.playlists.PlaylistsFragment">
+    tools:context=".library.ui.PlaylistsFragment">
 
 
     <LinearLayout

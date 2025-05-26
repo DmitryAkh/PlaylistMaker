@@ -2,11 +2,9 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.media.MediaPlayer
-import androidx.room.Room
-import com.example.playlistmaker.data.db.AppDataBase
-import com.example.playlistmaker.data.network.ITunesApi
-import com.example.playlistmaker.data.network.NetworkClient
-import com.example.playlistmaker.data.network.RetrofitClient
+import com.example.playlistmaker.search.data.network.ITunesApi
+import com.example.playlistmaker.search.data.network.NetworkClient
+import com.example.playlistmaker.search.data.network.RetrofitClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -35,12 +33,6 @@ val dataModule = module {
 
     factory<MediaPlayer> {
         MediaPlayer()
-    }
-
-    single {
-        Room.databaseBuilder(androidContext(), AppDataBase::class.java, "database.db")
-            .fallbackToDestructiveMigration(false)
-            .build()
     }
 
 
