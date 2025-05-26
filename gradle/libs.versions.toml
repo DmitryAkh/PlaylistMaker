@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.2"
+agp = "8.9.3"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -9,7 +9,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.10.1"
 moxy = "2.2.2"
-fragmentKtx = "1.8.6"
+fragmentKtx = "1.8.7"
 viewpager2 = "1.1.0"
 legacySupportV4 = "1.0.0"
 lifecycleLivedataKtx = "2.9.0"
@@ -17,6 +17,7 @@ lifecycleViewmodelKtx = "2.9.0"
 navigation-fragment-ktx = "2.9.0"
 navigation-ui-ktx = "2.9.0"
 kotlinx-coroutines-android = "1.7.3"
+room = "2.7.1"
 
 
 [libraries]
@@ -47,6 +48,10 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigation-ui-ktx" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
