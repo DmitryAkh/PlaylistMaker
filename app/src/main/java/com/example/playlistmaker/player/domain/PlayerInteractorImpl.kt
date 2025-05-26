@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.domain
 
-import android.media.MediaPlayer
 import com.example.playlistmaker.search.domain.Track
 
 
@@ -27,6 +26,5 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
     }
 
     override fun getTrack(): Track = repository.getTrack()
-    override fun getPlayer(): MediaPlayer = repository.getPlayer()
 
 }

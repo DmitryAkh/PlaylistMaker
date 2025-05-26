@@ -4,7 +4,7 @@ import com.example.playlistmaker.search.data.dto.Response
 import com.example.playlistmaker.search.domain.ResponseState
 
 interface NetworkClient {
-    suspend fun doRequest(dto: Any): Response
+    fun doRequest(dto: Any): Response
     fun getResponseState(): ResponseState
-    suspend fun isConnected(): Boolean
+    fun isConnected(): Boolean
 }

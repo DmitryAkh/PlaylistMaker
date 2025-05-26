@@ -7,8 +7,6 @@ import android.util.Log
 import com.example.playlistmaker.search.data.dto.Response
 import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.data.dto.TracksSearchRequest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class RetrofitClient(private val context: Context, private val iTunesService: ITunesApi) :
     NetworkClient {
@@ -16,29 +14,28 @@ class RetrofitClient(private val context: Context, private val iTunesService: IT
 
     private var responseState: ResponseState = ResponseState.DEFAULT
 
-    override suspend fun doRequest(dto: Any): Response {
+    override fun doRequest(dto: Any): Response {
         if (dto is TracksSearchRequest && isConnected()) {
-            return withContext(Dispatchers.IO) {
-                try {
-                    val response = iTunesService.search(dto.searchRequest)
+            return try {
+                val response = iTunesService.search(dto.searchRequest).execute()
+                val body = response.body()
 
-                    if (response.results.isNotEmpty()) {
-                        response.apply {
-                            resultCode = 200
-                            responseState = ResponseState.SUCCESS
-                        }
-                    } else {
-
-                        Response().apply {
-                            resultCode = 404
-                            responseState = ResponseState.NOT_FOUND
-                        }
+                if (!body?.results.isNullOrEmpty()) {
+                    response.body()!!.apply {
+                        resultCode = 200
+                        responseState = ResponseState.SUCCESS
                     }
+                } else {
 
-                } catch (e: Exception) {
-                    Log.e("RetrofitClient", "Ошибка: ${e.localizedMessage}", e)
                     Response().apply {
+                        resultCode = 404
+                        responseState = ResponseState.NOT_FOUND
                     }
+                }
+
+            } catch (e: Exception) {
+                Log.e("RetrofitClient", "Ошибка: ${e.localizedMessage}", e)
+                Response().apply {
                 }
             }
         } else {
@@ -51,7 +48,7 @@ class RetrofitClient(private val context: Context, private val iTunesService: IT
 
     override fun getResponseState(): ResponseState = responseState
 
-    override suspend fun isConnected(): Boolean {
+    override fun isConnected(): Boolean {
         val connectivityManager = context.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager

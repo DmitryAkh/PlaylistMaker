@@ -1,42 +1,51 @@
 package com.example.playlistmaker.player.ui
 
-
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.PlayerInteractor
 import com.example.playlistmaker.player.domain.PlayerState
 import com.example.playlistmaker.search.domain.Track
 import com.example.playlistmaker.util.Utils
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
 ) : ViewModel() {
-    private val player = interactor.getPlayer()
-    private var timerJob: Job? = null
-    private val stateLiveData = MutableLiveData(PlayerState.DEFAULT)
     private val timeLiveData: MutableLiveData<String> = MutableLiveData()
+    private val stateLiveData: MutableLiveData<PlayerState> = MutableLiveData()
+    private val handler: Handler = Handler(Looper.getMainLooper())
+
+
+    private val updateTimerRunnable = object : Runnable {
+        override fun run() {
+            timeLiveData.postValue(
+                Utils.millisToSeconds(interactor.getCurrentPosition().toLong())
+            )
+            handler.postDelayed(this, 100)
+        }
+    }
 
 
     fun observeState(): LiveData<PlayerState> = stateLiveData
     fun observeTime(): LiveData<String> = timeLiveData
 
     fun preparePlayer() {
+        handler.removeCallbacks(updateTimerRunnable)
         interactor.preparePlayer()
         interactor.setOnCompletionListener {
             stateLiveData.postValue(PlayerState.PAUSED)
+            handler.removeCallbacks(updateTimerRunnable)
+            timeLiveData.postValue("00:00")
         }
+        timeLiveData.postValue("00:00")
     }
 
-    private fun startPlayer() {
+    fun startPlayer() {
         interactor.startPlayer()
+        handler.post(updateTimerRunnable)
         stateLiveData.postValue(PlayerState.PLAYING)
-        startTimer()
     }
 
     fun pausePlayer() {
@@ -45,31 +54,20 @@ class PlayerViewModel(
     }
 
     fun togglePlayer() {
-        val state = interactor.getState()
+        if (interactor.getState() == PlayerState.PLAYING) {
 
-        if (state == PlayerState.PLAYING) {
             pausePlayer()
-        } else if (state == PlayerState.PREPARED || state == PlayerState.PAUSED) {
+        } else if (interactor.getState() == PlayerState.PREPARED || interactor.getState() == PlayerState.PAUSED)
+
             startPlayer()
-        }
     }
 
     fun getTrack(): Track = interactor.getTrack()
 
     override fun onCleared() {
+        handler.removeCallbacks(updateTimerRunnable)
         interactor.release()
     }
 
-
-    private fun startTimer() {
-        timerJob = viewModelScope.launch {
-            while (player.isPlaying) {
-                delay(300L)
-                timeLiveData.postValue(
-                    Utils.millisToSeconds(interactor.getCurrentPosition().toLong())
-                )
-            }
-        }
-    }
-
 }
+

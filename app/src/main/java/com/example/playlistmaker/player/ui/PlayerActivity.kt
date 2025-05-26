@@ -1,5 +1,4 @@
 package com.example.playlistmaker.player.ui
-
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -76,21 +75,26 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-
         viewModel.observeTime().observe(this) { time ->
             binding.playerTime.text = time
         }
 
         viewModel.observeState().observe(this) { state ->
-            val drawableRes = if (state == PlayerState.PLAYING) {
-                R.drawable.pause_button
+            if (state == PlayerState.PLAYING) {
+                binding.playButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@PlayerActivity,
+                        R.drawable.pause_button
+                    )
+                )
             } else {
-                R.drawable.play_button
+                binding.playButton.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@PlayerActivity,
+                        R.drawable.play_button
+                    )
+                )
             }
-
-            binding.playButton.setImageDrawable(
-                ContextCompat.getDrawable(this, drawableRes)
-            )
         }
     }
 

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.player.domain
 
-import android.media.MediaPlayer
 import com.example.playlistmaker.search.domain.Track
 
 interface PlayerRepository {
@@ -14,6 +13,4 @@ interface PlayerRepository {
     fun setOnCompletionListener(listener: () -> Unit)
     fun trackFromJson(json: String?): Track
     fun getTrack(): Track
-    fun getPlayer(): MediaPlayer
-    fun getStringPlayerPosition(): String
 }

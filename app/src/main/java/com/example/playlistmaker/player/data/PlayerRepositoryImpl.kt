@@ -4,17 +4,19 @@ import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.PlayerRepository
 import com.example.playlistmaker.player.domain.PlayerState
+import com.example.playlistmaker.player.domain.PlayerState.PLAYING
+import com.example.playlistmaker.player.domain.PlayerState.PREPARED
+import com.example.playlistmaker.player.domain.PlayerState.PAUSED
+import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
 import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
 import com.example.playlistmaker.search.domain.Track
 import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerRepositoryImpl(
     private val mediaPlayer: MediaPlayer,
     private val sharedPrefs: SharedPreferences,
 ) : PlayerRepository {
-    private var playerState: PlayerState = PlayerState.DEFAULT
+    private var playerState = DEFAULT
     private var track = getTrackFromSharedPrefs()
 
 
@@ -28,18 +30,18 @@ class PlayerRepositoryImpl(
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = PlayerState.PREPARED
+            playerState = PREPARED
         }
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = PlayerState.PLAYING
+        playerState = PLAYING
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = PlayerState.PAUSED
+        playerState = PAUSED
     }
 
 
@@ -49,14 +51,10 @@ class PlayerRepositoryImpl(
 
     override fun getCurrentPosition(): Int = mediaPlayer.currentPosition
 
-    override fun getStringPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(getCurrentPosition())
-            ?: "00:00"
-    }
 
     override fun setOnCompletionListener(listener: () -> Unit) {
         mediaPlayer.setOnCompletionListener {
-            playerState = PlayerState.PREPARED
+            playerState = PREPARED
             listener()
         }
     }
@@ -67,6 +65,4 @@ class PlayerRepositoryImpl(
     }
 
     override fun getTrack(): Track = track
-
-    override fun getPlayer(): MediaPlayer = mediaPlayer
 }

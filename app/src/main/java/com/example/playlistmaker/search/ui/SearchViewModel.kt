@@ -1,63 +1,57 @@
 package com.example.playlistmaker.search.ui
 
-
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.search.domain.SearchInteractor
 import com.example.playlistmaker.search.domain.ResponseState
 import com.example.playlistmaker.search.domain.Track
-import com.example.playlistmaker.util.debounce
-import kotlinx.coroutines.launch
 
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
 ) : ViewModel() {
     private var latestSearchText: String? = null
-    private var tracksList: MutableList<Track> = mutableListOf()
-    private var historyList: MutableList<Track> = mutableListOf()
+    private val tracks: MutableList<Track> = mutableListOf()
+    private var historyList: List<Track> = mutableListOf()
+    private val handler = Handler(Looper.getMainLooper())
     private val stateLiveData = MutableLiveData<SearchScreenState>()
-    private val tracksSearchDebounce =
-        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
-            doSearch(changedText)
-        }
 
-    fun getTracks(): List<Track> = tracksList
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
 
     private fun renderState(state: SearchScreenState) = stateLiveData.postValue(state)
 
     fun doSearch(query: String) {
         renderState(SearchScreenState.Loading)
-        tracksList.clear()
-
-        viewModelScope.launch {
-
-            interactor
-                .searchProcessing(query)
-                .collect { tracks ->
-                    processResult(tracks)
-                }
-        }
-
-
-    }
-
-    private fun processResult(foundTracks: List<Track>?) {
+        tracks.clear()
         val responseState = interactor.getResponseState()
 
-        if (foundTracks != null) {
-            tracksList.addAll(foundTracks)
-            renderState(SearchScreenState.Content)
-        } else if (responseState == ResponseState.NOT_FOUND) {
-            renderState(SearchScreenState.NotFound)
-        } else {
-            renderState(SearchScreenState.NoInternet)
-        }
+        Thread {
+            interactor.doSearch(query, object : SearchInteractor.TracksConsumer {
+                override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
+                    Handler(Looper.getMainLooper()).post {
+
+                        if (foundTracks != null) {
+                            tracks.addAll(foundTracks)
+                            renderState(SearchScreenState.Content)
+                        } else if (responseState == ResponseState.NOT_FOUND) {
+                            renderState(SearchScreenState.NotFound)
+                        } else {
+                            renderState(SearchScreenState.NoInternet)
+                        }
+                    }
+                }
+
+            })
+        }.start()
     }
 
+    override fun onCleared() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    }
 
     fun searchDebounce(changedText: String) {
 
@@ -66,15 +60,25 @@ class SearchViewModel(
         }
 
         latestSearchText = changedText
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
 
-        if (changedText.isNotEmpty())
-            tracksSearchDebounce(changedText)
+        val searchRunnable = Runnable {
+            if (changedText.isNotEmpty())
+                doSearch(changedText)
+        }
 
+        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+        handler.postAtTime(
+            searchRunnable,
+            SEARCH_REQUEST_TOKEN,
+            postTime,
+        )
 
     }
 
     fun addTrackToHistory(track: Track) = interactor.addTrackToHistory(track)
 
+    fun getTracks(): List<Track> = tracks
     private fun loadHistoryList() {
         historyList = interactor.loadHistoryList()
 
@@ -85,21 +89,16 @@ class SearchViewModel(
         return historyList
     }
 
-    fun clearTracks() {
+    fun clearTracks() = tracks.clear()
 
-        tracksList.clear()
-
-    }
-
-    fun clearHistoryList() {
-        interactor.clearHistoryList()
-
-    }
+    fun clearHistoryList() = interactor.clearHistoryList()
 
     fun putTrackForPlayer(track: Track) = interactor.putTrackForPlayer(track)
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private val SEARCH_REQUEST_TOKEN = Any()
+
 
     }
 }
