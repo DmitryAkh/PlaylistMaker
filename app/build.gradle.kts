@@ -83,6 +83,14 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.android)
 
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+}
+
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
 }
 
 

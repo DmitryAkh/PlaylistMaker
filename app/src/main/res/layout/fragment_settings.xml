@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:orientation="vertical"
-    tools:context=".settings.ui.SettingsFragment">
+    tools:context=".presentation.settings.SettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
         style="@style/Toolbar"
