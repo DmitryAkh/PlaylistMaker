@@ -23,7 +23,6 @@ class FavTracksFragment : Fragment() {
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private val viewModel by viewModel<FavTracksViewModel>()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
