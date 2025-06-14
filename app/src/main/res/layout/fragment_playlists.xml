@@ -30,7 +30,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <TextView
-        android:id="@+id/placeholderText"
+        android:id="@+id/placeholderLibEmpty"
         style="@style/PlaceholderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
