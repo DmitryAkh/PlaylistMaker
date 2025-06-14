@@ -10,7 +10,7 @@ import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.Utils
 
 class SearchViewHolder(
-    private val binding: TrackItemBinding, private val onTrackClicked: (Track) -> Unit,
+    private val binding: TrackItemBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -28,10 +28,6 @@ class SearchViewHolder(
         binding.tvTrackName.text = item.trackName
         binding.tvArtistName.text = item.artistName
         binding.tvTrackTime.text = item.trackTime
-
-        binding.root.setOnClickListener() {
-            onTrackClicked(item)
-        }
 
 
     }

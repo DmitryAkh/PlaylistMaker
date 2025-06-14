@@ -75,7 +75,7 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="ImgTrack">
+    <style name="rvCover">
         <item name="android:layout_width">@dimen/img_track_width</item>
         <item name="android:layout_height">@dimen/img_track_height</item>
         <item name="android:layout_marginVertical">@dimen/img_track_layout_margin_vertical</item>
@@ -83,7 +83,7 @@
         <item name="android:layout_marginEnd">@dimen/img_track_layout_margin_end</item>
     </style>
 
-    <style name="TrackName">
+    <style name="rvName">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="paddingStart">1dp</item>
         <item name="android:textColor">@color/track_name_text_color</item>
@@ -92,7 +92,7 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="ArtistNameAndTrackTime">
+    <style name="rvDetails">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/artist_name_separator_time_color</item>
         <item name="android:textSize">11sp</item>
@@ -184,4 +184,54 @@
         <item name="tabIndicatorColor">@color/tab_indicator</item>
     </style>
 
+    <style name="ActionButton2">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="EditTextField" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusBottomEnd">3.5dp</item>
+        <item name="boxCornerRadiusBottomStart">3.5dp</item>
+        <item name="boxCornerRadiusTopEnd">3.5dp</item>
+        <item name="boxCornerRadiusTopStart">3.5dp</item>
+        <item name="hintTextColor">@color/box_stroke_color</item>
+        <item name="cursorColor">@color/cursor_and_progressBar</item>
+        <item name="android:textColorHint">@color/main_text</item>
+        <item name="endIconDrawable">@drawable/clear</item>
+        <item name="endIconMode">clear_text</item>
+    </style>
+
+    <style name="EditTextHint">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/main_text</item>
+        <item name="boxStrokeColor">@color/box_stroke_color</item>
+    </style>
+
+    <style name="CustomShapeImage" parent="@style/ThemeOverlay.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="Playlist_rv_item">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/main_text</item>
+    </style>
+
+    <style name="Rounded_image">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="HeaderBottomSheet">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">@color/main_text</item>
+    </style>
 </resources>

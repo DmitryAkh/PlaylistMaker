@@ -1,7 +1,7 @@
 package com.example.playlistmaker.data.db.impl
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.data.converters.TrackDbConverter
+import com.example.playlistmaker.data.converters.DbConverter
 import com.example.playlistmaker.data.db.AppDataBase
 import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.data.impl.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
@@ -17,11 +17,11 @@ class FavTracksRepositoryImpl(
     private val appDataBase: AppDataBase, private val sharedPrefs: SharedPreferences,
 ) : FavTracksRepository {
     override suspend fun insertFavTrack(track: TrackEntity) {
-        appDataBase.trackDao().insertFavTrack(track)
+        appDataBase.trackDao().insertTrack(track)
     }
 
     override suspend fun deleteFavTrack(trackId: String?) {
-        appDataBase.trackDao().deleteFavTrack(trackId)
+        appDataBase.trackDao().deleteTrack(trackId)
     }
 
     override fun getFavTracksFlow(): Flow<List<TrackDto>> = flow {
@@ -30,11 +30,11 @@ class FavTracksRepositoryImpl(
     }
 
     private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<TrackDto> {
-        return tracks.map { track -> TrackDbConverter.map(track) }
+        return tracks.map { track -> DbConverter.map(track) }
     }
 
     override fun putTrackForPlayer(track: Track) {
-        sharedPrefs.edit() {
+        sharedPrefs.edit {
             putString(
                 TRACK_FOR_PLAYER_KEY, jsonFromTrack(track)
             )

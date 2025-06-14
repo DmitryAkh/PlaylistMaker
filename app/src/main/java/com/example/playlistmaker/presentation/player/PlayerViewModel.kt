@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.data.converters.TrackDbConverter
+import com.example.playlistmaker.data.converters.DbConverter
+import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.domain.db.FavTracksInteractor
 import com.example.playlistmaker.domain.interactors.PlayerInteractor
 import com.example.playlistmaker.domain.entity.PlayerState
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.interactors.PlaylistsInteractor
 import com.example.playlistmaker.util.Utils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,17 +21,22 @@ import kotlinx.coroutines.launch
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val favTracksInteractor: FavTracksInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
     private val player = playerInteractor.getPlayer()
     private var timerJob: Job? = null
     private val stateLiveData = MutableLiveData(PlayerState.DEFAULT)
     private val timeLiveData: MutableLiveData<String> = MutableLiveData()
     private val isFavoriteLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private val playlistsLiveData: MutableLiveData<List<Playlist>> = MutableLiveData()
+//    private val playlistIdsLiveData: MutableLiveData<List<Int>> = MutableLiveData()
 
 
     fun observeState(): LiveData<PlayerState> = stateLiveData
     fun observeTime(): LiveData<String> = timeLiveData
     fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
+    fun observePlaylists(): LiveData<List<Playlist>> = playlistsLiveData
+//    fun observePlaylistIds(): LiveData<List<Int>> = playlistIdsLiveData
 
     fun preparePlayer() {
         playerInteractor.preparePlayer()
@@ -63,7 +70,6 @@ class PlayerViewModel(
 
     fun getTrack(): Track {
         val track = playerInteractor.getTrack()
-//        isFavoriteLiveData.postValue(track.isFavorite)
         return track
     }
     override fun onCleared() {
@@ -83,7 +89,7 @@ class PlayerViewModel(
 
     fun addFavTrack(track: Track) {
         viewModelScope.launch {
-            favTracksInteractor.insertFavTrack(TrackDbConverter.map(track))
+            favTracksInteractor.insertFavTrack(DbConverter.map(track))
         }
     }
 
@@ -97,6 +103,20 @@ class PlayerViewModel(
 
     fun syncFavorite() {
         isFavoriteLiveData.postValue(playerInteractor.isFavorite())
+    }
+
+    fun syncPlaylists() {
+        viewModelScope.launch {
+            playlistsLiveData.postValue(playlistsInteractor.getPlaylists())
+        }
+    }
+
+    fun addToPlaylist(playlist: Playlist, track: Track) {
+
+        viewModelScope.launch {
+            playlistsInteractor.addToPlaylist(playlist, track)
+            syncPlaylists()
+        }
     }
 
 }

@@ -13,7 +13,7 @@
 
         <ImageView
             android:id="@+id/ivImgTrack"
-            style="@style/ImgTrack"
+            style="@style/rvCover"
             android:src="@drawable/placeholder" />
 
 
@@ -25,7 +25,7 @@
 
             <TextView
                 android:id="@+id/tvTrackName"
-                style="@style/TrackName"
+                style="@style/rvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -39,7 +39,7 @@
 
                 <TextView
                     android:id="@+id/tvArtistName"
-                    style="@style/ArtistNameAndTrackTime"
+                    style="@style/rvDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -54,7 +54,7 @@
 
                 <TextView
                     android:id="@+id/tvTrackTime"
-                    style="@style/ArtistNameAndTrackTime"
+                    style="@style/rvDetails"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""

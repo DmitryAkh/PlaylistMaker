@@ -1,11 +1,13 @@
 package com.example.playlistmaker.data.converters
 
+import com.example.playlistmaker.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.data.db.entity.TrackEntity
+import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.data.models.TrackDto
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.Utils
 
-object TrackDbConverter {
+object DbConverter {
 
     fun map(track: Track): TrackEntity {
         return TrackEntity(
@@ -39,5 +41,32 @@ object TrackDbConverter {
             isFavorite = track.isFavorite
         )
     }
+
+    fun map(playlist: Playlist): PlaylistEntity {
+        return PlaylistEntity(
+            playlistName = playlist.playlistName,
+            playlistDescription = playlist.playlistDescription,
+            coverPath = playlist.coverPath,
+            tracksIds = Utils.jsonFromList(playlist.tracksIds)
+        )
+    }
+
+    private fun map(playlist: PlaylistEntity): Playlist {
+        return Playlist(
+            playlistId = playlist.playlistId,
+            playlistName = playlist.playlistName,
+            playlistDescription = playlist.playlistDescription,
+            coverPath = playlist.coverPath,
+            tracksIds = Utils.listFromJson(playlist.tracksIds),
+            tracksCount = playlist.tracksCount,
+            additionTime = playlist.additionTime
+        )
+    }
+
+    fun map(playlists: List<PlaylistEntity>): List<Playlist> {
+        return playlists.map { playlist -> map(playlist) }
+    }
+
+
 
 }

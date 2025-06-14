@@ -15,7 +15,7 @@ class HistoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return SearchViewHolder(binding, onTrackClicked)
+        return SearchViewHolder(binding)
     }
 
     override fun getItemCount(): Int = historyList.size
@@ -23,6 +23,9 @@ class HistoryAdapter(
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val track = historyList[position]
         holder.bind(track)
+        holder.itemView.setOnClickListener {
+            onTrackClicked(track)
+        }
     }
 
     fun updateData(newHistoryList: List<Track>) {

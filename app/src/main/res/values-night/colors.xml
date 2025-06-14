@@ -2,6 +2,8 @@
 <resources>
     <color name="white">#FFFFFFFF</color>
     <color name="black">#FF000000</color>
+    <color name="main">#FFFFFFFF</color>
+    <color name="main_inverse">#1A1B22</color>
     <color name="main_activity_header_text">#FFFFFFFF</color>
     <color name="main_activity_background">#1A1B22</color>
     <color name="main_activity_button_icon_text">#1A1B22</color>
@@ -34,5 +36,8 @@
     <color name="tab_text">#FFFFFF</color>
     <color name="tab_indicator">#FFFFFF</color>
     <color name="bottom_navigation_ic">#FFFFFF</color>
+    <color name="edit_area_stroke">#FFFFFF</color>
+    <color name="bottom_sheet_stripe">#FFFFFF</color>
+
 
 </resources>

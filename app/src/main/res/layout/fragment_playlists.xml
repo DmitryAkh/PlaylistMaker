@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -8,40 +9,36 @@
     android:orientation="vertical"
     tools:context=".presentation.library.playlists.PlaylistsFragment">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/placeholderButtonNew"
+        style="@style/ActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="@string/new_playlist"
+        android:visibility="visible" />
 
-    <LinearLayout
-        android:id="@+id/placeholderLibEmpty"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylists"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <TextView
+        android:id="@+id/placeholderText"
+        style="@style/PlaceholderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="16dp"
+        android:layout_marginTop="46dp"
+        android:text="@string/no_playlists"
         android:gravity="center"
-        android:orientation="vertical"
-        tools:visibility="visible">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/placeholderButtonNew"
-            style="@style/ActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="46dp"
-            android:text="@string/new_playlist"
-            android:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/placeholderImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/not_found" />
-
-        <TextView
-            android:id="@+id/placeholderText"
-            style="@style/PlaceholderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/no_playlists" />
-
-    </LinearLayout>
+        app:drawableTopCompat="@drawable/not_found" />
 
 </LinearLayout>

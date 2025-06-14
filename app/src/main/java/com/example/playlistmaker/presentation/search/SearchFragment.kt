@@ -52,7 +52,7 @@ class SearchFragment : Fragment() {
         onTrackClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.putTrackForPlayer(track)
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment3)
             }
 
         adapter = SearchAdapter(emptyList()) { track ->
