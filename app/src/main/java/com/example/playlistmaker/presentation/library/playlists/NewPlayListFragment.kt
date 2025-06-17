@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,7 +32,6 @@ class NewPlayListFragment : Fragment() {
     private var description: String = ""
     private var path: String = ""
     private lateinit var debouncedClick: (Unit) -> Unit
-    private val args: NewPlayListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,8 +43,6 @@ class NewPlayListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val myArgs = args.sourceScreen
 
 
         val pickImage =
@@ -138,16 +134,8 @@ class NewPlayListFragment : Fragment() {
                     R.color.main_inverse
                 )
 
-                if (myArgs == "player") {
-                    findNavController().navigate(R.id.action_newPlayListFragment_to_playerFragment3)
-                } else {
-                    val bundle = bundleOf("tabIndex" to 2)
+                findNavController().navigateUp()
 
-                    findNavController().navigate(
-                        R.id.action_newPlayListFragment_to_libraryFragment2,
-                        bundle
-                    )
-                }
             }
         )
 

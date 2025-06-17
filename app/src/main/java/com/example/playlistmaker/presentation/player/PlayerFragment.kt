@@ -159,9 +159,7 @@ class PlayerFragment : Fragment() {
         }
 
         binding.bottomSheet.buttonNew.setOnClickListener {
-            val action = PlayerFragmentDirections
-                .actionPlayerFragment3ToNewPlayListFragment(sourceScreen = "player")
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_playerFragment3_to_newPlayListFragment)
         }
     }
 

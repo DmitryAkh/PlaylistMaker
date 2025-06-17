@@ -38,11 +38,6 @@ class LibraryFragment : Fragment() {
         }
         tabMediator.attach()
 
-        val tabIndex = arguments?.getInt("tabIndex") ?: 0
-
-        binding.viewPager.post {
-            binding.viewPager.currentItem = tabIndex
-        }
 
     }
 
