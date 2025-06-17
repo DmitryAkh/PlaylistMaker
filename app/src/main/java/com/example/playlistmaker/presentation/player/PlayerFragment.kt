@@ -1,6 +1,7 @@
 package com.example.playlistmaker.presentation.player
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,6 @@ class PlayerFragment : Fragment() {
 
     private val viewModel by viewModel<PlayerViewModel>()
     private lateinit var track: Track
-    private lateinit var playlists: List<Playlist>
     private lateinit var overlay: View
     private lateinit var recyclerView: RecyclerView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
@@ -53,12 +53,12 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        track = viewModel.getTrack()
-        prepareUI()
-        setupObservers()
-        viewModel.syncFavorite()
-
         viewModel.syncPlaylists()
+        setupObservers()
+        track = viewModel.getTrack()
+        viewModel.syncFavorite()
+        prepareUI()
+
 
 
         onPlaylistClickDebounce =
@@ -73,7 +73,6 @@ class PlayerFragment : Fragment() {
                     )
                 } else {
                     viewModel.addToPlaylist(playlist, track)
-                    bottomSheetAdapter.updateData(playlists)
                     binding.root.showStyledSnackbar(
                         requireContext(),
                         getString(R.string.added_to_playlist_successfully, playlist.playlistName),
@@ -165,38 +164,39 @@ class PlayerFragment : Fragment() {
 
     private fun setupObservers() {
 
+
         viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+
             binding.playerTime.text = state.time
 
-        }
 
-        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
-            val drawableRes = if (state.playerState == PlayerState.PLAYING) {
+            val playRes = if (state.playerState == PlayerState.PLAYING) {
                 R.drawable.pause_button
             } else {
                 R.drawable.play_button
             }
 
             binding.playButton.setImageDrawable(
-                ContextCompat.getDrawable(requireContext(), drawableRes)
+                ContextCompat.getDrawable(requireContext(), playRes)
             )
-        }
 
-        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
-            val drawableRes = if (state.isFavorite) {
+            val likeRes = if (state.isFavorite) {
                 R.drawable.like_button_active
             } else {
                 R.drawable.like_button_inactive
             }
 
             binding.likeButton.setImageDrawable(
-                ContextCompat.getDrawable(requireContext(), drawableRes)
+                ContextCompat.getDrawable(requireContext(), likeRes)
             )
-        }
-        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+
+
+
             bottomSheetAdapter.updateData(state.playlists)
-            this.playlists = state.playlists
+
+
         }
+
     }
 
     override fun onDestroyView() {

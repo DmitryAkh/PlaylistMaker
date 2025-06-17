@@ -82,6 +82,7 @@ class PlayerViewModel(
         val track = playerInteractor.getTrack()
         return track
     }
+
     override fun onCleared() {
         playerInteractor.release()
     }
@@ -120,9 +121,12 @@ class PlayerViewModel(
         viewModelScope.launch {
             playlistsInteractor
                 .getPlaylists()
-                .collect { playlists -> currentPlaylists = playlists }
-            updateState()
+                .collect { playlists ->
+                    currentPlaylists = playlists
+                    updateState()
+                }
         }
+
     }
 
     fun addToPlaylist(playlist: Playlist, track: Track) {

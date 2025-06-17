@@ -34,7 +34,7 @@ class BottomSheetAdapter(
     }
 
     fun updateData(newPlList: List<Playlist>) {
-        this.plList = newPlList
+        plList = newPlList
         notifyDataSetChanged()
     }
 }
