@@ -159,17 +159,21 @@ class PlayerFragment : Fragment() {
         }
 
         binding.bottomSheet.buttonNew.setOnClickListener {
-            findNavController().navigate(R.id.newPlayListFragment)
+            val action = PlayerFragmentDirections
+                .actionPlayerFragment3ToNewPlayListFragment(sourceScreen = "player")
+            findNavController().navigate(action)
         }
     }
 
     private fun setupObservers() {
-        viewModel.observeTime().observe(viewLifecycleOwner) { time ->
-            binding.playerTime.text = time
+
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+            binding.playerTime.text = state.time
+
         }
 
-        viewModel.observeState().observe(viewLifecycleOwner) { state ->
-            val drawableRes = if (state == PlayerState.PLAYING) {
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+            val drawableRes = if (state.playerState == PlayerState.PLAYING) {
                 R.drawable.pause_button
             } else {
                 R.drawable.play_button
@@ -180,8 +184,8 @@ class PlayerFragment : Fragment() {
             )
         }
 
-        viewModel.observeIsFavorite().observe(viewLifecycleOwner) { isFavorite ->
-            val drawableRes = if (isFavorite == true) {
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+            val drawableRes = if (state.isFavorite) {
                 R.drawable.like_button_active
             } else {
                 R.drawable.like_button_inactive
@@ -191,9 +195,9 @@ class PlayerFragment : Fragment() {
                 ContextCompat.getDrawable(requireContext(), drawableRes)
             )
         }
-        viewModel.observePlaylists().observe(viewLifecycleOwner) { playlists ->
-            bottomSheetAdapter.updateData(playlists)
-            this.playlists = playlists
+        viewModel.observeScreenState().observe(viewLifecycleOwner) { state ->
+            bottomSheetAdapter.updateData(state.playlists)
+            this.playlists = state.playlists
         }
     }
 

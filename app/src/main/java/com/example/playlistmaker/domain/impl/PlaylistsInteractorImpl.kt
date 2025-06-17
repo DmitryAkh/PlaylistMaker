@@ -5,6 +5,7 @@ import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.interactors.PlaylistsInteractor
 import com.example.playlistmaker.domain.repositories.PlaylistsRepository
+import kotlinx.coroutines.flow.Flow
 
 class PlaylistsInteractorImpl(private val repository: PlaylistsRepository) : PlaylistsInteractor {
     override fun saveImageToPrivateStorage(uri: Uri): String {
@@ -15,7 +16,7 @@ class PlaylistsInteractorImpl(private val repository: PlaylistsRepository) : Pla
         repository.insertPlaylist(playlist)
     }
 
-    override suspend fun getPlaylists(): List<Playlist> {
+    override fun getPlaylists(): Flow<List<Playlist>> {
         return repository.getPlaylists()
     }
 

@@ -12,6 +12,8 @@ import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.repositories.PlaylistsRepository
 import com.example.playlistmaker.util.Utils
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.io.File
 import java.io.FileOutputStream
 
@@ -39,10 +41,15 @@ class PlaylistsRepositoryImpl(private val context: Context, private val dataBase
         dataBase.playlistDao().insertPlaylist(DbConverter.map(playlist))
     }
 
-    override suspend fun getPlaylists(): List<Playlist> {
-        val listEntity = dataBase.playlistDao().getPlaylists()
-        return DbConverter.map(listEntity)
-    }
+//    override suspend fun getPlaylists(): List<Playlist> {
+//        val listEntity = dataBase.playlistDao().getPlaylists()
+//        return DbConverter.map(listEntity)
+//    }
+
+    override fun getPlaylists(): Flow<List<Playlist>> =
+        dataBase.playlistDao()
+            .getPlaylists()
+            .map { playlists -> DbConverter.map(playlists) }
 
     override suspend fun addToPlaylist(playlist: Playlist, track: Track) {
         val plId = playlist.playlistId

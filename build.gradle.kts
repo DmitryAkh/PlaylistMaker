@@ -5,3 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.parcelize) apply false
 }
 
+buildscript {
+    dependencies {
+        classpath(libs.navigation.safe.args)
+    }
+}
+

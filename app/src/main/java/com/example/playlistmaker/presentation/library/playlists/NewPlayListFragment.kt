@@ -9,11 +9,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.util.Utils.showStyledSnackbar
@@ -30,19 +33,21 @@ class NewPlayListFragment : Fragment() {
     private var description: String = ""
     private var path: String = ""
     private lateinit var debouncedClick: (Unit) -> Unit
-
+    private val args: NewPlayListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentNewPlayListBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val myArgs = args.sourceScreen
+
 
         val pickImage =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -64,6 +69,14 @@ class NewPlayListFragment : Fragment() {
         binding.backButton.setOnClickListener {
             confirmExit()
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                confirmExit()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
 
         val simpleEditNameTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(
@@ -125,7 +138,16 @@ class NewPlayListFragment : Fragment() {
                     R.color.main_inverse
                 )
 
-                findNavController().popBackStack()
+                if (myArgs == "player") {
+                    findNavController().navigate(R.id.action_newPlayListFragment_to_playerFragment3)
+                } else {
+                    val bundle = bundleOf("tabIndex" to 2)
+
+                    findNavController().navigate(
+                        R.id.action_newPlayListFragment_to_libraryFragment2,
+                        bundle
+                    )
+                }
             }
         )
 

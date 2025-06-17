@@ -9,9 +9,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.playlistmaker.R
 import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.presentation.library.LibraryFragmentDirections
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,10 +52,11 @@ class PlaylistsFragment : Fragment() {
         binding.rvPlaylists.adapter = adapter
 
         binding.placeholderButtonNew.setOnClickListener {
-
-            findNavController().navigate(R.id.action_libraryFragment_to_newPlayListFragment)
-
+            val action =
+                LibraryFragmentDirections.actionLibraryFragmentToNewPlayListFragment(sourceScreen = "playlists")
+            findNavController().navigate(action)
         }
+
 
         viewModel.getPlaylists()
 
@@ -76,6 +77,7 @@ class PlaylistsFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L

@@ -3,8 +3,8 @@ package com.example.playlistmaker.data.impl
 import android.content.SharedPreferences
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.repositories.PlayerRepository
-import com.example.playlistmaker.domain.entity.PlayerState
 import com.example.playlistmaker.data.impl.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
+import com.example.playlistmaker.domain.entity.PlayerState
 import com.example.playlistmaker.domain.entity.Track
 import com.google.gson.Gson
 import java.text.SimpleDateFormat

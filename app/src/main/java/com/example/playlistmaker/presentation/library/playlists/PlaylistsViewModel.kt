@@ -34,8 +34,12 @@ class PlaylistsViewModel(private val interactor: PlaylistsInteractor) : ViewMode
 
     fun getPlaylists() {
         viewModelScope.launch {
-            val playlists = interactor.getPlaylists()
-            playlistsLiveData.postValue(playlists)
+            interactor
+                .getPlaylists()
+                .collect { playlists ->
+                    playlistsLiveData.postValue(playlists)
+                }
+
 
         }
     }

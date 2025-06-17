@@ -8,8 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.data.converters.DbConverter
 import com.example.playlistmaker.data.models.Playlist
 import com.example.playlistmaker.domain.db.FavTracksInteractor
-import com.example.playlistmaker.domain.interactors.PlayerInteractor
+import com.example.playlistmaker.domain.entity.PlayerScreenState
 import com.example.playlistmaker.domain.entity.PlayerState
+import com.example.playlistmaker.domain.interactors.PlayerInteractor
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.interactors.PlaylistsInteractor
 import com.example.playlistmaker.util.Utils
@@ -25,37 +26,46 @@ class PlayerViewModel(
 ) : ViewModel() {
     private val player = playerInteractor.getPlayer()
     private var timerJob: Job? = null
-    private val stateLiveData = MutableLiveData(PlayerState.DEFAULT)
-    private val timeLiveData: MutableLiveData<String> = MutableLiveData()
-    private val isFavoriteLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    private val playlistsLiveData: MutableLiveData<List<Playlist>> = MutableLiveData()
-//    private val playlistIdsLiveData: MutableLiveData<List<Int>> = MutableLiveData()
+    private val screenState = MutableLiveData<PlayerScreenState>()
+    private var currentState = PlayerState.DEFAULT
+    private var currentTime = "00:00"
+    private var currentIsFavorite = false
+    private var currentPlaylists: List<Playlist> = emptyList()
+
+    fun observeScreenState(): LiveData<PlayerScreenState> = screenState
 
 
-    fun observeState(): LiveData<PlayerState> = stateLiveData
-    fun observeTime(): LiveData<String> = timeLiveData
-    fun observeIsFavorite(): LiveData<Boolean> = isFavoriteLiveData
-    fun observePlaylists(): LiveData<List<Playlist>> = playlistsLiveData
-//    fun observePlaylistIds(): LiveData<List<Int>> = playlistIdsLiveData
+    private fun updateState() {
+        screenState.postValue(
+            PlayerScreenState(
+                playerState = currentState,
+                time = currentTime,
+                isFavorite = currentIsFavorite,
+                playlists = currentPlaylists
+            )
+        )
+    }
 
     fun preparePlayer() {
         playerInteractor.preparePlayer()
         playerInteractor.setOnCompletionListener {
-            stateLiveData.postValue(PlayerState.PAUSED)
-            timeLiveData.postValue("00:00")
+            currentState = PlayerState.PAUSED
+            currentTime = "00:00"
             timerJob?.cancel()
+            updateState()
         }
     }
 
     private fun startPlayer() {
         playerInteractor.startPlayer()
-        stateLiveData.postValue(PlayerState.PLAYING)
+        currentState = PlayerState.PLAYING
         startTimer()
+        updateState()
     }
 
     fun pausePlayer() {
         playerInteractor.pausePlayer()
-        stateLiveData.postValue(PlayerState.PAUSED)
+        currentState = PlayerState.PAUSED
     }
 
     fun togglePlayer() {
@@ -80,9 +90,9 @@ class PlayerViewModel(
         timerJob = viewModelScope.launch {
             while (player.isPlaying) {
                 delay(300L)
-                timeLiveData.postValue(
+                currentTime =
                     Utils.millisToSeconds(playerInteractor.getCurrentPosition().toLong())
-                )
+                updateState()
             }
         }
     }
@@ -102,12 +112,16 @@ class PlayerViewModel(
     fun isFavorite(): Boolean = playerInteractor.isFavorite()
 
     fun syncFavorite() {
-        isFavoriteLiveData.postValue(playerInteractor.isFavorite())
+        currentIsFavorite = playerInteractor.isFavorite()
+        updateState()
     }
 
     fun syncPlaylists() {
         viewModelScope.launch {
-            playlistsLiveData.postValue(playlistsInteractor.getPlaylists())
+            playlistsInteractor
+                .getPlaylists()
+                .collect { playlists -> currentPlaylists = playlists }
+            updateState()
         }
     }
 
