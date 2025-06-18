@@ -21,11 +21,13 @@ class PlaylistsViewHolder(
             .placeholder(R.drawable.placeholder)
             .into((binding.cover))
 
-        val playlistSize = item.tracksIds.size
 
         binding.name.text = item.playlistName
-        binding.count.text = playlistSize.toString()
-
+        binding.count.text = binding.root.resources.getQuantityString(
+            R.plurals.tracks_count,
+            item.tracksIds.size,
+            item.tracksIds.size
+        )
     }
 
 }

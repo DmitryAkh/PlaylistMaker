@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
     android:orientation="vertical"
     android:layout_marginHorizontal="8dp">
 
@@ -25,5 +26,9 @@
         android:layout_height="wrap_content"
         tools:text="28 треков"
         style="@style/Playlist_rv_item" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
 
 </LinearLayout>

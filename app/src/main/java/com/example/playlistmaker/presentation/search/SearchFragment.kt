@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.domain.entity.SearchState
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.debounce
 import kotlinx.coroutines.launch
@@ -223,31 +224,26 @@ class SearchFragment : Fragment() {
         binding.llSearchHistory.isVisible = historyList.isNotEmpty()
     }
 
-    private fun render(state: SearchScreenState) {
+    private fun render(state: SearchState) {
         when (state) {
-            is SearchScreenState.Loading -> showLoading()
-            is SearchScreenState.Content -> showContent()
-            is SearchScreenState.History -> showHistory()
-            is SearchScreenState.NotFound -> showNotFound()
-            is SearchScreenState.NoInternet -> showNoInternet()
+            SearchState.LOADING -> showLoading()
+            SearchState.CONTENT -> showContent()
+            SearchState.HISTORY -> showHistory()
+            SearchState.NOTFOUND -> showNotFound()
+            SearchState.NOINTERNET -> showNoInternet()
+            SearchState.DEFAULT -> {}
         }
     }
 
     private fun setupObservers() {
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            render(state.searchState)
+            adapter?.updateData(state.tracks)
+            historyAdapter?.updateData(state.history)
+            historyList = state.history
+
         }
 
-        viewModel.observeTracks().observe(viewLifecycleOwner) { tracks ->
-            if (tracks != null) {
-                adapter?.updateData(tracks)
-            }
-        }
-
-        viewModel.observeHistory().observe(viewLifecycleOwner) { history ->
-            historyAdapter?.updateData(history)
-            historyList = history
-        }
     }
 
     companion object {

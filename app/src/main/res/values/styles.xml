@@ -41,10 +41,9 @@
     <style name="StringIconStyle">
         <item name="android:layout_width">@dimen/string_screen_icon_layout_width</item>
         <item name="android:layout_height">@dimen/string_screen_icon_layout_height</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginTop">@dimen/string_icon_margin_top</item>
+        <item name="android:layout_marginTop">18dp</item>
         <item name="android:layout_marginEnd">@dimen/string_icon_margin_end</item>
-        <item name="android:layout_marginBottom">@dimen/string_icon_margin_bottom</item>
+        <item name="android:layout_marginBottom">19dp</item>
         <item name="tint">@color/icon_tint</item>
     </style>
 
@@ -78,7 +77,7 @@
     <style name="rvCover">
         <item name="android:layout_width">@dimen/img_track_width</item>
         <item name="android:layout_height">@dimen/img_track_height</item>
-        <item name="android:layout_marginVertical">@dimen/img_track_layout_margin_vertical</item>
+
         <item name="android:layout_marginStart">@dimen/img_track_layout_margin_start</item>
         <item name="android:layout_marginEnd">@dimen/img_track_layout_margin_end</item>
     </style>
