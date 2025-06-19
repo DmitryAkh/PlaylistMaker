@@ -23,11 +23,13 @@ class PlaylistsViewHolder(
 
 
         binding.name.text = item.playlistName
-        binding.count.text = binding.root.resources.getQuantityString(
-            R.plurals.tracks_count,
-            item.tracksIds.size,
-            item.tracksIds.size
-        )
-    }
+        val tracksCount = item.tracksIds.size
+        val trackCountEnding = Utils.tracksCountEnding(tracksCount)
 
+        binding.name.text = item.playlistName
+        binding.count.text =
+            itemView.context.getString(R.string.track_count, tracksCount, trackCountEnding)
+
+    }
 }
+

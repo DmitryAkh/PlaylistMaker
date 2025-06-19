@@ -102,6 +102,19 @@ object Utils {
         snackbar.show()
     }
 
+    fun tracksCountEnding(count: Int): String {
+        val lastTwoDigits = count % 100
+        val lastDigit = count % 10
+        if (lastTwoDigits in 11..14) {
+            return "треков"
+        }
+        return when (lastDigit) {
+            1 -> "трек"
+            2, 3, 4 -> "трека"
+            else -> "треков"
+        }
+    }
+
 }
 
 

@@ -79,6 +79,6 @@ class PlaylistsFragment : Fragment() {
 
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }

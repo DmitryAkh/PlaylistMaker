@@ -88,9 +88,7 @@ class SearchFragment : Fragment() {
 
         binding.clearButton.setOnClickListener {
             binding.searchArea.setText("")
-            viewModel.clearTracks()
             viewModel.loadHistoryList()
-            showHistory()
         }
 
 
@@ -237,10 +235,10 @@ class SearchFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
-            render(state.searchState)
+            historyList = state.history
             adapter?.updateData(state.tracks)
             historyAdapter?.updateData(state.history)
-            historyList = state.history
+            render(state.searchState)
 
         }
 
@@ -248,7 +246,7 @@ class SearchFragment : Fragment() {
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 
 

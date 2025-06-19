@@ -204,6 +204,6 @@ class PlayerFragment : Fragment() {
     }
 
     companion object {
-        const val CLICK_DEBOUNCE_DELAY = 1000L
+        const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }

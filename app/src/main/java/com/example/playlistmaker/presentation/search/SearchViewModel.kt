@@ -19,10 +19,6 @@ class SearchViewModel(
 ) : ViewModel() {
 
     private var latestSearchText: String? = null
-    private var state: SearchState = SearchState.DEFAULT
-
-    private var tracks: List<Track> = emptyList()
-    private var history: List<Track> = emptyList()
 
     private val screenState = MutableLiveData<SearchScreenState>()
 
@@ -33,20 +29,15 @@ class SearchViewModel(
 
     fun observeState(): LiveData<SearchScreenState> = screenState
 
-    private fun renderState(state: SearchState) {
-        this.state = state
-        screenState.postValue(
-            SearchScreenState(
-                searchState = state,
-                tracks = tracks,
-                history = history
-            )
-        )
-    }
 
     fun doSearch(query: String) {
-        renderState(SearchState.LOADING)
-
+        screenState.postValue(
+            SearchScreenState(
+                searchState = SearchState.LOADING,
+                tracks = emptyList(),
+                history = emptyList()
+            )
+        )
         viewModelScope.launch {
             interactor
                 .searchProcessing(query)
@@ -60,14 +51,29 @@ class SearchViewModel(
         val responseState = interactor.getResponseState()
 
         if (foundTracks != null) {
-            tracks = foundTracks
-            renderState(SearchState.CONTENT)
+            screenState.postValue(
+                SearchScreenState(
+                    searchState = SearchState.CONTENT,
+                    tracks = foundTracks,
+                    history = emptyList()
+                )
+            )
         } else if (responseState == ResponseState.NOT_FOUND) {
-            tracks = emptyList()
-            renderState(SearchState.NOTFOUND)
+            screenState.postValue(
+                SearchScreenState(
+                    searchState = SearchState.NOTFOUND,
+                    tracks = emptyList(),
+                    history = emptyList()
+                )
+            )
         } else {
-            tracks = emptyList()
-            renderState(SearchState.NOINTERNET)
+            screenState.postValue(
+                SearchScreenState(
+                    searchState = SearchState.NOINTERNET,
+                    tracks = emptyList(),
+                    history = emptyList()
+                )
+            )
         }
     }
 
@@ -88,20 +94,26 @@ class SearchViewModel(
 
     fun loadHistoryList() {
         viewModelScope.launch {
-            history = interactor.loadHistoryList()
-            renderState(SearchState.HISTORY)
+            screenState.postValue(
+                SearchScreenState(
+                    searchState = SearchState.HISTORY,
+                    tracks = emptyList(),
+                    history = interactor.loadHistoryList()
+                )
+            )
         }
     }
 
-    fun clearTracks() {
-        tracks = emptyList()
-        renderState(state)
-    }
 
     fun clearHistoryList() {
         interactor.clearHistoryList()
-        history = emptyList()
-        renderState(state)
+        screenState.postValue(
+            SearchScreenState(
+                searchState = SearchState.CONTENT,
+                tracks = emptyList(),
+                history = emptyList()
+            )
+        )
     }
 
     fun putTrackForPlayer(track: Track) = interactor.putTrackForPlayer(track)
