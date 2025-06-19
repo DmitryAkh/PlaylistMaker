@@ -55,7 +55,7 @@ class FavTracksFragment : Fragment() {
         onTrackClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
                 viewModel.putTrackForPlayer(track)
-                findNavController().navigate(R.id.action_libraryFragment_to_playerActivity)
+                findNavController().navigate(R.id.action_libraryFragment_to_playerFragment3)
             }
 
         adapter = FavTracksAdapter(emptyList()) { track ->
@@ -78,6 +78,6 @@ class FavTracksFragment : Fragment() {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 }

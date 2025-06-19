@@ -1,47 +1,49 @@
-package com.example.playlistmaker.search.data
+package com.example.playlistmaker.data.impl
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.util.Utils
-import com.example.playlistmaker.search.data.dto.TracksResponse
-import com.example.playlistmaker.search.data.dto.TracksSearchRequest
-import com.example.playlistmaker.search.data.network.NetworkClient
-import com.example.playlistmaker.search.domain.SearchRepository
-import com.example.playlistmaker.search.domain.ResponseState
-import com.example.playlistmaker.search.domain.Resource
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.data.converters.TrackConverter
+import com.example.playlistmaker.data.db.AppDataBase
+import com.example.playlistmaker.data.models.TracksResponse
+import com.example.playlistmaker.data.models.TracksSearchRequest
+import com.example.playlistmaker.data.network.NetworkClient
+import com.example.playlistmaker.domain.repositories.SearchRepository
+import com.example.playlistmaker.domain.entity.ResponseState
+import com.example.playlistmaker.domain.entity.Resource
+import com.example.playlistmaker.domain.entity.Track
 import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import androidx.core.content.edit
+import com.example.playlistmaker.util.Utils
 
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val sharedPrefs: SharedPreferences,
+    private val appDataBase: AppDataBase,
 ) : SearchRepository {
-    override fun doSearch(expression: String): Resource<List<Track>> {
+    override fun doSearch(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         if (response.resultCode == 200) {
-            return Resource.Success((response as TracksResponse).results.map {
-                Track(
-                    trackId = it.trackId,
-                    trackName = it.trackName,
-                    artistName = it.artistName,
-                    collectionName = it.collectionName,
-                    primaryGenreName = it.primaryGenreName,
-                    artworkUrl100 = it.artworkUrl100,
-                    country = it.country,
-                    previewUrl = it.previewUrl,
-                    releaseDate = Utils.formatDate(it.releaseDate),
-                    trackTime = Utils.millisToSeconds(it.trackTimeMillis)
-                )
+            val favTracks = appDataBase.trackDao().getTrackIdList()
+            val foundTracks = (response as TracksResponse).results.map {
+                TrackConverter.map(it)
             }
-            )
+            val checkedTracks = foundTracks.map { track ->
+                track.copy(isFavorite = track.trackId in favTracks)
+            }
 
+            emit(
+                Resource.Success(checkedTracks)
+            )
+        } else {
+            emit(Resource.Error("Ошибка сервера"))
         }
-        return Resource.Error("Ошибка сервера")
     }
 
     override fun getResponseState(): ResponseState = networkClient.getResponseState()
 
-    override fun addTrackToHistory(track: Track) {
+    override suspend fun addTrackToHistory(track: Track) {
         val historyList = loadHistoryList()
 
         if (historyList.contains(track)) {
@@ -54,7 +56,7 @@ class SearchRepositoryImpl(
         historyList.add(0, track)
         sharedPrefs.edit()
             .putString(
-                HISTORY_LIST_KEY, jsonFromHistoryList(historyList)
+                HISTORY_LIST_KEY, Utils.jsonFromList(historyList)
             )
             .apply()
     }
@@ -65,30 +67,26 @@ class SearchRepositoryImpl(
             .apply()
     }
 
-    override fun loadHistoryList(): MutableList<Track> {
+    override suspend fun loadHistoryList(): MutableList<Track> {
         val json = sharedPrefs.getString(HISTORY_LIST_KEY, null)
         return if (json != null) {
-            historyListFromJson(json)
+            val favTracks = appDataBase.trackDao().getTrackIdList()
+            val historyList = Utils.listFromJson<Track>(json)
+            historyList.map { track -> track.copy(isFavorite = track.trackId in favTracks) }
+                .toMutableList()
         } else {
             mutableListOf()
         }
     }
 
-    override fun historyListFromJson(json: String?): MutableList<Track> {
-        val type = object : com.google.gson.reflect.TypeToken<MutableList<Track>>() {}.type
-        return Gson().fromJson(json, type)
-    }
 
-    override fun jsonFromHistoryList(historyList: MutableList<Track>): String {
-        return Gson().toJson(historyList)
-    }
 
     override fun putTrackForPlayer(track: Track) {
-        sharedPrefs.edit()
-            .putString(
+        sharedPrefs.edit {
+            putString(
                 TRACK_FOR_PLAYER_KEY, jsonFromTrack(track)
             )
-            .apply()
+        }
     }
 
 

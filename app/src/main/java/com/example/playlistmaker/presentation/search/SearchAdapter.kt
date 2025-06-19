@@ -15,7 +15,7 @@ class SearchAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
         val binding = TrackItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return SearchViewHolder(binding, onTrackClicked)
+        return SearchViewHolder(binding)
     }
 
     override fun getItemCount(): Int = trackList.size
@@ -23,6 +23,9 @@ class SearchAdapter(
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         val track = trackList[position]
         holder.bind(track)
+        holder.itemView.setOnClickListener {
+            onTrackClicked(track)
+        }
     }
 
     fun updateData(newTrackList: List<Track>) {

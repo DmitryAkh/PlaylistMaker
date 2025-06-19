@@ -1,9 +1,7 @@
-package com.example.playlistmaker.search.ui
+package com.example.playlistmaker.presentation.search
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,43 +12,27 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.domain.entity.SearchState
+import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.util.debounce
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
-    private var tracks: List<Track> = emptyList()
-    private var historyList: List<Track> = emptyList()
-    private var isClickAllowed = true
     private var enteredText: String = ""
-    private val handler = Handler(Looper.getMainLooper())
+    private var historyList: List<Track> = emptyList()
     private val viewModel by viewModel<SearchViewModel>()
-    private val adapter: TrackAdapter by lazy {
-        TrackAdapter(tracks) { track ->
-
-            if (clickDebounce()) {
-                viewModel.addTrackToHistory(
-                    track
-                )
-                viewModel.putTrackForPlayer(track)
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
-            }
-        }
-    }
-    private val historyAdapter: HistoryAdapter by lazy {
-        HistoryAdapter(historyList) { track ->
-            if (clickDebounce()) {
-                viewModel.putTrackForPlayer(track)
-                findNavController().navigate(R.id.action_searchFragment_to_playerActivity)
-
-            }
-        }
-    }
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private var adapter: SearchAdapter? = null
+    private var historyAdapter: HistoryAdapter? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,26 +45,41 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        setupObservers()
 
-        tracks = viewModel.getTracks()
-        historyList = viewModel.getHistoryList()
+        viewModel.loadHistoryList()
 
 
-        binding.searchArea.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.doSearch(binding.searchArea.text.toString())
+        onTrackClickDebounce =
+            debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { track ->
+                viewModel.putTrackForPlayer(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment3)
             }
 
+        adapter = SearchAdapter(emptyList()) { track ->
+            onTrackClickDebounce(track)
+            lifecycleScope.launch {
+                viewModel.addTrackToHistory(track)
+            }
+        }
+        historyAdapter = HistoryAdapter(emptyList()) { track ->
+            onTrackClickDebounce(track)
+        }
+
+        binding.searchArea.setOnEditorActionListener { _, actionId, _ ->
+            lifecycleScope.launch {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    viewModel.doSearch(binding.searchArea.text.toString())
+                }
+            }
             true
 
         }
         binding.placeholderButtonRenew.setOnClickListener {
-            viewModel.doSearch(binding.searchArea.text.toString())
+            lifecycleScope.launch {
+                viewModel.doSearch(binding.searchArea.text.toString())
+            }
         }
-
 
         if (savedInstanceState != null) {
             enteredText = savedInstanceState.getString(ENTERED_TEXT, "")
@@ -91,9 +88,7 @@ class SearchFragment : Fragment() {
 
         binding.clearButton.setOnClickListener {
             binding.searchArea.setText("")
-            viewModel.clearTracks()
-            adapter.notifyDataSetChanged()
-            showHistory()
+            viewModel.loadHistoryList()
         }
 
 
@@ -171,16 +166,6 @@ class SearchFragment : Fragment() {
         outState.putString(ENTERED_TEXT, enteredText)
     }
 
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }
-
     private fun showLoading() {
         hideKeyboard(binding.root)
         binding.llSearchHistory.isVisible = false
@@ -194,7 +179,7 @@ class SearchFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.llSearchHistory.isVisible = false
         binding.rvTracks.isVisible = false
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
@@ -222,7 +207,7 @@ class SearchFragment : Fragment() {
 
 
     private fun showContent() {
-        adapter.notifyDataSetChanged()
+        adapter?.notifyDataSetChanged()
         binding.progressBar.isVisible = false
         binding.placeholderMessage.isVisible = false
         binding.placeholderButtonRenew.isVisible = false
@@ -234,24 +219,34 @@ class SearchFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.placeholderMessage.isVisible = false
         binding.placeholderButtonRenew.isVisible = false
-        historyList = viewModel.getHistoryList()
-        historyAdapter.updateData(historyList)
         binding.llSearchHistory.isVisible = historyList.isNotEmpty()
     }
 
-    private fun render(state: SearchScreenState) {
+    private fun render(state: SearchState) {
         when (state) {
-            is SearchScreenState.Loading -> showLoading()
-            is SearchScreenState.Content -> showContent()
-            is SearchScreenState.History -> showHistory()
-            is SearchScreenState.NotFound -> showNotFound()
-            is SearchScreenState.NoInternet -> showNoInternet()
+            SearchState.LOADING -> showLoading()
+            SearchState.CONTENT -> showContent()
+            SearchState.HISTORY -> showHistory()
+            SearchState.NOTFOUND -> showNotFound()
+            SearchState.NOINTERNET -> showNoInternet()
+            SearchState.DEFAULT -> {}
         }
+    }
+
+    private fun setupObservers() {
+        viewModel.observeState().observe(viewLifecycleOwner) { state ->
+            historyList = state.history
+            adapter?.updateData(state.tracks)
+            historyAdapter?.updateData(state.history)
+            render(state.searchState)
+
+        }
+
     }
 
     companion object {
         private const val ENTERED_TEXT = "ENTERED_TEXT"
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 
 

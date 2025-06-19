@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_background"
-    tools:context=".presentation.player.PlayerActivity">
+    android:fitsSystemWindows="true"
+    tools:context=".presentation.player.PlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -23,7 +26,6 @@
             android:layout_gravity="start"
             android:src="@drawable/arrow_back" />
     </androidx.appcompat.widget.Toolbar>
-
 
     <ImageView
         android:id="@+id/cover"
@@ -49,8 +51,7 @@
         android:text=""
         app:layout_constraintBottom_toTopOf="@id/artistName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cover"
-        tools:text="Yesterday (Remastered 2009)" />
+        app:layout_constraintTop_toBottomOf="@+id/cover" />
 
     <TextView
         android:id="@+id/artistName"
@@ -62,8 +63,7 @@
         android:text=""
         app:layout_constraintBottom_toTopOf="@id/playButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/trackName"
-        tools:text="The Beatles" />
+        app:layout_constraintTop_toBottomOf="@+id/trackName" />
 
     <ImageView
         android:id="@+id/addButton"
@@ -87,9 +87,7 @@
         app:layout_constraintBottom_toTopOf="@+id/playerTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/artistName"
-
-        />
+        app:layout_constraintTop_toBottomOf="@id/artistName" />
 
     <ImageView
         android:id="@+id/likeButton"
@@ -109,7 +107,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="00:00"
+        android:text=""
+        tools:text="00:00"
         app:layout_constraintBottom_toTopOf="@+id/trackTime"
         app:layout_constraintEnd_toEndOf="@id/playButton"
         app:layout_constraintStart_toStartOf="@id/playButton"
@@ -122,7 +121,6 @@
         app:barrierDirection="end"
         app:constraint_referenced_tags="timeTag, albumTag, yearTag, genreTag, countryTag" />
 
-
     <TextView
         android:id="@+id/trackTime"
         style="@style/PlayerTrackInfo"
@@ -134,7 +132,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTag="timeTag"
         app:layout_constraintTop_toBottomOf="@id/playerTime" />
-
 
     <TextView
         android:id="@+id/trackTimeData"
@@ -149,10 +146,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
         app:layout_constraintTag="timeDataTag"
-        app:layout_constraintTop_toBottomOf="@id/playButton"
-        tools:text="5:35"
-
-        />
+        app:layout_constraintTop_toBottomOf="@id/playButton" />
 
     <TextView
         android:id="@+id/trackAlbum"
@@ -177,8 +171,7 @@
         app:layout_constraintBottom_toTopOf="@+id/trackYearData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/trackTimeData"
-        tools:text="Yesterday (Remastered 2009) Yesterday (Remastered 2009) Yesterday (Remastered 2009)" />
+        app:layout_constraintTop_toBottomOf="@id/trackTimeData" />
 
     <TextView
         android:id="@+id/trackYear"
@@ -203,8 +196,7 @@
         app:layout_constraintBottom_toTopOf="@+id/trackGenreData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@id/trackAlbumData"
-        tools:text="1965" />
+        app:layout_constraintTop_toBottomOf="@id/trackAlbumData" />
 
     <TextView
         android:id="@+id/trackGenre"
@@ -229,8 +221,7 @@
         app:layout_constraintBottom_toTopOf="@+id/trackCountryData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/trackYearData"
-        tools:text="Rock" />
+        app:layout_constraintTop_toBottomOf="@+id/trackYearData" />
 
     <TextView
         android:id="@+id/trackCountry"
@@ -255,8 +246,28 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/barrier"
-        app:layout_constraintTop_toBottomOf="@+id/trackGenreData"
-        tools:text="Великобритания" />
+        app:layout_constraintTop_toBottomOf="@+id/trackGenreData" />
 
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#801a1b22"
+        android:visibility="gone"
+        android:clickable="true" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="505dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include
+            android:id="@+id/bottomSheet"
+            layout="@layout/bottom_sheet_add_to_playlist" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+

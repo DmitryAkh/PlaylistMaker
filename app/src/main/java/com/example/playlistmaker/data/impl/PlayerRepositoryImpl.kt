@@ -1,22 +1,20 @@
-package com.example.playlistmaker.player.data
+package com.example.playlistmaker.data.impl
 
 import android.content.SharedPreferences
 import android.media.MediaPlayer
-import com.example.playlistmaker.player.domain.PlayerRepository
-import com.example.playlistmaker.player.domain.PlayerState
-import com.example.playlistmaker.player.domain.PlayerState.PLAYING
-import com.example.playlistmaker.player.domain.PlayerState.PREPARED
-import com.example.playlistmaker.player.domain.PlayerState.PAUSED
-import com.example.playlistmaker.player.domain.PlayerState.DEFAULT
-import com.example.playlistmaker.search.data.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
-import com.example.playlistmaker.search.domain.Track
+import com.example.playlistmaker.domain.repositories.PlayerRepository
+import com.example.playlistmaker.data.impl.SearchRepositoryImpl.Companion.TRACK_FOR_PLAYER_KEY
+import com.example.playlistmaker.domain.entity.PlayerState
+import com.example.playlistmaker.domain.entity.Track
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class PlayerRepositoryImpl(
     private val mediaPlayer: MediaPlayer,
     private val sharedPrefs: SharedPreferences,
 ) : PlayerRepository {
-    private var playerState = DEFAULT
+    private var playerState: PlayerState = PlayerState.DEFAULT
     private var track = getTrackFromSharedPrefs()
 
 
@@ -30,18 +28,18 @@ class PlayerRepositoryImpl(
         mediaPlayer.setDataSource(track.previewUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            playerState = PREPARED
+            playerState = PlayerState.PREPARED
         }
     }
 
     override fun startPlayer() {
         mediaPlayer.start()
-        playerState = PLAYING
+        playerState = PlayerState.PLAYING
     }
 
     override fun pausePlayer() {
         mediaPlayer.pause()
-        playerState = PAUSED
+        playerState = PlayerState.PAUSED
     }
 
 
@@ -51,10 +49,14 @@ class PlayerRepositoryImpl(
 
     override fun getCurrentPosition(): Int = mediaPlayer.currentPosition
 
+    override fun getStringPlayerPosition(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(getCurrentPosition())
+            ?: "00:00"
+    }
 
     override fun setOnCompletionListener(listener: () -> Unit) {
         mediaPlayer.setOnCompletionListener {
-            playerState = PREPARED
+            playerState = PlayerState.PREPARED
             listener()
         }
     }
@@ -65,4 +67,10 @@ class PlayerRepositoryImpl(
     }
 
     override fun getTrack(): Track = track
+
+    override fun getPlayer(): MediaPlayer = mediaPlayer
+
+    override fun isFavorite(): Boolean {
+        return track.isFavorite
+    }
 }

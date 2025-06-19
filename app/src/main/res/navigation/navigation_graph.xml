@@ -4,32 +4,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
     app:startDestination="@id/libraryFragment">
+
+    <!--  search  -->
+
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.playlistmaker.presentation.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_searchFragment_to_playerFragment3"
+            app:destination="@id/playerFragment3" />
     </fragment>
+
+    <!--  library  -->
+
     <fragment
         android:id="@+id/libraryFragment"
         android:name="com.example.playlistmaker.presentation.library.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library">
+        <argument
+            android:name="tabIndex"
+            android:defaultValue="0"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_libraryFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_libraryFragment_to_playerFragment3"
+            app:destination="@id/playerFragment3" />
+        <action
+            android:id="@+id/action_libraryFragment_to_newPlayListFragment"
+            app:destination="@id/newPlayListFragment" />
     </fragment>
+
+    <!--  settings  -->
+
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.playlistmaker.presentation.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-    <activity
-        android:id="@+id/playerActivity"
-        android:name="com.example.playlistmaker.presentation.player.PlayerActivity"
-        android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+
+    <!-- newPlaylist   -->
+
+    <fragment
+        android:id="@+id/newPlayListFragment"
+        android:name="com.example.playlistmaker.presentation.library.playlists.NewPlayListFragment"
+        android:label="fragment_new_play_list"
+        tools:layout="@layout/fragment_new_play_list">
+        <argument
+            android:name="sourceScreen"
+            android:defaultValue=""
+            app:argType="string" />
+        <action
+            android:id="@+id/action_newPlayListFragment_to_libraryFragment2"
+            app:destination="@id/libraryFragment" />
+        <action
+            android:id="@+id/action_newPlayListFragment_to_playerFragment3"
+            app:destination="@id/playerFragment3" />
+    </fragment>
+
+    <!--  player  -->
+
+    <fragment
+        android:id="@+id/playerFragment3"
+        android:name="com.example.playlistmaker.presentation.player.PlayerFragment"
+        android:label="fragment_player"
+        tools:layout="@layout/fragment_player">
+        <action
+            android:id="@+id/action_playerFragment3_to_newPlayListFragment"
+            app:destination="@id/newPlayListFragment" />
+    </fragment>
+
+    <!--  playlists   -->
+
 </navigation>

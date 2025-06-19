@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     id("org.jetbrains.kotlin.kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -81,6 +82,36 @@ dependencies {
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
 
+    implementation(libs.kotlinx.coroutines.android)
+
+    implementation(libs.room.runtime)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
+
+    implementation(libs.rxpermissions)
+    implementation(libs.androidx.navigation.common.ktx)
+
 }
 
+configurations.all {
+    exclude(group = "com.intellij", module = "annotations")
+}
+
+kapt {
+    arguments {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
+}
+
+android {
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas"
+                )
+            }
+        }
+    }
+}
 

@@ -10,8 +10,6 @@ interface SearchRepository {
     suspend fun addTrackToHistory(track: Track)
     fun clearHistoryList()
     suspend fun loadHistoryList(): MutableList<Track>
-    fun historyListFromJson(json: String?): List<Track>
-    fun jsonFromHistoryList(historyList: MutableList<Track>): String
     fun getResponseState(): ResponseState
     fun putTrackForPlayer(track: Track)
     fun jsonFromTrack(track: Track): String

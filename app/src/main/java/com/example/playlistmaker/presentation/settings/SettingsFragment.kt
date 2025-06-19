@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.settings
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +28,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.themeSwitcher.isChecked = viewModel.isNightMode
+        viewModel.syncNightModeData()
+
+        viewModel.observeIsNightMode()
+            .observe(viewLifecycleOwner) { state -> binding.themeSwitcher.isChecked = state }
 
         binding.themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.switchTheme(checked)
