@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.time.Year
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 object Utils {
@@ -32,6 +33,13 @@ object Utils {
 
     fun millisToSeconds(milliseconds: Long?): String =
         SimpleDateFormat("mm:ss", Locale.getDefault()).format(milliseconds)
+
+    fun millisToMinutes(milliseconds: Long?): String {
+        if (milliseconds == null) return "0"
+        val date = Date(milliseconds)
+        val formatter = SimpleDateFormat("m", Locale.getDefault())
+        return formatter.format(date)
+    }
 
     fun secondsToMillis(time: String): Long {
         val parts = time.split(":")
@@ -112,6 +120,19 @@ object Utils {
             1 -> "трек"
             2, 3, 4 -> "трека"
             else -> "треков"
+        }
+    }
+
+    fun minutesCountEnding(minutes: Int): String {
+        val lastTwoDigits = minutes % 100
+        val lastDigit = minutes % 10
+        if (lastTwoDigits in 11..14) {
+            return "минут"
+        }
+        return when (lastDigit) {
+            1 -> "минута"
+            2, 3, 4 -> "минуты"
+            else -> "минут"
         }
     }
 

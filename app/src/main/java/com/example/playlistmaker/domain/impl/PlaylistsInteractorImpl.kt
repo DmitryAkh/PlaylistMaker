@@ -23,4 +23,45 @@ class PlaylistsInteractorImpl(private val repository: PlaylistsRepository) : Pla
     override suspend fun addToPlaylist(playlist: Playlist, track: Track) {
         repository.addToPlaylist(playlist, track)
     }
+
+    override fun getOnePlaylist(playlistId: Int?): Flow<Playlist> {
+        return repository.getOnePlaylist(playlistId)
+    }
+
+    override suspend fun deleteFromPlaylist(trackId: String?, playlist: Playlist) {
+        val newTracklist = playlist.tracks.filter {
+            it.trackId != trackId
+        }.toMutableList()
+        val newPlaylist = Playlist(
+            playlistId = playlist.playlistId,
+            playlistName = playlist.playlistName,
+            playlistDescription = playlist.playlistDescription,
+            coverPath = playlist.coverPath,
+            tracks = newTracklist,
+            tracksCount = playlist.tracksCount,
+            additionTime = playlist.additionTime
+        )
+        repository.deleteFromPlaylist(trackId, newPlaylist)
+    }
+
+    override suspend fun deletePlaylist(tracksIds: List<Track>, playlistId: Int) {
+        val ids: List<String> = tracksIds.map {
+            it.trackId.toString()
+        }
+        repository.deletePlaylist(ids, playlistId)
+    }
+
+    override suspend fun updatePlaylistData(
+        playlistId: Int,
+        name: String,
+        description: String,
+        coverPath: String,
+    ) {
+        repository.updatePlaylistData(
+            playlistId,
+            name,
+            description,
+            coverPath
+        )
+    }
 }

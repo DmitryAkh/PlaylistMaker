@@ -39,7 +39,13 @@ class PlaylistsFragment : Fragment() {
 
         onPlaylistClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
-// TODO:
+                val bundle = Bundle().apply {
+                    putInt("PLAYLIST_ID", playlist.playlistId)
+                }
+                findNavController().navigate(
+                    R.id.action_libraryFragment_to_playlistInternals,
+                    bundle
+                )
             }
 
         adapter = PlaylistsAdapter(emptyList()) { playlist ->

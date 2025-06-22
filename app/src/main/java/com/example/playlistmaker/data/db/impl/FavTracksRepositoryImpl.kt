@@ -21,7 +21,12 @@ class FavTracksRepositoryImpl(
     }
 
     override suspend fun deleteFavTrack(trackId: String?) {
-        appDataBase.trackDao().deleteTrack(trackId)
+        val existsInPlaylists = appDataBase.tracksInPlCrossRefDao().existsByTrackId(trackId)
+        if (existsInPlaylists) {
+            appDataBase.trackDao().deleteTrack(trackId)
+        } else {
+            appDataBase.trackDao().unFavorite(trackId)
+        }
     }
 
     override fun getFavTracksFlow(): Flow<List<TrackDto>> =

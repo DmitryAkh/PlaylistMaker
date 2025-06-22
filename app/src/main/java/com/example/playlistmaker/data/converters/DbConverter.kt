@@ -47,17 +47,17 @@ object DbConverter {
             playlistName = playlist.playlistName,
             playlistDescription = playlist.playlistDescription,
             coverPath = playlist.coverPath,
-            tracksIds = Utils.jsonFromList(playlist.tracksIds)
+            tracksIds = Utils.jsonFromList(playlist.tracks)
         )
     }
 
-    private fun map(playlist: PlaylistEntity): Playlist {
+    fun map(playlist: PlaylistEntity): Playlist {
         return Playlist(
             playlistId = playlist.playlistId,
             playlistName = playlist.playlistName,
             playlistDescription = playlist.playlistDescription,
             coverPath = playlist.coverPath,
-            tracksIds = Utils.listFromJson(playlist.tracksIds),
+            tracks = Utils.listFromJson(playlist.tracksIds),
             tracksCount = playlist.tracksCount,
             additionTime = playlist.additionTime
         )

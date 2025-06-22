@@ -41,10 +41,11 @@ class PlaylistsRepositoryImpl(private val context: Context, private val dataBase
         dataBase.playlistDao().insertPlaylist(DbConverter.map(playlist))
     }
 
-//    override suspend fun getPlaylists(): List<Playlist> {
-//        val listEntity = dataBase.playlistDao().getPlaylists()
-//        return DbConverter.map(listEntity)
-//    }
+    override fun getOnePlaylist(playlistId: Int?): Flow<Playlist> =
+        dataBase.playlistDao()
+            .getOnePlaylist(playlistId)
+            .map { playlistEntity -> DbConverter.map(playlistEntity) }
+
 
     override fun getPlaylists(): Flow<List<Playlist>> =
         dataBase.playlistDao()
@@ -58,7 +59,7 @@ class PlaylistsRepositoryImpl(private val context: Context, private val dataBase
         dataBase.trackDao().insertTrack(DbConverter.map(track))
         val playlistTrackCrossRef = TracksInPlCrossRefEntity(plId, trackId, additionTime)
         dataBase.tracksInPlCrossRefDao().insertItem(playlistTrackCrossRef)
-        val tracks = playlist.tracksIds
+        val tracks = playlist.tracks
         tracks.add(track)
         val tracksCount = tracks.size
         dataBase.playlistDao().updatePlaylist(
@@ -68,6 +69,41 @@ class PlaylistsRepositoryImpl(private val context: Context, private val dataBase
             tracksCount
         )
     }
+
+
+    override suspend fun deleteFromPlaylist(trackId: String?, playlist: Playlist) {
+
+        dataBase.playlistDao().updatePlaylist(
+            playlist.playlistId,
+            Utils.jsonFromList(playlist.tracks),
+            System.currentTimeMillis(),
+            playlist.tracks.size
+        )
+        dataBase.tracksInPlCrossRefDao().deleteTrackFromPlaylist(playlist.playlistId, trackId)
+
+        val existInOtherPlaylists = dataBase.tracksInPlCrossRefDao().existsByTrackId(trackId)
+        val existsByTrackIdAndIsFavorite = dataBase.trackDao().existsByTrackIdAndIsFavorite(trackId)
+
+        if (!existInOtherPlaylists && existsByTrackIdAndIsFavorite) {
+            dataBase.trackDao().deleteTrack(trackId)
+        }
+    }
+
+    override suspend fun deletePlaylist(tracksIds: List<String>, playlistId: Int) {
+        dataBase.playlistDao().deletePlaylist(playlistId)
+        dataBase.tracksInPlCrossRefDao().deletePlaylist(playlistId)
+        dataBase.trackDao().deleteTracksByList(tracksIds)
+    }
+
+    override suspend fun updatePlaylistData(
+        playlistId: Int,
+        name: String,
+        description: String,
+        coverPath: String,
+    ) {
+        dataBase.playlistDao().updatePlaylistData(playlistId, name, description, coverPath)
+    }
+
 }
 
 

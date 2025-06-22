@@ -62,7 +62,7 @@ class PlayerFragment : Fragment() {
 
         onPlaylistClickDebounce =
             debounce(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { playlist ->
-                if (playlist.tracksIds.contains(track)) {
+                if (playlist.tracks.contains(track)) {
                     binding.root.showStyledSnackbar(
                         requireContext(),
                         getString(R.string.track_has_already_been_added, playlist.playlistName),

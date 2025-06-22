@@ -23,7 +23,7 @@ class PlaylistsViewHolder(
 
 
         binding.name.text = item.playlistName
-        val tracksCount = item.tracksIds.size
+        val tracksCount = item.tracks.size
         val trackCountEnding = Utils.tracksCountEnding(tracksCount)
 
         binding.name.text = item.playlistName

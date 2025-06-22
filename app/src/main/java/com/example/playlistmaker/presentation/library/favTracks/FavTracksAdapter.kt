@@ -26,7 +26,7 @@ class FavTracksAdapter(
     }
 
     fun updateData(newTrackList: List<Track>) {
-        this.favTrackList = newTrackList
+        favTrackList = newTrackList
         notifyDataSetChanged()
     }
 }

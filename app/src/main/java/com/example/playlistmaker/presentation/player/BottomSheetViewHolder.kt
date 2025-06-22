@@ -21,7 +21,7 @@ class BottomSheetViewHolder(private val binding: PlaylistItemBottomSheetBinding)
             .placeholder(drawable.placeholder)
             .into((binding.cover))
 
-        val tracksCount = item.tracksIds.size
+        val tracksCount = item.tracks.size
         val trackCountEnding = Utils.tracksCountEnding(tracksCount)
 
         binding.name.text = item.playlistName

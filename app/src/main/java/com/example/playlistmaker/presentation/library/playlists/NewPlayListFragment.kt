@@ -15,34 +15,36 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
+import com.example.playlistmaker.databinding.FragmentEditPlaylistBinding
 import com.example.playlistmaker.util.Utils.showStyledSnackbar
 import com.example.playlistmaker.util.debounce
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlayListFragment : Fragment() {
+open class NewPlayListFragment : Fragment() {
 
-    private var _binding: FragmentNewPlayListBinding? = null
-    private val binding get() = _binding!!
+    private var _binding: FragmentEditPlaylistBinding? = null
+    val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistsViewModel>()
-    private var name: String = ""
-    private var description: String = ""
-    private var path: String = ""
+    var name: String = ""
+    var description: String = ""
+    var path: String = ""
     private lateinit var debouncedClick: (Unit) -> Unit
+    var playlistId: Int? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentNewPlayListBinding.inflate(inflater, container, false)
+        _binding = FragmentEditPlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
 
         val pickImage =
@@ -149,20 +151,26 @@ class NewPlayListFragment : Fragment() {
 
 
     private fun confirmExit() {
-        if (name.isNotBlank() || description.isNotBlank() ||
-            path.isNotBlank()
-        ) {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.confirm_exit_title)
-                .setMessage(R.string.confirm_exit_message)
-                .setNeutralButton(R.string.cancel) { dialog, witch ->
-                }.setNegativeButton(R.string.finish) { dialog, witch ->
-                    findNavController().navigateUp()
-                }.show()
-        } else {
+        if (playlistId != null) {
             findNavController().navigateUp()
+
+        } else {
+            if (name.isNotBlank() || description.isNotBlank() ||
+                path.isNotBlank()
+            ) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.confirm_exit_title)
+                    .setMessage(R.string.confirm_exit_message)
+                    .setNeutralButton(R.string.cancel) { dialog, witch ->
+                    }.setNegativeButton(R.string.finish) { dialog, witch ->
+                        findNavController().navigateUp()
+                    }.show()
+            } else {
+                findNavController().navigateUp()
+            }
         }
     }
+
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
