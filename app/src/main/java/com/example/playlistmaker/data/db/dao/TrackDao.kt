@@ -22,4 +22,12 @@ interface TrackDao {
     @Query("SELECT trackId FROM track_table")
     suspend fun getTrackIdList(): List<String>
 
+    @Query("SELECT EXISTS(SELECT 1 FROM track_table WHERE trackId = :trackId AND isFavorite = 0)")
+    suspend fun existsByTrackIdAndIsFavorite(trackId: String?): Boolean
+
+    @Query("UPDATE track_table SET isFavorite = 0 WHERE trackId = :trackId")
+    suspend fun unFavorite(trackId: String?)
+
+    @Query("DELETE FROM track_table WHERE trackId IN (:tracks) AND isFavorite = 0")
+    suspend fun deleteTracksByList(tracks: List<String>)
 }

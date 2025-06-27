@@ -1,4 +1,5 @@
-package com.example.playlistmaker.presentation.library.favTracks
+package com.example.playlistmaker.presentation.search
+
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -8,8 +9,8 @@ import com.example.playlistmaker.databinding.TrackItemBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.Utils
 
-class FavTracksViewHolder(
-    private val binding: TrackItemBinding, private val onTrackClicked: (Track) -> Unit,
+class TrackViewHolder(
+    private val binding: TrackItemBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -27,10 +28,6 @@ class FavTracksViewHolder(
         binding.tvTrackName.text = item.trackName
         binding.tvArtistName.text = item.artistName
         binding.tvTrackTime.text = item.trackTime
-
-        binding.root.setOnClickListener() {
-            onTrackClicked(item)
-        }
 
 
     }

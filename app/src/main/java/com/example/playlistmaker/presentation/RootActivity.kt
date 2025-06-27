@@ -21,11 +21,14 @@ class RootActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.newPlayListFragment -> binding.bottomNavigationView.isVisible = false
                 R.id.playerFragment3 ->
                     binding.bottomNavigationView.isVisible = false
+                R.id.playlistInternals -> binding.bottomNavigationView.isVisible = false
+                R.id.editPlaylistFragment -> binding.bottomNavigationView.isVisible = false
 
                 else -> binding.bottomNavigationView.isVisible = true
             }

@@ -16,7 +16,6 @@
         android:layout_margin="4dp"
         android:layout_marginBottom="@dimen/header_linear_layout_margin_bottom">
 
-
         <TextView
             style="@style/HeaderTextView"
             android:layout_width="wrap_content"
@@ -24,7 +23,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="12dp"
             android:text="@string/settings" />
-
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -52,62 +50,37 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
         android:id="@+id/share"
+        style="@style/StringTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="@string/share_app"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/share" />
 
-        <TextView
-            style="@style/StringTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/share" />
-
-        <ImageView
-            style="@style/StringIconStyle"
-            android:src="@drawable/share" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
         android:id="@+id/support"
+        style="@style/StringTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="@string/support"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/support" />
 
-        <TextView
-            style="@style/StringTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/support" />
-
-        <ImageView
-            style="@style/StringIconStyle"
-            android:src="@drawable/support"
-
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
         android:id="@+id/user_agreement"
+        style="@style/StringTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            style="@style/StringTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/user_agreement" />
-
-        <ImageView
-            style="@style/StringIconStyle"
-            android:src="@drawable/arrow_forward"
-
-            />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="@string/user_agreement"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:drawableEndCompat="@drawable/arrow_forward" />
 
 </LinearLayout>

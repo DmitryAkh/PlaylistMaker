@@ -30,8 +30,8 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var onTrackClickDebounce: (Track) -> Unit
-    private var adapter: SearchAdapter? = null
-    private var historyAdapter: HistoryAdapter? = null
+    private var adapter: TrackAdapter? = null
+    private var historyAdapter: TrackAdapter? = null
 
 
     override fun onCreateView(
@@ -56,13 +56,13 @@ class SearchFragment : Fragment() {
                 findNavController().navigate(R.id.action_searchFragment_to_playerFragment3)
             }
 
-        adapter = SearchAdapter(emptyList()) { track ->
+        adapter = TrackAdapter { track ->
             onTrackClickDebounce(track)
             lifecycleScope.launch {
                 viewModel.addTrackToHistory(track)
             }
         }
-        historyAdapter = HistoryAdapter(emptyList()) { track ->
+        historyAdapter = TrackAdapter { track ->
             onTrackClickDebounce(track)
         }
 
@@ -179,7 +179,6 @@ class SearchFragment : Fragment() {
         binding.progressBar.isVisible = false
         binding.llSearchHistory.isVisible = false
         binding.rvTracks.isVisible = false
-        adapter?.notifyDataSetChanged()
         binding.placeholderMessage.isVisible = true
         binding.placeholderImage.setImageDrawable(
             ContextCompat.getDrawable(
@@ -207,7 +206,6 @@ class SearchFragment : Fragment() {
 
 
     private fun showContent() {
-        adapter?.notifyDataSetChanged()
         binding.progressBar.isVisible = false
         binding.placeholderMessage.isVisible = false
         binding.placeholderButtonRenew.isVisible = false
@@ -236,8 +234,8 @@ class SearchFragment : Fragment() {
     private fun setupObservers() {
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             historyList = state.history
-            adapter?.updateData(state.tracks)
-            historyAdapter?.updateData(state.history)
+            adapter?.submitList(state.tracks)
+            historyAdapter?.submitList(state.history)
             render(state.searchState)
 
         }

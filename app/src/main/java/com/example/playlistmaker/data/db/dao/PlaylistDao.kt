@@ -19,9 +19,18 @@ interface PlaylistDao {
     @Query("Select * FROM playlist_table ORDER BY additionTime DESC")
     fun getPlaylists(): Flow<List<PlaylistEntity>>
 
-//    @Query("Select tracksIds FROM playlist_table WHERE playlistId = :playlistId")
-//    suspend fun getPlaylistTracksIds(playlistId: Int): String
-
     @Query("UPDATE playlist_table SET tracksIds = :tracks, additionTime = :time, tracksCount = :tracksCount WHERE playlistId = :playlistId")
     suspend fun updatePlaylist(playlistId: Int, tracks: String, time: Long, tracksCount: Int)
+
+    @Query("SELECT * FROM playlist_table WHERE playlistId = :playlistId")
+    fun getOnePlaylist(playlistId: Int?): Flow<PlaylistEntity>
+
+    @Query("UPDATE playlist_table SET playlistName = :name, playlistDescription = :description, coverPath = :coverPath WHERE playlistId = :playlistId")
+    suspend fun updatePlaylistData(
+        playlistId: Int,
+        name: String,
+        description: String,
+        coverPath: String,
+    )
+
 }

@@ -1,5 +1,4 @@
-package com.example.playlistmaker.presentation.search
-
+package com.example.playlistmaker.presentation.library.playlists.internals
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -9,7 +8,7 @@ import com.example.playlistmaker.databinding.TrackItemBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.Utils
 
-class SearchViewHolder(
+class PlaylistInternalsViewHolder(
     private val binding: TrackItemBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
@@ -31,5 +30,5 @@ class SearchViewHolder(
 
 
     }
-
 }
+

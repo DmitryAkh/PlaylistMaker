@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_libraryFragment_to_newPlayListFragment"
             app:destination="@id/newPlayListFragment" />
+        <action
+            android:id="@+id/action_libraryFragment_to_playlistInternals"
+            app:destination="@id/playlistInternals" />
     </fragment>
 
     <!--  settings  -->
@@ -50,7 +53,7 @@
         android:id="@+id/newPlayListFragment"
         android:name="com.example.playlistmaker.presentation.library.playlists.NewPlayListFragment"
         android:label="fragment_new_play_list"
-        tools:layout="@layout/fragment_new_play_list">
+        tools:layout="@layout/fragment_edit_playlist">
         <argument
             android:name="sourceScreen"
             android:defaultValue=""
@@ -73,8 +76,36 @@
         <action
             android:id="@+id/action_playerFragment3_to_newPlayListFragment"
             app:destination="@id/newPlayListFragment" />
+        <action
+            android:id="@+id/action_playerFragment3_to_playlistInternals"
+            app:destination="@id/playlistInternals" />
     </fragment>
 
     <!--  playlists   -->
+
+    <fragment
+        android:id="@+id/playlistInternals"
+        android:name="com.example.playlistmaker.presentation.library.playlists.internals.PlaylistInternalsFragment"
+        android:label="fragment_playlist_internals"
+        tools:layout="@layout/fragment_playlist_internals">
+        <action
+            android:id="@+id/action_playlistInternals_to_libraryFragment"
+            app:destination="@id/libraryFragment" />
+        <action
+            android:id="@+id/action_playlistInternals_to_playerFragment3"
+            app:destination="@id/playerFragment3" />
+        <action
+            android:id="@+id/action_playlistInternals_to_editPlaylistFragment"
+            app:destination="@id/editPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editPlaylistFragment"
+        android:name="com.example.playlistmaker.presentation.library.playlists.EditPlaylistFragment"
+        android:label="EditPlaylistFragment">
+        <action
+            android:id="@+id/action_editPlaylistFragment_to_playlistInternals"
+            app:destination="@id/playlistInternals" />
+    </fragment>
+
 
 </navigation>

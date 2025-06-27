@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesTracksBinding
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.presentation.search.TrackAdapter
 import com.example.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,7 +20,7 @@ class FavTracksFragment : Fragment() {
 
     private var _binding: FragmentFavoritesTracksBinding? = null
     private val binding get() = _binding!!
-    private var adapter: FavTracksAdapter? = null
+    private var adapter: TrackAdapter? = null
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private val viewModel by viewModel<FavTracksViewModel>()
 
@@ -43,7 +44,7 @@ class FavTracksFragment : Fragment() {
 
             if (tracks.isNotEmpty()) {
                 binding.placeholderLibEmpty.isVisible = false
-                adapter?.updateData(tracks)
+                adapter?.submitList(tracks)
                 binding.rvFavTracks.isVisible = true
             } else {
                 binding.placeholderLibEmpty.isVisible = true
@@ -58,7 +59,7 @@ class FavTracksFragment : Fragment() {
                 findNavController().navigate(R.id.action_libraryFragment_to_playerFragment3)
             }
 
-        adapter = FavTracksAdapter(emptyList()) { track ->
+        adapter = TrackAdapter { track ->
             onTrackClickDebounce(track)
         }
 

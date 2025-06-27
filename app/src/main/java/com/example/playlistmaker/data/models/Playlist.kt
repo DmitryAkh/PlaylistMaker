@@ -7,7 +7,7 @@ data class Playlist(
     val playlistName: String,
     val playlistDescription: String,
     val coverPath: String,
-    val tracksIds: MutableList<Track> = mutableListOf(),
+    val tracks: MutableList<Track> = mutableListOf(),
     val tracksCount: Int = 0,
     val additionTime: Long = System.currentTimeMillis(),
 )

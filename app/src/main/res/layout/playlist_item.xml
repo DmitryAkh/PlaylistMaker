@@ -11,12 +11,14 @@
         android:id="@+id/cover"
         android:layout_width="match_parent"
         android:layout_height="160dp"
+        android:scaleType="centerCrop"
         android:src="@drawable/placeholder" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         tools:text="Prodigy"
         style="@style/Playlist_rv_item" />
 
@@ -27,8 +29,5 @@
         tools:text="28 треков"
         style="@style/Playlist_rv_item" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
 
 </LinearLayout>

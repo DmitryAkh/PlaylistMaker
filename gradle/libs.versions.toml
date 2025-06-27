@@ -17,8 +17,9 @@ lifecycleLivedataKtx = "2.9.1"
 lifecycleViewmodelKtx = "2.9.1"
 navigation-fragment-ktx = "2.9.0"
 navigation-ui-ktx = "2.9.0"
-kotlinx-coroutines-android = "1.7.3"
-room = "2.7.1"
+kotlinx-coroutines-android = "1.8.1"
+room = "2.7.2"
+scenecore = "1.0.0-alpha04"
 
 
 [libraries]
@@ -55,6 +56,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 navigation-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation-fragment-ktx" }
+androidx-scenecore = { group = "androidx.xr.scenecore", name = "scenecore", version.ref = "scenecore" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
