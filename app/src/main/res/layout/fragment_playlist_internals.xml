@@ -26,10 +26,10 @@
     <ImageView
         android:id="@+id/cover"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_min="250dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/name"
-        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -43,6 +43,7 @@
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/cover"
+        app:layout_constraintBottom_toTopOf="@id/description"
         tools:text="Best Songs 2021" />
 
     <TextView
@@ -53,6 +54,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintBottom_toTopOf="@id/duration"
         tools:text="2022" />
 
     <TextView
@@ -63,6 +65,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintBottom_toTopOf="@id/share"
         tools:text="300 минут" />
 
     <ImageView
@@ -83,6 +86,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@id/point"
         app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintBottom_toTopOf="@id/options"
         tools:text="58 треков" />
 
     <ImageView
@@ -92,7 +96,8 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/share_black"
         app:layout_constraintStart_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/duration" />
+        app:layout_constraintTop_toBottomOf="@id/duration"
+        app:layout_constraintBottom_toTopOf="@id/space" />
 
     <ImageView
         android:id="@+id/options"
@@ -102,7 +107,8 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/points"
         app:layout_constraintStart_toEndOf="@id/share"
-        app:layout_constraintTop_toBottomOf="@id/count" />
+        app:layout_constraintTop_toBottomOf="@id/count"
+        app:layout_constraintBottom_toTopOf="@id/space" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -119,7 +125,17 @@
         android:clickable="true"
         android:visibility="gone" />
 
+    <Space
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bs"
+        app:layout_constraintTop_toBottomOf="@id/options" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

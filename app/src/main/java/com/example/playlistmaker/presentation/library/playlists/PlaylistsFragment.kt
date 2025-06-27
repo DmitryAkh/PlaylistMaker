@@ -48,7 +48,7 @@ class PlaylistsFragment : Fragment() {
                 )
             }
 
-        adapter = PlaylistsAdapter(emptyList()) { playlist ->
+        adapter = PlaylistsAdapter { playlist ->
             onPlaylistClickDebounce(playlist)
         }
 
@@ -68,7 +68,7 @@ class PlaylistsFragment : Fragment() {
         viewModel.observePlaylists().observe(viewLifecycleOwner) { playlists ->
             if (playlists.isNotEmpty()) {
                 binding.placeholderLibEmpty.isVisible = false
-                adapter?.updateData(playlists)
+                adapter?.submitList(playlists)
                 binding.rvPlaylists.isVisible = true
             } else {
                 binding.placeholderLibEmpty.isVisible = true

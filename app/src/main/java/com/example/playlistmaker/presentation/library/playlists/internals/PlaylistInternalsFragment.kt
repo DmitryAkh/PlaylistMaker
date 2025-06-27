@@ -99,7 +99,6 @@ class PlaylistInternalsFragment : Fragment() {
         recyclerView = binding.rvBottomSheet.rvTracks
 
         adapter = PlaylistInternalsAdapter(
-            emptyList(),
             onTrackClicked = { track ->
                 onTrackClickDebounce(track)
             },
@@ -128,7 +127,6 @@ class PlaylistInternalsFragment : Fragment() {
     }
 
     private fun showContent() {
-        adapter?.notifyDataSetChanged()
         binding.rvBottomSheet.placeholder.isVisible = false
         binding.rvBottomSheet.rvTracks.isVisible = true
     }
@@ -157,19 +155,11 @@ class PlaylistInternalsFragment : Fragment() {
                 playlist.tracksCount,
                 Utils.tracksCountEnding(playlist.tracksCount)
             )
+            val (totalMinutes, totalMillis) = viewModel.calculateMinutes(tracks)
 
 
-            val totalMillis = tracks.sumOf {
-                it.trackTime?.let { timeStr ->
-                    val parts = timeStr.split(":")
-                    val minutes = parts.getOrNull(0)?.toIntOrNull() ?: 0
-                    val seconds = parts.getOrNull(1)?.toIntOrNull() ?: 0
-                    (minutes * 60 + seconds) * 1000
-                } ?: 0
-            }
-            val totalMinutes = Utils.millisToMinutes(totalMillis.toLong())
 
-            adapter?.updateData(state.tracklist)
+            adapter?.submitList(state.tracklist)
             render(state.playlistState)
 
 
@@ -248,6 +238,7 @@ class PlaylistInternalsFragment : Fragment() {
             .setNeutralButton(R.string.ok) { dialog, witch ->
             }.show()
     }
+
 
     private fun sharePlaylist(
         trackList: List<Track>,

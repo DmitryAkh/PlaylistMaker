@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.library.playlists.internals
 
-import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +8,7 @@ import com.example.playlistmaker.domain.entity.PlaylistInternalsState
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.interactors.PlaylistsInteractor
 import com.example.playlistmaker.domain.interactors.SearchInteractor
+import com.example.playlistmaker.util.Utils
 import kotlinx.coroutines.launch
 
 open class PlaylistInternalsViewModel(
@@ -60,5 +60,15 @@ open class PlaylistInternalsViewModel(
 
     fun putTrackForPlayer(track: Track) = searchInteractor.putTrackForPlayer(track)
 
-
+    fun calculateMinutes(tracks: List<Track>): Pair<String, Int> {
+        val totalMillis = tracks.sumOf {
+            it.trackTime?.let { timeStr ->
+                val parts = timeStr.split(":")
+                val minutes = parts.getOrNull(0)?.toIntOrNull() ?: 0
+                val seconds = parts.getOrNull(1)?.toIntOrNull() ?: 0
+                (minutes * 60 + seconds) * 1000
+            } ?: 0
+        }
+        return Pair(Utils.millisToMinutes(totalMillis.toLong()), totalMillis)
+    }
 }

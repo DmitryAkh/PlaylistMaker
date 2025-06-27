@@ -9,7 +9,7 @@ import com.example.playlistmaker.databinding.TrackItemBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.util.Utils
 
-class SearchViewHolder(
+class TrackViewHolder(
     private val binding: TrackItemBinding,
 ) :
     RecyclerView.ViewHolder(binding.root) {
