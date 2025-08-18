@@ -22,7 +22,7 @@
 
 ## Стек
 
-Kotlin
+- Kotlin
 - MVVM
 - LiveData
 - Flow
