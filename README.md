@@ -35,11 +35,15 @@
 - Koin
 - Fragments
 - XML
-  
+
 ## Установка
 
+Последнюю версию приложения можно скачать [отсюда](https://github.com/DmitryAkh/PlaylistMaker/releases/download/release/PlaylistMaker.apk)
+  
+## Код
+
 ```
-https://github.com/DmitryAkh/PlaylistMaker
+https://github.com/DmitryAkh/Vacancy-s-app
 ```
 
 1. Откройте проект в Android Studio.
