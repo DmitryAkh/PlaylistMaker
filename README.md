@@ -33,7 +33,7 @@
 - Jetpack Navigation
 - Glide
 - Koin
-- Fragments,
+- Fragments
 - XML
   
 ## Установка
