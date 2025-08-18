@@ -20,10 +20,23 @@
 
 - Возможность делиться плейлистами с друзьями
 
-## Технологии
+## Стек
 
-Kotlin, MVVM, LiveData, Flow, SQLite (Room), SharedPreferences, Retrofit, Coroutines, Gson, Jetpack Navigation, Glide, Koin, Fragments, XML
-
+Kotlin
+- MVVM
+- LiveData
+- Flow
+- SQLite (Room)
+- SharedPreferences
+- Retrofit
+- Coroutines
+- Gson
+- Jetpack Navigation
+- Glide
+- Koin
+- Fragments,
+- XML
+  
 ## Установка
 
 ```
