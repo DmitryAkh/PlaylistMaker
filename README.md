@@ -40,10 +40,10 @@
 
 Последнюю версию приложения можно скачать [отсюда](https://github.com/DmitryAkh/PlaylistMaker/releases/download/release/PlaylistMaker.apk)
   
-## Код
+## Исходный код
 
 ```
-https://github.com/DmitryAkh/Vacancy-s-app
+https://github.com/DmitryAkh/PlaylistMaker
 ```
 
 1. Откройте проект в Android Studio.
