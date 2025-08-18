@@ -23,3 +23,12 @@
 ## Технологии
 
 Kotlin, MVVM, LiveData, Flow, SQLite (Room), SharedPreferences, Retrofit, Coroutines, Gson, Jetpack Navigation, Glide, Koin, Fragments, XML
+
+## Установка
+
+```
+https://github.com/DmitryAkh/PlaylistMaker
+```
+
+1. Откройте проект в Android Studio.
+2. Запустите приложение на физическом устройстве или эмуляторе.
