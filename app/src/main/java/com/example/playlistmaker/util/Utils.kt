@@ -26,7 +26,7 @@ object Utils {
         ).toInt()
     }
 
-    fun dpToPx(dp: Int, context: Context): Int {
+    private fun dpToPx(dp: Int, context: Context): Int {
         return dpToPx(dp.toFloat(), context)
     }
 

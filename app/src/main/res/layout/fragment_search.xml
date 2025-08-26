@@ -8,7 +8,7 @@
     android:paddingBottom="80dp"
     android:background="@color/main_background"
     android:orientation="vertical"
-    tools:context=".presentation.search.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
         style="@style/Toolbar"
