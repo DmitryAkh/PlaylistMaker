@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:background="@color/main_background"
     android:fitsSystemWindows="true"
-    tools:context=".presentation.player.PlayerFragment">
+    tools:context=".ui.PlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"

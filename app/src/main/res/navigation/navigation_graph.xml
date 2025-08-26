@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.playlistmaker.presentation.search.SearchFragment"
+        android:name="com.example.playlistmaker.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/libraryFragment"
-        android:name="com.example.playlistmaker.presentation.library.LibraryFragment"
+        android:name="com.example.playlistmaker.ui.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library">
         <argument
@@ -43,7 +43,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.playlistmaker.presentation.settings.SettingsFragment"
+        android:name="com.example.playlistmaker.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
 
@@ -51,7 +51,7 @@
 
     <fragment
         android:id="@+id/newPlayListFragment"
-        android:name="com.example.playlistmaker.presentation.library.playlists.NewPlayListFragment"
+        android:name="com.example.playlistmaker.ui.NewPlayListFragment"
         android:label="fragment_new_play_list"
         tools:layout="@layout/fragment_edit_playlist">
         <argument
@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/playerFragment3"
-        android:name="com.example.playlistmaker.presentation.player.PlayerFragment"
+        android:name="com.example.playlistmaker.ui.PlayerFragment"
         android:label="fragment_player"
         tools:layout="@layout/fragment_player">
         <action
@@ -85,7 +85,7 @@
 
     <fragment
         android:id="@+id/playlistInternals"
-        android:name="com.example.playlistmaker.presentation.library.playlists.internals.PlaylistInternalsFragment"
+        android:name="com.example.playlistmaker.ui.library.internals.PlaylistInternalsFragment"
         android:label="fragment_playlist_internals"
         tools:layout="@layout/fragment_playlist_internals">
         <action
@@ -100,7 +100,7 @@
     </fragment>
     <fragment
         android:id="@+id/editPlaylistFragment"
-        android:name="com.example.playlistmaker.presentation.library.playlists.EditPlaylistFragment"
+        android:name="com.example.playlistmaker.ui.EditPlaylistFragment"
         android:label="EditPlaylistFragment">
         <action
             android:id="@+id/action_editPlaylistFragment_to_playlistInternals"
