@@ -24,7 +24,7 @@ open class PlaylistInternalsViewModel(
             interactor
                 .getOnePlaylist(playlistId)
                 .collect { playlist ->
-                    if (playlist.tracks.size > 0) {
+                    if (playlist.tracks.isNotEmpty()) {
                         screenState.postValue(
                             PlaylistInternalsScreenState(
                                 playlist, playlist.tracks.reversed(),

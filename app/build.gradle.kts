@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.scenecore)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 
     testImplementation(libs.junit)
 
@@ -79,9 +83,6 @@ dependencies {
 
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.viewpager2)
-
-    implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
 
     implementation(libs.kotlinx.coroutines.android)
 
